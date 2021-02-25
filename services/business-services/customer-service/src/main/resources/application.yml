@@ -1,0 +1,91 @@
+spring:
+  application:
+    name: customer-service
+  cloud:
+    stream:
+      bindings:
+        output:
+          binder: kafka
+          destination: customer
+          contentType: 'application/json'
+          group: customer-group
+          producer:
+            requiredGroups: customer-group
+  profiles:
+    active: docker
+server:
+  port: ${PORT:${SERVER_PORT:8120}}
+logging:
+  level:
+    root: INFO
+    kafka.*: WARN
+    org.springframework.*: INFO
+    org.apache.kafka.*: WARN
+    liquibase.integration.spring.SpringLiquibase: ERROR
+---
+postgres.port: 5432
+postgres.host: localhost
+postgres.url: jdbc:postgresql://${postgres.host:localhost}:${postgres.port}/
+postgres.database-name: postgres
+spring:
+  datasource:
+    url: ${postgres.url}
+    data-username: postgres
+    data-password: example
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    url: ${postgres.url}
+    user: postgres
+    password: example
+  cloud:
+    kubernetes.discovery.enabled: false
+    kubernetes.ribbon.enabled: false
+    kubernetes.enabled: false
+  config:
+    activate:
+      on-profile: deployment
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+---
+postgres.port: 5432
+postgres.host: customer-db
+postgres.url: jdbc:postgresql://${postgres.host:localhost}:${postgres.port}/
+postgres.database-name: postgres
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka
+          defaultBrokerPort: 29092
+          zkNodes: zookeeper
+          defaultZkPort: 32181
+    kubernetes.discovery.enabled: false
+    kubernetes.ribbon.enabled: false
+    kubernetes.enabled: false
+  datasource:
+    url: ${postgres.url}
+    data-username: postgres
+    data-password: example
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    url: ${postgres.url}
+    user: postgres
+    password: example
+  config:
+    activate:
+      on-profile: docker
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://discovery-service:8761/eureka/

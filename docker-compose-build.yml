@@ -1,0 +1,30 @@
+version: "3.5"
+
+services:
+  discovery-service:
+    build: .
+    image: eloquenza/favs-discovery-service:0.0.1-SNAPSHOT
+
+  gateway-service:
+    build: .
+    image: eloquenza/favs-gateway-service:0.0.1-SNAPSHOT
+
+  business-intelligence-service:
+    build: .
+    image: eloquenza/favs-business-intelligence-service:0.0.1-SNAPSHOT
+
+  customer-service:
+    build: .
+    image: eloquenza/favs-customer-service:0.0.1-SNAPSHOT
+
+  order-service:
+    build: .
+    image: eloquenza/favs-order-service:0.0.1-SNAPSHOT
+
+  product-service:
+    build: .
+    image: eloquenza/favs-product-service:0.0.1-SNAPSHOT
+
+  web-service:
+    build: .
+    image: eloquenza/favs-web-service:0.0.1-SNAPSHOT

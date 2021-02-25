@@ -1,0 +1,85 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: product-service
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: product1
+              - column:
+                  name: cost
+                  value: 10
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: product2
+              - column:
+                  name: cost
+                  value: 20
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: product3
+              - column:
+                  name: cost
+                  value: 30
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: product4
+              - column:
+                  name: cost
+                  value: 40
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: product5
+              - column:
+                  name: cost
+                  value: 50

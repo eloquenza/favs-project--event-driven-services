@@ -1,0 +1,147 @@
+version: "3.5"
+
+services:
+
+  discovery-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-discovery-service:0.0.1-SNAPSHOT
+    ports:
+      - "8761:8761/tcp"
+    deploy:
+      replicas: 1
+
+  gateway-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-gateway-service:0.0.1-SNAPSHOT
+    ports:
+      - "9000:9000/tcp"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb'
+
+  customer-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-customer-service:0.0.1-SNAPSHOT
+    ports:
+      - "8120:8120/tcp"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb'
+
+  order-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-order-service:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb'
+
+  product-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-product-service:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb'
+
+  business-intelligence-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-business-intelligence-service:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          cpus: '0.1'
+          memory: '250mb'
+#
+#  web-service:
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
+#      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+#    image: eloquenza/favs-web-service:0.0.1-SNAPSHOT
+#    deploy:
+#      replicas: 1
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: '1000mb'
+#        reservations:
+#          cpus: '0.1'
+#          memory: '250mb'
+
+  kafka:
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "29092:29092/tcp"
+    deploy:
+      replicas: 1
+
+  zookeeper:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "32181:32181/tcp"
+    deploy:
+      replicas: 1
+
+#  product-db:
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_PASSWORD: example
+#    ports:
+#      - "5432/tcp"
+#    deploy:
+#      replicas: 1
+
+  customer-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432/tcp"
+    deploy:
+      replicas: 1
