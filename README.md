@@ -8,6 +8,8 @@ It was built as part of an exam for the module "Advanced aspects of distributed 
 The whole system can be started through docker-compose.
 The following diagram displays how the microservices are interacting:
 
+![High-level container overview](./documentation/diagrams/container-overview.png)
+
 ## Usage
 
 Currently, this system does not have a GUI in any form.
