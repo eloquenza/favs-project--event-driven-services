@@ -17,36 +17,15 @@ spring:
         - id: customer-service
           uri: lb://customer-service
           predicates:
-            - name: Path
-              args:
-                pattern: "/customer/**"
-          filters:
-            - name: RewritePath
-              args:
-                regexp: "/customer/(?<remaining>.*)"
-                replacement: "/${remaining}"
+            - Path=/customers/**
         - id: product-service
           uri: lb://product-service
           predicates:
-            - name: Path
-              args:
-                pattern: "/products/**"
-          filters:
-            - name: RewritePath
-              args:
-                regexp: "/products/(?<remaining>.*)"
-                replacement: "/${remaining}"
+            - Path=/products/**
         - id: order-service
           uri: lb://order-service
           predicates:
-            - name: Path
-              args:
-                pattern: "/orders/**"
-          filters:
-            - name: RewritePath
-              args:
-                regexp: "/orders/(?<remaining>.*)"
-                replacement: "/${remaining}"
+            - Path=/orders/**
 server:
   port: 9000
 management:
