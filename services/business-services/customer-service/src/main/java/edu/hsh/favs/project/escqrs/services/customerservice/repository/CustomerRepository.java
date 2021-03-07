@@ -7,9 +7,13 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerRepository extends ReactiveSortingRepository<Customer, Long> {
 
-    Flux<Customer> findByUsername(String username);
-    Flux<Customer> findByFirstName(String firstName);
-    Flux<Customer> findByLastName(String lastName);
-    Mono<Customer> findById(Long id);
-    Flux<Customer> findByAge(int age);
+  Flux<Customer> findByUsername(String username);
+
+  Flux<Customer> findByFirstName(String firstName);
+
+  Flux<Customer> findByLastName(String lastName);
+
+  Mono<Customer> findById(Long id);
+
+  Flux<Customer> findByAge(int age);
 }

@@ -5,26 +5,24 @@ import edu.hsh.favs.projects.escqrs.events.DomainBaseEvent;
 
 public class OrderCreatedEvent extends DomainBaseEvent<Integer, Order> {
 
-    private Order order;
+  private Order order;
 
-    public OrderCreatedEvent(Order order) {
-        this.order = order;
-    }
+  public OrderCreatedEvent(Order order) {
+    this.order = order;
+  }
 
-    @Override
-    public Order getData() {
-        return order;
-    }
+  @Override
+  public Order getData() {
+    return order;
+  }
 
-    @Override
-    public void setData(Order data) {
-        this.order = data;
-    }
+  @Override
+  public void setData(Order data) {
+    this.order = data;
+  }
 
-    @Override
-    public String toString() {
-        return "OrderCreatedEvent{" +
-                "order=" + order +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "OrderCreatedEvent{" + "order=" + order + '}';
+  }
 }

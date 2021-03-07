@@ -9,17 +9,17 @@ import reactor.core.publisher.Mono;
 @Service
 public class ProductService {
 
-    private final ProductRepository repo;
+  private final ProductRepository repo;
 
-    public ProductService(ProductRepository repo) {
-        this.repo = repo;
-    }
+  public ProductService(ProductRepository repo) {
+    this.repo = repo;
+  }
 
-    public Mono<Product> findProductById(Long productId) {
-        return repo.findById(productId);
-    }
+  public Mono<Product> findProductById(Long productId) {
+    return repo.findById(productId);
+  }
 
-    public Flux<Product> findAllProducts() {
-        return repo.getAllProducts();
-    }
+  public Flux<Product> findAllProducts() {
+    return repo.getAllProducts();
+  }
 }

@@ -10,7 +10,8 @@ import reactor.core.publisher.Mono;
 @Service
 public interface ProductRepository extends ReactiveSortingRepository<Product, Long> {
 
-    Mono<Product> findById(Long productId);
-    @Query("SELECT * FROM products")
-    Flux<Product> getAllProducts();
+  Mono<Product> findById(Long productId);
+
+  @Query("SELECT * FROM products")
+  Flux<Product> getAllProducts();
 }

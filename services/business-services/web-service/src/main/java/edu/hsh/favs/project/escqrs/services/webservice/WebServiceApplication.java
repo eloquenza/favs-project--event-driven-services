@@ -10,12 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 public class WebServiceApplication {
 
-    public static void main(String[] args) {
-        new SpringApplicationBuilder(WebServiceApplication.class).web(WebApplicationType.REACTIVE).run(args);
-    }
+  public static void main(String[] args) {
+    new SpringApplicationBuilder(WebServiceApplication.class)
+        .web(WebApplicationType.REACTIVE)
+        .run(args);
+  }
 
-    @Configuration
-    @EnableBinding(Source.class)
-    static class StreamConfig {
-    }
+  @Configuration
+  @EnableBinding(Source.class)
+  static class StreamConfig {}
 }
