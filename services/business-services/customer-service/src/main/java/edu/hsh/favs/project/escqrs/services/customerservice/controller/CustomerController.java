@@ -43,33 +43,30 @@ public class CustomerController {
             consumes = MEDIATYPE_CUSTOMER_JSON_V1
     )
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Mono<Customer> createCustomer(@RequestBody Mono<Customer> customer) {
-        log.info("Logging createCustomer request: " + customer);
-        return customer.flatMap(cust -> {
-                return service.createCustomer(cust, entity -> {
-                    // If the database operation fails, a domain event should not be sent to the message broker
-                    log.info(String.format("Database request is pending transaction commit to broker: %s",
-                            entity.toString()));
-                    try {
-                        CustomerCreatedEvent event = new CustomerCreatedEvent(entity);
-                        // Attempt to perform a reactive dual-write to message broker by sending a domain event
-                        Message<CustomerCreatedEvent> message = MessageBuilder.withPayload(event).build();
-                        messageBroker.output().send(message, 30000L);
-                        // The application dual-write was a success and the database transaction
-                        // can commit
-                        log.info(String.format("Database transaction completed, emitted event " +
-                                "broker: %s", message));
-                    } catch (Exception ex) {
-                        log.error(String.format("A dual-write transaction to the " +
-                                        "message broker" +
-                                        " has failed: %s",
-                                entity.toString()), ex);
-                        // This error will cause the database transaction to be rolled back
-                        throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR,
-                                "A transactional error occurred");
-                    }
-                });
-            }
-        );
+    public Mono<Customer> createCustomer(@RequestBody Mono<Customer> body) {
+        log.info("Logging createCustomer request: " + body);
+        // Execute an dual-write of entity to local database and event to shared Kafka broker
+        return body.flatMap(customer -> service.createCustomer(customer, this::onTransactionCommitEmitEventCallback));
+    }
+
+    private void onTransactionCommitEmitEventCallback(Customer entity) {
+        // If the database transaction fails, our domain event must not be sent to broker
+        try {
+            CustomerCreatedEvent event = new CustomerCreatedEvent(entity);
+            // Attempt to perform CQRS dual-write to message broker by sending domain event
+            Message<CustomerCreatedEvent> message = MessageBuilder.withPayload(event).build();
+            log.info(String.format("Emitting event to broker: %s", message));
+            messageBroker.output().send(message, 30000L);
+            // Dual-write was a success and the database transaction can commit
+            log.info(String.format("Dual-write transaction has been successful\n" +
+                    "\tEntity: %1$s\n" +
+                    "\tMessage: %2$s", entity, message));
+        } catch (Exception ex) {
+            log.error(String.format("A dual-write transaction to the message broker has failed: %s",
+                    entity.toString()), ex);
+            // This error will cause the database transaction to be rolled back
+            throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "A transactional error occurred");
+        }
     }
 }
