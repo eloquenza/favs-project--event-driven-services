@@ -1,11 +1,11 @@
-package edu.hsh.favs.project.escqrs.services.customerservice;
+package edu.hsh.favs.project.escqrs.services.customerservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.customers.Customer;
 import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
+import edu.hsh.favs.project.escqrs.services.customerservice.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;

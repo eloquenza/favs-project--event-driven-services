@@ -1,8 +1,8 @@
-package edu.hsh.favs.project.escqrs.services.customerservice;
+package edu.hsh.favs.project.escqrs.services.customerservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.customers.Customer;
+import edu.hsh.favs.project.escqrs.services.customerservice.repository.CustomerRepository;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
