@@ -42,4 +42,99 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!-- https://stackoverflow.com/questions/12924634/define-maven-plugins-in-parent-pom-but-only-invoke-plugins-in-child-projects -->
+    <!--
+        A way to define plugins in parent, which are used by all children without the need to
+        redeclare these in the children POMs
+     -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.coveo</groupId>
+                    <artifactId>fmt-maven-plugin</artifactId>
+                    <version>2.10</version>
+                    <configuration>
+                        <verbose>true</verbose>
+                        <filesNamePattern>.*\.java</filesNamePattern>
+                        <skip>false</skip>
+                        <skipSortingImports>false</skipSortingImports>
+                        <style>google</style>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>formatting</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <!-- Main declaration and configuration of the plugin -->
+                    <!-- Will be inherited by children -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <!--This must be named-->
+                            <id>checkstyle</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <!-- You may also use per-execution configuration block -->
+                    <configuration>
+                        <configLocation>google_checks.xml</configLocation>
+                        <encoding>UTF-8</encoding>
+                        <consoleOutput>true</consoleOutput>
+                        <failOnViolation>true</failOnViolation>
+                        <failsOnError>true</failsOnError>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <linkXRef>false</linkXRef>
+                        <logViolationsToConsole>true</logViolationsToConsole>
+                        <violationSeverity>warning</violationSeverity>
+                        <suppressionsLocation>coding-conventions/checkstyle-suppressions.xml</suppressionsLocation>
+                        <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>2.10</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>formatting</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- This declaration makes sure children get plugin in their lifecycle -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.0</version>
+                <!-- Configuration won't be propagated to children -->
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <!--This matches and thus overrides execution defined above -->
+                        <id>checkstyle</id>
+                        <!-- Unbind from lifecycle for this POM -->
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

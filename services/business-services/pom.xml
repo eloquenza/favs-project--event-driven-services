@@ -140,4 +140,37 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <!-- This declaration makes sure children get plugin in their lifecycle -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.0</version>
+                <!-- Configuration won't be propagated to children -->
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <!--This matches and thus overrides execution defined above -->
+                        <id>checkstyle</id>
+                        <!-- Unbind from lifecycle for this POM -->
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>2.10</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>formatting</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
