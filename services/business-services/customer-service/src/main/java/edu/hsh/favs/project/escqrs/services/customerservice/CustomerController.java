@@ -15,9 +15,13 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 
 @RestController
-@RequestMapping(value = "/v1/customers")
+@RequestMapping(
+        value = "/customers",
+        produces = CustomerController.MEDIATYPE_CUSTOMER_JSON_V1
+)
 public class CustomerController {
 
+    public static final String MEDIATYPE_CUSTOMER_JSON_V1 = "application/vnd.favs-commerce.customers.v1+json";
     private final Logger log = Loggers.getLogger(CustomerController.class.getName());
     private final CustomerService service;
     private final Source messageBroker;
@@ -28,13 +32,16 @@ public class CustomerController {
         this.service = service;
     }
 
-    @GetMapping(path = "{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "{customerId}")
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<Customer> getCustomer(@PathVariable("customerId") Long customerId) {
         return service.find(customerId);
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            value = "",
+            consumes = MEDIATYPE_CUSTOMER_JSON_V1
+    )
     @ResponseStatus(code = HttpStatus.CREATED)
     public Mono<Customer> createCustomer(@RequestBody Mono<Customer> customer) {
         log.info("Logging createCustomer request: " + customer);

@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +17,14 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 
 @RestController
-@RequestMapping(value = "/v1/orders")
+@RequestMapping(
+        value = "/orders",
+        produces = OrderController.MEDIATYPE_ORDER_JSON_V1
+)
 public class OrderController {
 
+    public static final String MEDIATYPE_ORDER_JSON_V1 = "application/vnd.favs-commerce.orders" +
+            ".v1+json";
     private final Logger log = Loggers.getLogger(OrderController.class.getName());
     private final OrderService service;
     private final Source messageBroker;
@@ -31,14 +35,17 @@ public class OrderController {
         this.service = service;
     }
 
-    @GetMapping(path = "{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "{orderId}")
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<Order> getOrder(@PathVariable("orderId") Long orderId) {
         Assert.state(orderId != null, "During getOrder: orderId must not be null");
         return service.findOrderById(orderId);
     }
 
-    @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            path = "",
+            consumes = OrderController.MEDIATYPE_ORDER_JSON_V1
+    )
     @ResponseStatus(code = HttpStatus.OK)
     public Mono<Order> createOrder(@RequestBody Mono<Order> order) {
         Assert.state(order != null, "During CreateOrder: Order payload must not be null");
@@ -67,9 +74,9 @@ public class OrderController {
         });
     }
 
-    @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "")
     @ResponseStatus(code = HttpStatus.OK)
-    public Flux<Order> getAllProducts() {
+    public Flux<Order> getAllOrders() {
         return service.findAllOrders();
     }
 }
