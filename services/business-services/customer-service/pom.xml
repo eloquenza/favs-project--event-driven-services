@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>edu.hsh.favs.project.escqrs.events</groupId>
-            <artifactId>customer</artifactId>
+            <artifactId>events</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

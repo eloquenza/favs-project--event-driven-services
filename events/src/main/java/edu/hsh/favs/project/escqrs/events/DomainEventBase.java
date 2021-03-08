@@ -1,8 +1,17 @@
 package edu.hsh.favs.project.escqrs.events;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
+import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
 import java.io.Serializable;
 import java.util.Objects;
 
+@JsonTypeInfo(use = Id.NAME, include = As.WRAPPER_OBJECT)
+@JsonSubTypes({@Type(CustomerCreatedEvent.class), @Type(OrderCreatedEvent.class)})
 public abstract class DomainEventBase<IdT extends Number, DomainTypeT> implements Serializable {
 
   private IdT id;
