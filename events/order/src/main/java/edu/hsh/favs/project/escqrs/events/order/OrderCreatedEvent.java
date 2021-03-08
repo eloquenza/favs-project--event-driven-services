@@ -1,13 +1,14 @@
 package edu.hsh.favs.project.escqrs.events.order;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
-import edu.hsh.favs.projects.escqrs.events.DomainBaseEvent;
+import edu.hsh.favs.project.escqrs.events.DomainBaseEvent;
 
-public class OrderCreatedEvent extends DomainBaseEvent<Integer, Order> {
+public class OrderCreatedEvent extends DomainBaseEvent<Long, Order> {
 
   private Order order;
 
   public OrderCreatedEvent(Order order) {
+    super();
     this.order = order;
   }
 

@@ -32,6 +32,12 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
+      <dependency>
+        <groupId>edu.hsh.favs.project.escqrs.services</groupId>
+        <artifactId>service-commons</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <scope>compile</scope>
+      </dependency>
     </dependencies>
 
     <build>

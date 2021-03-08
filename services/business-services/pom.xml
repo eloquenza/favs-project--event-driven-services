@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>service-commons</module>
         <module>business-intelligence-service</module>
         <module>customer-service</module>
         <module>order-service</module>

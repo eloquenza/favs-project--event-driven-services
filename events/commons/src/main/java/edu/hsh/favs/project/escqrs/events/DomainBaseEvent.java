@@ -1,9 +1,9 @@
-package edu.hsh.favs.projects.escqrs.events;
+package edu.hsh.favs.project.escqrs.events;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class DomainBaseEvent<IdT, DomainTypeT> implements Serializable {
+public abstract class DomainBaseEvent<IdT extends Number, DomainTypeT> implements Serializable {
 
   private IdT id;
   private Long createdAt;

@@ -1,9 +1,9 @@
 package edu.hsh.favs.project.escqrs.events.customer;
 
 import edu.hsh.favs.project.escqrs.domains.customers.Customer;
-import edu.hsh.favs.projects.escqrs.events.DomainBaseEvent;
+import edu.hsh.favs.project.escqrs.events.DomainBaseEvent;
 
-public class CustomerCreatedEvent extends DomainBaseEvent<Integer, Customer> {
+public class CustomerCreatedEvent extends DomainBaseEvent<Long, Customer> {
 
   private Customer cust;
 
