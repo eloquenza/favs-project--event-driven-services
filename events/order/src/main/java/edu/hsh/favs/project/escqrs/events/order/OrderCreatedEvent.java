@@ -7,6 +7,10 @@ public class OrderCreatedEvent extends DomainEventBase<Long, Order> {
 
   private Order order;
 
+  public OrderCreatedEvent() {
+    super();
+  }
+
   public OrderCreatedEvent(Order order) {
     super();
     this.order = order;

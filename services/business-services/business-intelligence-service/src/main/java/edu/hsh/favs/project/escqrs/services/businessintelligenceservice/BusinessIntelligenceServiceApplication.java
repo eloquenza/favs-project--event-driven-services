@@ -1,6 +1,7 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice;
 
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.processing.JsonToCustomerCreatedEventConverter;
+import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.processing.JsonToOrderCreatedEventConverter;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -17,7 +18,12 @@ public class BusinessIntelligenceServiceApplication {
   }
 
   @Bean
-  public MessageConverter customMessageConverter() {
+  public MessageConverter customCustomerCreatedEventConverter() {
     return new JsonToCustomerCreatedEventConverter();
+  }
+
+  @Bean
+  public MessageConverter customOrderCreatedEventConverter() {
+    return new JsonToOrderCreatedEventConverter();
   }
 }
