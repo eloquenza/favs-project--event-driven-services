@@ -1,4 +1,4 @@
-package edu.hsh.favs.project.escqrs.services.orderservice.orders.repository;
+package edu.hsh.favs.project.escqrs.services.orderservice.repository;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import org.springframework.data.r2dbc.repository.Query;

@@ -3,7 +3,7 @@ package edu.hsh.favs.project.escqrs.services.orderservice.service;
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
-import edu.hsh.favs.project.escqrs.services.orderservice.orders.repository.OrderRepository;
+import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,8 @@ public class OrderService {
     return repo.getAllOrders();
   }
 
-  public Mono<Order> createOrder(Order order, OrderCreatedEventFactory eventFactory, Source messageBroker) {
+  public Mono<Order> createOrder(
+      Order order, OrderCreatedEventFactory eventFactory, Source messageBroker) {
     return DualWriteTransactionHelper.createEntityControlFlowTemplate(
         template,
         txOperator,
@@ -44,6 +45,6 @@ public class OrderService {
         log,
         eventFactory,
         messageBroker,
-        repo.findById(order.getOrderid()));
+        o -> repo.findById(o.getOrderid()));
   }
 }

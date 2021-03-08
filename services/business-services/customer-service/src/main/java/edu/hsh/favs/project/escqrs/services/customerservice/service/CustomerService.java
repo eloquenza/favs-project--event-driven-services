@@ -40,6 +40,6 @@ public class CustomerService {
         log,
         eventFactory,
         messageBroker,
-        repo.findByUsername(customer.getUsername()));
+        cust -> repo.findByUsername(cust.getUsername()));
   }
 }

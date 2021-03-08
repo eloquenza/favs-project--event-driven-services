@@ -1,14 +1,11 @@
 package edu.hsh.favs.project.escqrs.services.orderservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
-import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
