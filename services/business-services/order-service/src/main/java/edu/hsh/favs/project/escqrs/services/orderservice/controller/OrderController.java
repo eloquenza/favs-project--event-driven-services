@@ -2,6 +2,7 @@ package edu.hsh.favs.project.escqrs.services.orderservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
+import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
@@ -31,11 +32,13 @@ public class OrderController {
   private final Logger log = Loggers.getLogger(OrderController.class.getName());
   private final OrderService service;
   private final Source messageBroker;
+  private final OrderCreatedEventFactory createEventFactory;
 
   @Autowired
   public OrderController(Source messageBroker, OrderService service) {
     this.messageBroker = messageBroker;
     this.service = service;
+    this.createEventFactory = new OrderCreatedEventFactory();
   }
 
   @GetMapping(path = "{orderId}")
@@ -47,42 +50,11 @@ public class OrderController {
 
   @PostMapping(path = "", consumes = OrderController.MEDIATYPE_ORDER_JSON_V1)
   @ResponseStatus(code = HttpStatus.OK)
-  public Mono<Order> createOrder(@RequestBody Mono<Order> order) {
-    Assert.state(order != null, "During CreateOrder: Order payload must not be null");
+  public Mono<Order> createOrder(@RequestBody Mono<Order> body) {
+    Assert.state(body != null, "During CreateOrder: Order payload must not be null");
 
-    log.info("Logging createOrder request: " + order);
-    return order.flatMap(
-        o -> {
-          return service.createOrder(
-              o,
-              entity -> {
-                log.info(
-                    String.format(
-                        "Database request is pending transaction commit to broker: %s",
-                        entity.toString()));
-                try {
-                  OrderCreatedEvent event = new OrderCreatedEvent(entity);
-                  // Attempt to perform a reactive dual-write to message broker by sending a domain
-                  // event
-                  Message<OrderCreatedEvent> message = MessageBuilder.withPayload(event).build();
-                  messageBroker.output().send(message, 30000L);
-                  // The application dual-write was a success and the database transaction
-                  // can commit
-                  log.info(
-                      String.format(
-                          "Database transaction completed, emitted event broker: %s", message));
-                } catch (Exception ex) {
-                  log.error(
-                      String.format(
-                          "A dual-write transaction to the message broker has " + "failed: %s",
-                          entity.toString()),
-                      ex);
-                  // This error will cause the database transaction to be rolled back
-                  throw new HttpClientErrorException(
-                      HttpStatus.INTERNAL_SERVER_ERROR, "A transactional error occurred");
-                }
-              });
-        });
+    log.info("Logging createOrder request: " + body);
+    return body.flatMap(order -> service.createOrder(order, createEventFactory, messageBroker));
   }
 
   @GetMapping(path = "")
