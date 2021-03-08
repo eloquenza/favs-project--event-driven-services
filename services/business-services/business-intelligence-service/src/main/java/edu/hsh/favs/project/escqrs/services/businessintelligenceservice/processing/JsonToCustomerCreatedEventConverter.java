@@ -11,7 +11,7 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 
 public class JsonToCustomerCreatedEventConverter extends AbstractMessageConverter {
-  private final Logger log = Loggers.getLogger(CustomerEventProcessor.class.getName());
+  private final Logger log = Loggers.getLogger(JsonToCustomerCreatedEventConverter.class.getName());
 
   public JsonToCustomerCreatedEventConverter() {
     super(new MimeType("application", "json"));
