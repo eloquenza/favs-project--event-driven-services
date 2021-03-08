@@ -1,9 +1,9 @@
 package edu.hsh.favs.project.escqrs.events.order;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
-import edu.hsh.favs.project.escqrs.events.DomainBaseEvent;
+import edu.hsh.favs.project.escqrs.events.DomainEventBase;
 
-public class OrderCreatedEvent extends DomainBaseEvent<Long, Order> {
+public class OrderCreatedEvent extends DomainEventBase<Long, Order> {
 
   private Order order;
 

@@ -1,6 +1,6 @@
 package edu.hsh.favs.project.escqrs.services.commons;
 
-import edu.hsh.favs.project.escqrs.events.DomainBaseEvent;
+import edu.hsh.favs.project.escqrs.events.DomainEventBase;
 import edu.hsh.favs.project.escqrs.events.factories.AbstractEventFactory;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -16,7 +16,7 @@ public class DualWriteTransactionHelper {
 
   private DualWriteTransactionHelper() {}
 
-  public static <EntityT, DomainEventBaseT extends DomainBaseEvent<? extends Number, EntityT>> Mono<EntityT> createEntityControlFlowTemplate(
+  public static <EntityT, DomainEventBaseT extends DomainEventBase<? extends Number, EntityT>> Mono<EntityT> createEntityControlFlowTemplate(
       R2dbcEntityTemplate template,
       TransactionalOperator txOperator,
       EntityT entity,
@@ -57,7 +57,7 @@ public class DualWriteTransactionHelper {
             e -> log.info(String.format("Reading entity from DB: %s", e.toString())));
   }
 
-  private static <EntityT, DomainEventBaseT extends DomainBaseEvent<? extends Number, EntityT>> Mono<EntityT> beforeTransactionFinalizeTryEventEmitCallback(
+  private static <EntityT, DomainEventBaseT extends DomainEventBase<? extends Number, EntityT>> Mono<EntityT> beforeTransactionFinalizeTryEventEmitCallback(
       EntityT entity,
       AbstractEventFactory<EntityT, DomainEventBaseT> factory,
       Logger log,
@@ -65,9 +65,9 @@ public class DualWriteTransactionHelper {
     return Mono.fromRunnable(() -> {
       // If the database transaction fails, our domain event must not be sent to broker
       try {
-        DomainBaseEvent<?, ?> event = factory.createEvent(entity);
+        DomainEventBase<?, ?> event = factory.createEvent(entity);
         // Attempt to perform CQRS dual-write to message broker by sending domain event
-        Message<? extends DomainBaseEvent<?, ?>> message = MessageBuilder.withPayload(event).build();
+        Message<? extends DomainEventBase<?, ?>> message = MessageBuilder.withPayload(event).build();
         log.info(String.format("Emitting event to broker: %s", message));
         messageBroker.output().send(message, 30000L);
         // Dual-write was a success and the database transaction can commit

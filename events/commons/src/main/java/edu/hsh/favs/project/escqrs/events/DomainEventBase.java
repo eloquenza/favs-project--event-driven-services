@@ -3,19 +3,19 @@ package edu.hsh.favs.project.escqrs.events;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class DomainBaseEvent<IdT extends Number, DomainTypeT> implements Serializable {
+public abstract class DomainEventBase<IdT extends Number, DomainTypeT> implements Serializable {
 
   private IdT id;
   private Long createdAt;
   private Long lastModified;
 
-  public DomainBaseEvent() {}
+  public DomainEventBase() {}
 
   public IdT getId() {
     return id;
   }
 
-  public DomainBaseEvent<IdT, DomainTypeT> setId(IdT id) {
+  public DomainEventBase<IdT, DomainTypeT> setId(IdT id) {
     this.id = id;
     return this;
   }
@@ -24,7 +24,7 @@ public abstract class DomainBaseEvent<IdT extends Number, DomainTypeT> implement
     return createdAt;
   }
 
-  public DomainBaseEvent<IdT, DomainTypeT> setCreatedAt(Long createdAt) {
+  public DomainEventBase<IdT, DomainTypeT> setCreatedAt(Long createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -33,7 +33,7 @@ public abstract class DomainBaseEvent<IdT extends Number, DomainTypeT> implement
     return lastModified;
   }
 
-  public DomainBaseEvent<IdT, DomainTypeT> setLastModified(Long lastModified) {
+  public DomainEventBase<IdT, DomainTypeT> setLastModified(Long lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -47,10 +47,10 @@ public abstract class DomainBaseEvent<IdT extends Number, DomainTypeT> implement
     if (this == o) {
       return true;
     }
-    if (!(o instanceof DomainBaseEvent)) {
+    if (!(o instanceof DomainEventBase)) {
       return false;
     }
-    DomainBaseEvent<?, ?> that = (DomainBaseEvent<?, ?>) o;
+    DomainEventBase<?, ?> that = (DomainEventBase<?, ?>) o;
     return getId().equals(that.getId())
         && getCreatedAt().equals(that.getCreatedAt())
         && getLastModified().equals(that.getLastModified());
