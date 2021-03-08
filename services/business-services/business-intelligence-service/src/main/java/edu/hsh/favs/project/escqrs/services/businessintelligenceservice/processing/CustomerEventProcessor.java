@@ -1,9 +1,6 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.processing;
 
 import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
@@ -14,20 +11,18 @@ import reactor.util.Loggers;
 @EnableBinding(EventSink.class)
 public class CustomerEventProcessor {
 
-  private Map<Integer, Long> customerAgeHistogram = new TreeMap<>();
+  private Histogram<Integer> customerAgeHistogram;
   private final Logger log = Loggers.getLogger(CustomerEventProcessor.class.getName());
+
+  public CustomerEventProcessor() {
+    customerAgeHistogram = new Histogram<>();
+  }
 
   @StreamListener(value = EventSink.CUSTOMER_INPUT)
   public void receive(CustomerCreatedEvent customerCreatedEvent) {
-    log.info("Event received: " + customerCreatedEvent.toString());
+    log.info("CustomerCreatedEvent received: " + customerCreatedEvent.toString());
     Integer ageOfCreatedCustomer = customerCreatedEvent.getData().getAge();
-    customerAgeHistogram.merge(ageOfCreatedCustomer, 1L, (oldValue, newValue) -> oldValue + 1L);
-    log.info("New customer age histogram: " + printHistogram(customerAgeHistogram));
-  }
-
-  private String printHistogram(Map<?, ?> histogram) {
-    return histogram.keySet().stream()
-        .map(key -> key + "=" + histogram.get(key))
-        .collect(Collectors.joining(", ", "{", "}"));
+    customerAgeHistogram.addEntry(ageOfCreatedCustomer);
+    log.info("Displaying the updated 'customer age' histogram: " + customerAgeHistogram);
   }
 }

@@ -1,9 +1,6 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.processing;
 
 import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
@@ -15,20 +12,18 @@ import reactor.util.Loggers;
 @EnableBinding(EventSink.class)
 public class OrderEventProcessor {
 
-  private Map<Long, Long> productBoughtHistogram = new TreeMap<>();
+  private Histogram<Long> productBoughtHistogram;
   private final Logger log = Loggers.getLogger(OrderEventProcessor.class.getName());
+
+  public OrderEventProcessor() {
+    productBoughtHistogram = new Histogram<>();
+  }
 
   @StreamListener(value = EventSink.ORDER_INPUT)
   public void listen(@Payload OrderCreatedEvent orderCreatedEvent) {
-    log.info("Event received: " + orderCreatedEvent.toString());
+    log.info("OrderCreatedEvent received: " + orderCreatedEvent.toString());
     Long boughtProductId = orderCreatedEvent.getData().getProductId();
-    productBoughtHistogram.computeIfPresent(boughtProductId, (k, v) -> v++);
-    log.info("New customer age histogram: " + printHistogram(productBoughtHistogram));
-  }
-
-  private String printHistogram(Map<?, ?> histogram) {
-    return histogram.keySet().stream()
-        .map(key -> key + "=" + histogram.get(key))
-        .collect(Collectors.joining(", ", "{", "}"));
+    productBoughtHistogram.addEntry(boughtProductId);
+    log.info("Displaying the updated 'products bought' histogram: " + productBoughtHistogram);
   }
 }
