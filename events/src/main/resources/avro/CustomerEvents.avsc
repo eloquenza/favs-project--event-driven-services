@@ -1,0 +1,4 @@
+[
+    "edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent",
+    "edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent"
+]
