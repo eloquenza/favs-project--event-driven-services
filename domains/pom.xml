@@ -40,15 +40,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                  <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <!-- This declaration makes sure children get plugin in their lifecycle -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.0</version>
                 <!-- Configuration won't be propagated to children -->
                 <inherited>false</inherited>
                 <executions>
@@ -63,7 +62,6 @@
             <plugin>
                 <groupId>com.coveo</groupId>
                 <artifactId>fmt-maven-plugin</artifactId>
-                <version>2.10</version>
                 <inherited>false</inherited>
                 <executions>
                     <execution>

@@ -19,6 +19,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
+        <spring-cloud.version>2020.0.1</spring-cloud.version>
+        <spring-data-releasetrain.version>Moore-SR13</spring-data-releasetrain.version>
+        <avro.version>1.10.1</avro.version>
+        <confluent.version>6.1.0</confluent.version>
+        <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
+        <fmt.plugin.version>2.10</fmt.plugin.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <docker.user>eloquenza</docker.user>
     </properties>
 
     <modules>
@@ -48,7 +57,23 @@
             <id>confluent</id>
             <url>https://packages.confluent.io/maven/</url>
         </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <name>Confluent</name>
+            <url>https://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <!-- https://stackoverflow.com/questions/12924634/define-maven-plugins-in-parent-pom-but-only-invoke-plugins-in-child-projects -->
     <!--
@@ -59,9 +84,38 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.9</version>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <repository>${docker.user}/favs-${project.name}</repository>
+                        <tag>${project.version}</tag>
+                        <buildArgs>
+                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>com.coveo</groupId>
                     <artifactId>fmt-maven-plugin</artifactId>
-                    <version>2.10</version>
+                    <version>${fmt.plugin.version}</version>
                     <configuration>
                         <verbose>true</verbose>
                         <filesNamePattern>.*\.java</filesNamePattern>
@@ -84,7 +138,7 @@
                     <!-- Will be inherited by children -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>${checkstyle.plugin.version}</version>
                     <executions>
                         <execution>
                             <!--This must be named-->
@@ -116,7 +170,6 @@
             <plugin>
                 <groupId>com.coveo</groupId>
                 <artifactId>fmt-maven-plugin</artifactId>
-                <version>2.10</version>
                 <inherited>false</inherited>
                 <executions>
                     <execution>
@@ -129,7 +182,6 @@
                 <!-- This declaration makes sure children get plugin in their lifecycle -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.0</version>
                 <!-- Configuration won't be propagated to children -->
                 <inherited>false</inherited>
                 <executions>

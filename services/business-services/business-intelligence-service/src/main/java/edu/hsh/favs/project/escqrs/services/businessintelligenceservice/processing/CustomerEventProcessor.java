@@ -5,7 +5,6 @@ import edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import reactor.util.Logger;
 import reactor.util.Loggers;
