@@ -9,6 +9,8 @@ services:
     image: eloquenza/favs-discovery-service:0.0.1-SNAPSHOT
     ports:
       - "8761:8761/tcp"
+    restart:
+      - always
     deploy:
       replicas: 1
 
@@ -19,6 +21,8 @@ services:
     image: eloquenza/favs-gateway-service:0.0.1-SNAPSHOT
     ports:
       - "9000:9000/tcp"
+    restart:
+      - always
     deploy:
       replicas: 1
       resources:
@@ -139,6 +143,8 @@ services:
     image: confluentinc/cp-kafka:latest
     ports:
       - "29092:29092/tcp"
+    restart:
+      - always
     deploy:
       replicas: 1
     depends_on:
@@ -151,9 +157,12 @@ services:
     image: confluentinc/cp-zookeeper:latest
     ports:
       - "32181:32181/tcp"
+    restart:
+      - always
     deploy:
       replicas: 1
 
+# TODO: restart always
   schema-registry:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
@@ -163,6 +172,8 @@ services:
     container_name: schema-registry
     ports:
       - "8081:8081"
+    restart:
+      - always
     depends_on:
       - zookeeper
       - kafka
