@@ -31,10 +31,14 @@ spring:
             key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
             value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
             schema.registry.url: http://schema-registry:8081
+            auto.register.schemas: false
+            use.latest.version: true
           consumer-properties:
             key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
             value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
             schema.registry.url: http://schema-registry:8081
+            auto.register.schemas: false
+            use.latest.version: true
             specific.avro.reader: true
       bindings:
         output:
