@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.customer",
+  "name": "CustomerDeletedEvent",
+
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "username", "type": "string"},
+    {"name": "age", "type": "int"}
+  ]
+}

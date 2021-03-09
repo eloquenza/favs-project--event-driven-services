@@ -12,18 +12,18 @@
   <artifactId>service-commons</artifactId>
   <dependencies>
     <dependency>
-      <groupId>edu.hsh.favs.project.escqrs.events</groupId>
-      <artifactId>commons</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>io.projectreactor</groupId>
       <artifactId>reactor-core</artifactId>
     </dependency>
     <dependency>
       <groupId>edu.hsh.favs.project.escqrs.domains</groupId>
       <artifactId>customers</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>edu.hsh.favs.project.escqrs.events</groupId>
+      <artifactId>events</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

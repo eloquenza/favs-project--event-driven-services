@@ -81,7 +81,10 @@ public class Customer implements Serializable {
   @Override
   public String toString() {
     return "Customer{"
-        + "firstName='"
+        + "username='"
+        + username
+        + '\''
+        + ", firstName='"
         + firstName
         + '\''
         + ", lastName='"
@@ -104,6 +107,7 @@ public class Customer implements Serializable {
     }
     Customer customer = (Customer) o;
     return getAge() == customer.getAge()
+        && getUsername().equals(customer.getUsername())
         && getFirstName().equals(customer.getFirstName())
         && getLastName().equals(customer.getLastName())
         && getId().equals(customer.getId());
@@ -111,6 +115,6 @@ public class Customer implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(getFirstName(), getLastName(), getAge(), getId());
+    return Objects.hash(getUsername(), getFirstName(), getLastName(), getAge(), getId());
   }
 }

@@ -50,6 +50,7 @@ services:
       - customer-db
       - gateway-service
       - discovery-service
+      - schema-registry
 
   order-service:
     environment:
@@ -70,6 +71,7 @@ services:
       - customer-db
       - gateway-service
       - discovery-service
+      - schema-registry
 
   product-service:
     environment:
@@ -90,6 +92,7 @@ services:
       - customer-db
       - gateway-service
       - discovery-service
+      - schema-registry
 
   business-intelligence-service:
     environment:
@@ -109,6 +112,7 @@ services:
       - kafka
       - gateway-service
       - discovery-service
+      - schema-registry
 #
 #  web-service:
 #    environment:
@@ -148,6 +152,18 @@ services:
       - "32181:32181/tcp"
     deploy:
       replicas: 1
+
+  schema-registry:
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:32181'
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema-registry
+    container_name: schema-registry
+    ports:
+      - "8081:8081"
+    depends_on:
+      - zookeeper
 
 #  product-db:
 #    image: postgres:latest

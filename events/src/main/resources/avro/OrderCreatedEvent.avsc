@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.order",
+  "name": "OrderCreatedEvent",
+
+  "fields": [
+    {"name": "orderId", "type": "long"},
+    {"name": "customerId", "type": "long"},
+    {"name": "productId", "type": "long"},
+    {"name": "state", "type": "string"}
+  ]
+}

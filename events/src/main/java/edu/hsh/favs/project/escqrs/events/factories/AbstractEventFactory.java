@@ -1,8 +1,5 @@
 package edu.hsh.favs.project.escqrs.events.factories;
 
-import edu.hsh.favs.project.escqrs.events.DomainEventBase;
-
-public interface AbstractEventFactory<
-    EntityT, DomainEventBaseT extends DomainEventBase<? extends Number, EntityT>> {
+public interface AbstractEventFactory<EntityT, DomainEventBaseT> {
   DomainEventBaseT createEvent(EntityT entity);
 }

@@ -8,6 +8,7 @@ import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
+@EnableSchemaRegistryClient
 public class OrderServiceApplication {
 
   public static void main(String[] args) {

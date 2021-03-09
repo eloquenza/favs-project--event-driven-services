@@ -20,11 +20,27 @@ spring:
     password: ${postgres.password}
   cloud:
     stream:
+      default:
+        producer:
+          useNativeEncoding: true
+        consumer:
+          useNativeEncoding: true
+      kafka:
+        binder:
+          producer-properties:
+            key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            schema.registry.url: http://schema-registry:8081
+          consumer-properties:
+            key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            schema.registry.url: http://schema-registry:8081
+            specific.avro.reader: true
       bindings:
         output:
           binder: kafka
           destination: product
-          contentType: 'application/json'
+          contentType: application/*+avro
           group: product-group
           producer:
             requiredGroups: product-group

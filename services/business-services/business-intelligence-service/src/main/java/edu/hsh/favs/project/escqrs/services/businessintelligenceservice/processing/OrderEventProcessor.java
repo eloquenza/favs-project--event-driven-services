@@ -22,7 +22,7 @@ public class OrderEventProcessor {
   @StreamListener(value = EventSink.ORDER_INPUT)
   public void listen(@Payload OrderCreatedEvent orderCreatedEvent) {
     log.info("OrderCreatedEvent received: " + orderCreatedEvent.toString());
-    Long boughtProductId = orderCreatedEvent.getData().getProductId();
+    Long boughtProductId = orderCreatedEvent.getProductId();
     productBoughtHistogram.addEntry(boughtProductId);
     log.info("Displaying the updated 'products bought' histogram: " + productBoughtHistogram);
   }

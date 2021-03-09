@@ -9,6 +9,11 @@ public class CustomerCreatedEventFactory
 
   @Override
   public CustomerCreatedEvent createEvent(Customer entity) {
-    return new CustomerCreatedEvent(entity);
+    return new CustomerCreatedEvent(
+        entity.getId(),
+        entity.getFirstName(),
+        entity.getLastName(),
+        entity.getUsername(),
+        entity.getAge());
   }
 }

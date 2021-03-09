@@ -1,6 +1,7 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.processing;
 
 import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
+import edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +20,32 @@ public class CustomerEventProcessor {
   }
 
   @StreamListener(value = EventSink.CUSTOMER_INPUT)
-  public void receive(CustomerCreatedEvent customerCreatedEvent) {
-    log.info("CustomerCreatedEvent received: " + customerCreatedEvent.toString());
-    Integer ageOfCreatedCustomer = customerCreatedEvent.getData().getAge();
-    customerAgeHistogram.addEntry(ageOfCreatedCustomer);
-    log.info("Displaying the updated 'customer age' histogram: " + customerAgeHistogram);
+  public void receive(CustomerCreatedEvent createEvent) {
+    try {
+      log.info("CustomerCreatedEvent received: " + createEvent.toString());
+      Integer ageOfCreatedCustomer = createEvent.getAge();
+      customerAgeHistogram.addEntry(ageOfCreatedCustomer);
+      log.info("Displaying the updated 'customer age' histogram: " + customerAgeHistogram);
+    } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during processing CustomerCreatedEvent: %s", createEvent.toString(), e));
+      throw e;
+    }
+  }
+
+  @StreamListener(value = EventSink.CUSTOMER_INPUT)
+  public void receive(CustomerDeletedEvent deleteEvent) {
+    try {
+      log.info("CustomerDeletedEvent received: " + deleteEvent.toString());
+      Integer ageOfCreatedCustomer = deleteEvent.getAge();
+      customerAgeHistogram.removeEntry(ageOfCreatedCustomer);
+      log.info("Displaying the updated 'customer age' histogram: " + customerAgeHistogram);
+    } catch (Exception e) {
+      log.error(
+          String.format(
+              "Error during processing CustomerCreatedEvent: %s", deleteEvent.toString(), e));
+      throw e;
+    }
   }
 }

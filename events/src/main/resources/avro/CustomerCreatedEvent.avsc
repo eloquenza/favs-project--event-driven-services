@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.customer",
+  "name": "CustomerCreatedEvent",
+
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "firstName", "type": "string"},
+    {"name": "lastName", "type": "string"},
+    {"name": "username", "type": "string"},
+    {"name": "age", "type": "int"}
+  ]
+}
