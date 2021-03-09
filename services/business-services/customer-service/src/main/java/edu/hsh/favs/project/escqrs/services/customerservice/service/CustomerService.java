@@ -2,6 +2,7 @@ package edu.hsh.favs.project.escqrs.services.customerservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.customers.Customer;
 import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerCreatedEventFactory;
+import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.customerservice.repository.CustomerRepository;
 import org.springframework.cloud.stream.messaging.Source;
@@ -20,6 +21,7 @@ public class CustomerService {
   private final R2dbcEntityTemplate template;
   private final TransactionalOperator txOperator;
 
+  // TODO: add autowired
   public CustomerService(
       CustomerRepository repo, R2dbcEntityTemplate template, TransactionalOperator txOperator) {
     this.repo = repo;
@@ -41,5 +43,24 @@ public class CustomerService {
         eventFactory,
         messageBroker,
         cust -> repo.findByUsername(cust.getUsername()));
+  }
+
+  public Mono<Customer> deleteCustomer(
+      Long customerId, CustomerDeletedEventFactory eventFactory, Source messageBroker) {
+    return this.repo
+        .findById(customerId)
+        .flatMap(
+            customer -> {
+              Mono<Customer> retVal =
+                  DualWriteTransactionHelper.deleteEntityControlFlowTemplate(
+                      template,
+                      txOperator,
+                      customer,
+                      log,
+                      eventFactory,
+                      messageBroker,
+                      cust -> repo.findByUsername(cust.getUsername()));
+              return retVal;
+            });
   }
 }

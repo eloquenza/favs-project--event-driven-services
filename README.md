@@ -40,6 +40,9 @@ List a specific customer:
 
 Replace the `1` with the id of the customer you want to know more about.
 
+Delete a specific customer:
+`curl -s -X "DELETE" "http://0.0.0.0:9000/customers/1"`
+
 ### Orders
 
 Due to the smaller scope of this system each order, customer and product form a 1:1:1 relationship.

@@ -2,10 +2,13 @@ package edu.hsh.favs.project.escqrs.services.customerservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.customers.Customer;
 import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerCreatedEventFactory;
+import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.services.customerservice.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,12 +30,14 @@ public class CustomerController {
   private final CustomerService service;
   private final Source messageBroker;
   private final CustomerCreatedEventFactory createEventFactory;
+  private final CustomerDeletedEventFactory deleteEventFactory;
 
   @Autowired
   public CustomerController(Source messageBroker, CustomerService service) {
     this.messageBroker = messageBroker;
     this.service = service;
     this.createEventFactory = new CustomerCreatedEventFactory();
+    this.deleteEventFactory = new CustomerDeletedEventFactory();
   }
 
   @GetMapping(path = "{customerId}")
@@ -48,5 +53,15 @@ public class CustomerController {
     // Execute an dual-write of entity to local database and event to shared Kafka broker
     return body.flatMap(
         customer -> service.createCustomer(customer, createEventFactory, messageBroker));
+  }
+
+  @DeleteMapping(value = "{customerId}")
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Customer> deleteCustomer(@PathVariable("customerId") Long customerId) {
+    Assert.state(customerId != null, "CustomerId must not equal null");
+    // TODO: improve message to clarify that the customerId for the to be deleted customer is logged
+    log.info("Logging deleteCustomer request: " + customerId);
+    // Execute an dual-write of entity to local database and event to shared Kafka broker
+    return service.deleteCustomer(customerId, deleteEventFactory, messageBroker);
   }
 }
