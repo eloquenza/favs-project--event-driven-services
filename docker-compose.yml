@@ -156,7 +156,6 @@ services:
     deploy:
       replicas: 1
 
-# TODO: restart always
   schema-registry:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
