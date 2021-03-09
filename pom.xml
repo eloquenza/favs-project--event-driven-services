@@ -98,7 +98,7 @@
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         <linkXRef>false</linkXRef>
                         <logViolationsToConsole>true</logViolationsToConsole>
-                        <violationSeverity>warning</violationSeverity>
+                        <violationSeverity>error</violationSeverity>
                         <suppressionsLocation>coding-conventions/checkstyle-suppressions.xml</suppressionsLocation>
                         <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
                     </configuration>
