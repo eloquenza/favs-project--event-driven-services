@@ -1,10 +1,8 @@
 package edu.hsh.favs.project.escqrs.services.orderservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
-import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +25,10 @@ public class OrderController {
       "application/vnd.favs-commerce.orders" + ".v1+json";
   private final Logger log = Loggers.getLogger(OrderController.class.getName());
   private final OrderService service;
-  private final Source messageBroker;
-  private final OrderCreatedEventFactory createEventFactory;
 
   @Autowired
-  public OrderController(Source messageBroker, OrderService service) {
-    this.messageBroker = messageBroker;
+  public OrderController(OrderService service) {
     this.service = service;
-    this.createEventFactory = new OrderCreatedEventFactory();
   }
 
   @GetMapping(path = "{orderId}")
@@ -50,7 +44,7 @@ public class OrderController {
     Assert.state(body != null, "During CreateOrder: Order payload must not be null");
 
     log.info("Logging createOrder request: " + body);
-    return body.flatMap(order -> service.createOrder(order, createEventFactory, messageBroker));
+    return body.flatMap(order -> service.createOrder(order));
   }
 
   @GetMapping(path = "")

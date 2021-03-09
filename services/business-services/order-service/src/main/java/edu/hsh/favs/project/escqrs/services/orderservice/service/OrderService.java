@@ -4,6 +4,7 @@ import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,18 @@ public class OrderService {
 
   private final Logger log = Loggers.getLogger(OrderService.class.getName());
   private final OrderRepository repo;
-  private final R2dbcEntityTemplate template;
-  private final TransactionalOperator txOperator;
+  private final OrderCreatedEventFactory createEventFactory;
+  private final DualWriteTransactionHelper<Order> dualWriteHelper;
 
+  @Autowired
   public OrderService(
-      OrderRepository repo, R2dbcEntityTemplate template, TransactionalOperator txOperator) {
+      OrderRepository repo,
+      R2dbcEntityTemplate template,
+      TransactionalOperator txOperator,
+      Source messageBroker) {
     this.repo = repo;
-    this.template = template;
-    this.txOperator = txOperator;
+    this.createEventFactory = new OrderCreatedEventFactory();
+    this.dualWriteHelper = new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
   }
 
   public Mono<Order> findOrderById(Long orderId) {
@@ -36,14 +41,7 @@ public class OrderService {
     return repo.getAllOrders();
   }
 
-  public Mono<Order> createOrder(
-      Order order, OrderCreatedEventFactory eventFactory, Source messageBroker) {
-    return DualWriteTransactionHelper.createEntityControlFlowTemplate(
-        template,
-        txOperator,
-        order,
-        log,
-        eventFactory,
-        messageBroker);
+  public Mono<Order> createOrder(Order order) {
+    return dualWriteHelper.createEntity(order, createEventFactory);
   }
 }

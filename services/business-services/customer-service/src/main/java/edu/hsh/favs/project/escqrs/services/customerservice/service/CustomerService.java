@@ -5,6 +5,7 @@ import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerCreatedEven
 import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.customerservice.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Service;
@@ -18,47 +19,33 @@ public class CustomerService {
 
   private final Logger log = Loggers.getLogger(CustomerService.class.getName());
   private final CustomerRepository repo;
-  private final R2dbcEntityTemplate template;
-  private final TransactionalOperator txOperator;
+  private final CustomerCreatedEventFactory createEventFactory;
+  private final CustomerDeletedEventFactory deleteEventFactory;
+  private final DualWriteTransactionHelper<Customer> dualWriteHelper;
 
-  // TODO: add autowired
+  @Autowired
   public CustomerService(
-      CustomerRepository repo, R2dbcEntityTemplate template, TransactionalOperator txOperator) {
+      CustomerRepository repo,
+      R2dbcEntityTemplate template,
+      TransactionalOperator txOperator,
+      Source messageBroker) {
     this.repo = repo;
-    this.template = template;
-    this.txOperator = txOperator;
+    this.createEventFactory = new CustomerCreatedEventFactory();
+    this.deleteEventFactory = new CustomerDeletedEventFactory();
+    this.dualWriteHelper = new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
   }
 
   public Mono<Customer> find(Long id) {
     return repo.findById(id);
   }
 
-  public Mono<Customer> createCustomer(
-      Customer customer, CustomerCreatedEventFactory eventFactory, Source messageBroker) {
-    return DualWriteTransactionHelper.createEntityControlFlowTemplate(
-        template,
-        txOperator,
-        customer,
-        log,
-        eventFactory,
-        messageBroker);
+  public Mono<Customer> createCustomer(Customer customer) {
+    return dualWriteHelper.createEntity(customer, createEventFactory);
   }
 
-  public Mono<Customer> deleteCustomer(
-      Long customerId, CustomerDeletedEventFactory eventFactory, Source messageBroker) {
+  public Mono<Customer> deleteCustomer(Long customerId) {
     return this.repo
         .findById(customerId)
-        .flatMap(
-            customer -> {
-              Mono<Customer> retVal =
-                  DualWriteTransactionHelper.deleteEntityControlFlowTemplate(
-                      template,
-                      txOperator,
-                      customer,
-                      log,
-                      eventFactory,
-                      messageBroker);
-              return retVal;
-            });
+        .flatMap(customer -> dualWriteHelper.deleteEntity(customer, deleteEventFactory));
   }
 }

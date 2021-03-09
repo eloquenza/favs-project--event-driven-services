@@ -1,11 +1,8 @@
 package edu.hsh.favs.project.escqrs.services.customerservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.customers.Customer;
-import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerCreatedEventFactory;
-import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.services.customerservice.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,16 +25,10 @@ public class CustomerController {
       "application/vnd.favs-commerce.customers.v1+json";
   private final Logger log = Loggers.getLogger(CustomerController.class.getName());
   private final CustomerService service;
-  private final Source messageBroker;
-  private final CustomerCreatedEventFactory createEventFactory;
-  private final CustomerDeletedEventFactory deleteEventFactory;
 
   @Autowired
-  public CustomerController(Source messageBroker, CustomerService service) {
-    this.messageBroker = messageBroker;
+  public CustomerController(CustomerService service) {
     this.service = service;
-    this.createEventFactory = new CustomerCreatedEventFactory();
-    this.deleteEventFactory = new CustomerDeletedEventFactory();
   }
 
   @GetMapping(path = "{customerId}")
@@ -51,8 +42,7 @@ public class CustomerController {
   public Mono<Customer> createCustomer(@RequestBody Mono<Customer> body) {
     log.info("Logging createCustomer request: " + body);
     // Execute an dual-write of entity to local database and event to shared Kafka broker
-    return body.flatMap(
-        customer -> service.createCustomer(customer, createEventFactory, messageBroker));
+    return body.flatMap(customer -> service.createCustomer(customer));
   }
 
   @DeleteMapping(value = "{customerId}")
@@ -62,6 +52,6 @@ public class CustomerController {
     // TODO: improve message to clarify that the customerId for the to be deleted customer is logged
     log.info("Logging deleteCustomer request: " + customerId);
     // Execute an dual-write of entity to local database and event to shared Kafka broker
-    return service.deleteCustomer(customerId, deleteEventFactory, messageBroker);
+    return service.deleteCustomer(customerId);
   }
 }
