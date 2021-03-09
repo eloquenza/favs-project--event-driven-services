@@ -60,7 +60,20 @@
             <artifactId>avro-ipc</artifactId>
             <version>1.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-schema-registry-maven-plugin</artifactId>
+            <version>6.1.0</version>
+        </dependency>
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <name>Confluent</name>
+            <url>https://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <plugins>
@@ -78,11 +91,75 @@
                             <goal>idl-protocol</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/resources/</sourceDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                                <excludes>
+                                    <exclude>CustomerEvents.avsc</exclude>
+                                    <exclude>OrderEvents.avsc</exclude>
+                                </excludes>
                             <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-schema-registry-maven-plugin</artifactId>
+                <version>6.1.0</version>
+                <configuration>
+                    <schemaRegistryUrls>
+                        <param>http://0.0.0.0:8081</param>
+                    </schemaRegistryUrls>
+                    <subjects>
+                        <!-- This defines the possible event types on each Kafka topic -->
+                        <!-- How this works: -->
+                        <!-- There are multiple ways for constraining the event types on a Kafka topic.-->
+                        <!-- Schema-message constraints, Subject-schema constraints, or -->
+                        <!-- Subject-topic constraints. We are going to use the Subject-topic constraint -->
+                        <!-- When using Confluent's (de)serializer for the events on a kafka topic-->
+                        <!-- the default strategy to figure out, which schema is used, is called -->
+                        <!-- `TopicNameStrategy`. This means, that producer/consumer can ask the -->
+                        <!-- schema-registry and based on the Kafka topic's name, they will get -->
+                        <!-- the appropriate schema to use. -->
+                        <!-- The convention here is, that the message value schema, i.e. the payload -->
+                        <!-- in which our event is stored, is registered on the schema-registry as -->
+                        <!-- {topicName}-value. -->
+                        <!-- Therefore, we are going to define Avro union types are schemas for all -->
+                        <!-- our Kafka topics to ensure that only these events can be produced/consumed. -->
+                        <customer-value>src/main/resources/avro/CustomerEvents.avsc</customer-value>
+                        <order-value>src/main/resources/avro/OrderEvents.avsc</order-value>
+                        <CustomerCreated>src/main/resources/avro/CustomerCreatedEvent.avsc</CustomerCreated>
+                        <CustomerDeleted>src/main/resources/avro/CustomerDeletedEvent.avsc</CustomerDeleted>
+                        <OrderCreated>src/main/resources/avro/OrderCreatedEvent.avsc</OrderCreated>
+                    </subjects>
+                    <schemaTypes>
+                        <customer-value>AVRO</customer-value>
+                        <order-value>AVRO</order-value>
+                        <CustomerCreated>AVRO</CustomerCreated>
+                        <CustomerDeleted>AVRO</CustomerDeleted>
+                        <OrderCreated>AVRO</OrderCreated>
+                    </schemaTypes>
+                    <references>
+                        <customer-value>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent</name>
+                                <subject>CustomerCreated</subject>
+                            </reference>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent</name>
+                                <subject>CustomerDeleted</subject>
+                            </reference>
+                        </customer-value>
+                        <order-value>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent</name>
+                                <subject>OrderCreated</subject>
+                            </reference>
+                        </order-value>
+                    </references>
+                </configuration>
+                <goals>
+                    <goal>register</goal>
+                </goals>
             </plugin>
         </plugins>
     </build>
