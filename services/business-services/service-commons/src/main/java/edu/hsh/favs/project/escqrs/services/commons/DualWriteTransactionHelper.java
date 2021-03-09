@@ -30,9 +30,7 @@ public class DualWriteTransactionHelper {
         .doFirst(() -> logPendingWriteToDB(entity, log))
         .doOnSuccess(e -> logCompletedTransactionToDB(e, log))
         .delayUntil(
-            e ->
-                beforeTransactionFinalizeTryEventEmitCallback(
-                    e, eventFactory, log, messageBroker))
+            e -> beforeTransactionFinalizeTryEventEmitCallback(e, eventFactory, log, messageBroker))
         .as(txOperator::transactional)
         .single();
   }
@@ -95,7 +93,10 @@ public class DualWriteTransactionHelper {
           try {
             DomainEventBaseT event = factory.createEvent(entity);
             // Attempt to perform CQRS dual-write to message broker by sending domain event
-            Message<DomainEventBaseT> message = MessageBuilder.withPayload(event).build();
+            Message<DomainEventBaseT> message =
+                MessageBuilder.withPayload(event)
+                    .setHeader("eventType", event.getClass().getSimpleName())
+                    .build();
             log.info(String.format("Emitting event to broker: %s", message));
             messageBroker.output().send(message, 30000L);
             // Dual-write was a success and the database transaction can commit

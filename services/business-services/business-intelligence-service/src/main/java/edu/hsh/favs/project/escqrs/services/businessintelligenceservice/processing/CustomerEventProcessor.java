@@ -5,6 +5,8 @@ import edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import reactor.util.Logger;
 import reactor.util.Loggers;
 
@@ -19,8 +21,10 @@ public class CustomerEventProcessor {
     customerAgeHistogram = new Histogram<>();
   }
 
-  @StreamListener(value = EventSink.CUSTOMER_INPUT)
-  public void receive(CustomerCreatedEvent createEvent) {
+  @StreamListener(
+      value = EventSink.CUSTOMER_INPUT,
+      condition = "headers['eventType']=='CustomerCreatedEvent'")
+  public void receive(@Payload CustomerCreatedEvent createEvent) {
     try {
       log.info("CustomerCreatedEvent received: " + createEvent.toString());
       Integer ageOfCreatedCustomer = createEvent.getAge();
@@ -34,8 +38,10 @@ public class CustomerEventProcessor {
     }
   }
 
-  @StreamListener(value = EventSink.CUSTOMER_INPUT)
-  public void receive(CustomerDeletedEvent deleteEvent) {
+  @StreamListener(
+      value = EventSink.CUSTOMER_INPUT,
+      condition = "headers['eventType']=='CustomerDeletedEvent'")
+  public void receive(@Payload CustomerDeletedEvent deleteEvent) {
     try {
       log.info("CustomerDeletedEvent received: " + deleteEvent.toString());
       Integer ageOfCreatedCustomer = deleteEvent.getAge();
