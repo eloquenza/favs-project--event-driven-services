@@ -36,8 +36,6 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-customer-service:0.0.1-SNAPSHOT
-    ports:
-      - "8120:8120/tcp"
     deploy:
       replicas: 1
       resources:
