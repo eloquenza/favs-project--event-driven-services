@@ -9,7 +9,7 @@ public class OrderCreatedEventFactory implements AbstractEventFactory<Order, Ord
   @Override
   public OrderCreatedEvent createEvent(Order entity) {
     return new OrderCreatedEvent(
-        entity.getOrderid(),
+        entity.getId(),
         entity.getCustomerId(),
         entity.getProductId(),
         entity.getState().toString());

@@ -8,12 +8,10 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table(value = "orders")
 public class Order implements Serializable {
+  @Id private Long id;
+
   @Column(value = "customer_id")
   private Long customerId;
-
-  @Id
-  @Column(value = "order_id")
-  private Long orderId;
 
   @Column(value = "product_id")
   private Long productId;
@@ -23,9 +21,9 @@ public class Order implements Serializable {
 
   public Order() {}
 
-  public Order(Long customerId, Long orderId, Long productId, OrderState state) {
+  public Order(Long customerId, Long id, Long productId, OrderState state) {
     this.customerId = customerId;
-    this.orderId = orderId;
+    this.id = id;
     this.productId = productId;
     this.state = state;
   }
@@ -39,12 +37,12 @@ public class Order implements Serializable {
     return this;
   }
 
-  public Long getOrderid() {
-    return orderId;
+  public Long getId() {
+    return id;
   }
 
-  public Order setOrderid(Long orderId) {
-    this.orderId = orderId;
+  public Order setId(Long id) {
+    this.id = id;
     return this;
   }
 
@@ -76,14 +74,14 @@ public class Order implements Serializable {
     }
     Order order = (Order) o;
     return getCustomerId().equals(order.getCustomerId())
-        && getOrderid().equals(order.getOrderid())
+        && getId().equals(order.getId())
         && getProductId().equals(order.getProductId())
         && getState() == order.getState();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getCustomerId(), getOrderid(), getProductId(), getState());
+    return Objects.hash(getCustomerId(), getId(), getProductId(), getState());
   }
 
   @Override
@@ -92,7 +90,7 @@ public class Order implements Serializable {
         + "customerId="
         + customerId
         + ", orderId="
-        + orderId
+        + id
         + ", orderedProducts="
         + productId
         + ", state="

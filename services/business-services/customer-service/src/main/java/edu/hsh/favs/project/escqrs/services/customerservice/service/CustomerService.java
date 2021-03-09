@@ -41,8 +41,7 @@ public class CustomerService {
         customer,
         log,
         eventFactory,
-        messageBroker,
-        cust -> repo.findByUsername(cust.getUsername()));
+        messageBroker);
   }
 
   public Mono<Customer> deleteCustomer(
@@ -58,8 +57,7 @@ public class CustomerService {
                       customer,
                       log,
                       eventFactory,
-                      messageBroker,
-                      cust -> repo.findByUsername(cust.getUsername()));
+                      messageBroker);
               return retVal;
             });
   }

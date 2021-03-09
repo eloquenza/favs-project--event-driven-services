@@ -1,7 +1,10 @@
 package edu.hsh.favs.project.escqrs.services.commons;
 
+import static org.springframework.data.r2dbc.query.Criteria.where;
+import static org.springframework.data.relational.core.query.Query.query;
+
 import edu.hsh.favs.project.escqrs.events.factories.AbstractEventFactory;
-import java.util.function.Function;
+import java.lang.reflect.InvocationTargetException;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.http.HttpStatus;
@@ -22,8 +25,7 @@ public class DualWriteTransactionHelper {
       EntityT entity,
       Logger log,
       AbstractEventFactory<EntityT, DomainEventBaseT> eventFactory,
-      Source messageBroker,
-      Function<EntityT, Mono<EntityT>> queryFunction) {
+      Source messageBroker) {
     return template
         // Writes the entity to DB. Errors here will result in an rollback.
         .delete(entity)
@@ -41,16 +43,14 @@ public class DualWriteTransactionHelper {
       EntityT entity,
       Logger log,
       AbstractEventFactory<EntityT, DomainEventBaseT> eventFactory,
-      Source messageBroker,
-      Function<EntityT, Mono<EntityT>> queryFunction) {
+      Source messageBroker) {
     return template
         // Writes the entity to DB. Errors here will result in an rollback.
         .insert(entity)
         .doFirst(() -> logPendingWriteToDB(entity, log))
         // Reading the entity from the DB to ensure it has been committed before trying
         // to emit the associated domain event
-        // TODO: maybe rewrite via template.getConverter.populateIdIfNecessary
-        .delayUntil(committedEntity -> readEntityFromDB(committedEntity, queryFunction))
+        .delayUntil(committedEntity -> readEntityFromDB(template, committedEntity))
         .doOnSuccess(e -> logReadEntityFromDB(e, log))
         .doOnSuccess(e -> logCompletedTransactionToDB(e, log))
         .delayUntil(
@@ -76,9 +76,20 @@ public class DualWriteTransactionHelper {
     log.info(String.format("Reading entity from DB: %s", entity.toString()));
   }
 
-  private static <EntityT> Mono<EntityT> readEntityFromDB(
-      EntityT entity, Function<EntityT, Mono<EntityT>> queryFunction) {
-    return queryFunction.apply(entity);
+  private static <EntityT> Mono<EntityT> readEntityFromDB(R2dbcEntityTemplate template, EntityT entity) {
+    try {
+      return (Mono<EntityT>) template
+          .select(entity.getClass())
+          .matching(query(where("id").is(entity.getClass().getMethod("getId").invoke(entity))))
+          .first();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   private static <EntityT, DomainEventBaseT>
@@ -92,7 +103,7 @@ public class DualWriteTransactionHelper {
           // If the database transaction fails, our domain event must not be sent to broker
           try {
             DomainEventBaseT event = factory.createEvent(entity);
-            // Attempt to perform CQRS dual-write to message broker by sending domain event
+            // Attempt to perform CQRS-needed dual-write to message broker by sending domain event
             Message<DomainEventBaseT> message =
                 MessageBuilder.withPayload(event)
                     .setHeader("eventType", event.getClass().getSimpleName())
