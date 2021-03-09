@@ -43,6 +43,13 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
     <!-- https://stackoverflow.com/questions/12924634/define-maven-plugins-in-parent-pom-but-only-invoke-plugins-in-child-projects -->
     <!--
         A way to define plugins in parent, which are used by all children without the need to
