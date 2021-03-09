@@ -19,13 +19,16 @@ public class Histogram<KeyT> {
 
   public Long removeEntry(KeyT key) {
     Long initialValue = 0L;
-    return mergeEntries(key, initialValue, (oldV, newV) -> {
-      // Make sure that it cannot reach below zero
-      if (oldV == initialValue) {
-        return initialValue;
-      }
-      return oldV - 1L;
-    });
+    return mergeEntries(
+        key,
+        initialValue,
+        (oldV, newV) -> {
+          // Make sure that it cannot reach below zero
+          if (oldV == initialValue) {
+            return initialValue;
+          }
+          return oldV - 1L;
+        });
   }
 
   private Long mergeEntries(
