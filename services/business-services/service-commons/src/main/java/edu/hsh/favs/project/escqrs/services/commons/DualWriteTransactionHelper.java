@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.transaction.reactive.TransactionalOperator;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
 
@@ -157,8 +157,8 @@ public class DualWriteTransactionHelper<EntityT> {
                     entity.toString()),
                 ex);
             // This error will cause the database transaction to be rolled back
-            throw new HttpClientErrorException(
-                HttpStatus.INTERNAL_SERVER_ERROR, "A transactional error occurred");
+            throw new HttpServerErrorException(
+                HttpStatus.INTERNAL_SERVER_ERROR, "A transactional error occurred: " + ex.getMessage());
           }
         });
   }
