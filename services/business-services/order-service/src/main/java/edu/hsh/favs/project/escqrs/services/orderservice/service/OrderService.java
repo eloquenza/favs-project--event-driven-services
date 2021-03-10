@@ -2,6 +2,7 @@ package edu.hsh.favs.project.escqrs.services.orderservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
+import edu.hsh.favs.project.escqrs.events.order.factories.OrderDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderUpdatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.EntityUpdater;
@@ -23,6 +24,7 @@ public class OrderService {
   private final OrderRepository repo;
   private final OrderCreatedEventFactory createEventFactory;
   private final OrderUpdatedEventFactory updateEventFactory;
+  private final OrderDeletedEventFactory deleteEventFactory;
   private final DualWriteTransactionHelper<Order> dualWriteHelper;
   private final EntityUpdater<Order> entityUpdater;
 
@@ -35,6 +37,7 @@ public class OrderService {
     this.repo = repo;
     this.createEventFactory = new OrderCreatedEventFactory();
     this.updateEventFactory = new OrderUpdatedEventFactory();
+    this.deleteEventFactory = new OrderDeletedEventFactory();
     this.dualWriteHelper =
         new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
     this.entityUpdater = new EntityUpdater<>(log);
@@ -60,5 +63,11 @@ public class OrderService {
                 dualWriteHelper.updateEntity(
                     entityUpdater.update(order, updatedOrder),
                     updateEventFactory.supplyEntity(updatedOrder.setId(order.getId()))));
+  }
+
+  public Mono<Order> deleteOrder(Long orderId) {
+    return this.repo
+        .findById(orderId)
+        .flatMap(order -> dualWriteHelper.deleteEntity(order, deleteEventFactory));
   }
 }

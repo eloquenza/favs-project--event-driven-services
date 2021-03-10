@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.order",
+  "name": "OrderDeletedEvent",
+
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "productId", "type": "long"},
+    {"name": "state", "type": "string"}
+  ]
+}

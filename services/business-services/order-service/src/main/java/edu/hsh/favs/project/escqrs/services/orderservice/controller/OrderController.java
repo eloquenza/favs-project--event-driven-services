@@ -5,6 +5,7 @@ import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,16 @@ public class OrderController {
 
     log.info("Logging updateOrder request: " + updatedOrder);
     return service.updateOrder(orderId, updatedOrder);
+  }
+
+  @DeleteMapping(value = "{orderId}")
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
+    Assert.state(orderId != null, "orderId must not equal null");
+    // TODO: improve message to clarify that the orderId for the to be deleted order is logged
+    log.info("Logging deleteOrder request: " + orderId);
+    // Execute an dual-write of entity to local database and event to shared Kafka broker
+    return service.deleteOrder(orderId);
   }
 
   @GetMapping(path = "")
