@@ -158,7 +158,8 @@ public class DualWriteTransactionHelper<EntityT> {
                 ex);
             // This error will cause the database transaction to be rolled back
             throw new HttpServerErrorException(
-                HttpStatus.INTERNAL_SERVER_ERROR, "A transactional error occurred: " + ex.getMessage());
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "A transactional error occurred: " + ex.getMessage());
           }
         });
   }

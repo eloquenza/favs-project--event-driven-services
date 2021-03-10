@@ -1,5 +1,6 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.eventprocessors;
 
+import edu.hsh.favs.project.escqrs.domains.orders.OrderState;
 import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
 import edu.hsh.favs.project.escqrs.events.order.OrderDeletedEvent;
 import edu.hsh.favs.project.escqrs.events.order.OrderUpdatedEvent;
@@ -47,8 +48,18 @@ public class OrderEventProcessor extends EntityEventProcessor {
                 orderUpdatedEvent.getId(), orderUpdatedEvent.getProductId());
             this.logHistogram();
           } else {
+            this.log.info("Skip productId processing - REASON: no productIds were updated.");
+          }
+          if (orderUpdatedEvent
+              .getState()
+              .toString()
+              .contentEquals(OrderState.CANCELLED.toString())) {
+            this.analysis.removeProductIdEntry(orderUpdatedEvent.getId());
+            this.logHistogram();
+          } else {
             this.log.info(
-                "Event consumed, no processing happened. REASON: no productIds were updated.");
+                "Skip updateRemoval processing - REASON: state was not changed into "
+                    + OrderState.CANCELLED.toString());
           }
         });
   }

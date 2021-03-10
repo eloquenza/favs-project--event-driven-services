@@ -69,10 +69,14 @@ Get an specific order:
 
 Update a specific order:
 
-`curl -s -X "PUT" "http://0.0.0.0:9000/order/1" -H 'Content-Type:
+`curl -s -X "PUT" "http://0.0.0.0:9000/orders/1" -H 'Content-Type:
 application/vnd.favs-commerce.orders.v1+json; charset=utf-8' {\"productId\": 1, \"state\": \"CREATED\"}"`
 
 For this operation the same rules apply as to the customer update operation, i.e. updating only a specific field is possible.
+
+Cancel/"deliver" a specific order:
+
+`curl -s -X "PUT" "http://0.0.0.0:9000/orders/1/{cancel, deliver}"`
 
 Get all orders:
 `curl -H "Accept: application/vnd.favs-commerce.orders.v1+json" -s "http://0.0.0.0:9000/orders"`

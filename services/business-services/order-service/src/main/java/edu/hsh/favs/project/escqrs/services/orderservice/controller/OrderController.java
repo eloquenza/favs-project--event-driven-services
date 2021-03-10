@@ -1,6 +1,7 @@
 package edu.hsh.favs.project.escqrs.services.orderservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
+import edu.hsh.favs.project.escqrs.domains.orders.OrderState;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,24 @@ public class OrderController {
     }
   }
 
+  @PutMapping(path = "{orderId}/cancel")
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Order> cancelOrder(@PathVariable("orderId") Long orderId) {
+    Assert.state(orderId != null, "orderId must not equal null");
+
+    log.info("Logging cancelOrder request for order with id " + orderId);
+    return changeOrderState(orderId, OrderState.CANCELLED);
+  }
+
+  @PutMapping(path = "{orderId}/deliver")
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Order> deliverOrder(@PathVariable("orderId") Long orderId) {
+    Assert.state(orderId != null, "orderId must not equal null");
+
+    log.info("Logging deliverOrder request for order with id " + orderId);
+    return changeOrderState(orderId, OrderState.DELIVERED);
+  }
+
   @DeleteMapping(value = "{orderId}")
   @ResponseStatus(code = HttpStatus.OK)
   public Mono<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
@@ -78,5 +97,15 @@ public class OrderController {
   @ResponseStatus(code = HttpStatus.OK)
   public Flux<Order> getAllOrders() {
     return service.findAllOrders();
+  }
+
+  private Mono<Order> changeOrderState(Long orderId, OrderState newState) {
+    try {
+      return service.updateOrder(
+          orderId, new Order().setId(orderId).setState(newState));
+    } catch (UnsupportedOperationException e) {
+      log.info(e.toString());
+      throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, e.toString());
+    }
   }
 }
