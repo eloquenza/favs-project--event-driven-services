@@ -2,10 +2,12 @@ package edu.hsh.favs.project.escqrs.domains.orders;
 
 import java.io.Serializable;
 import java.util.Objects;
+import org.javers.core.metamodel.annotation.ValueObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+@ValueObject
 @Table(value = "orders")
 public class Order implements Serializable {
   @Id private Long id;
@@ -89,7 +91,7 @@ public class Order implements Serializable {
     return "Order{"
         + "customerId="
         + customerId
-        + ", orderId="
+        + ", id="
         + id
         + ", orderedProducts="
         + productId

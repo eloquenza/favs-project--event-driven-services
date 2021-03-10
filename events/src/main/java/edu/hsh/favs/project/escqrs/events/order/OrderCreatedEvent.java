@@ -14,11 +14,11 @@ import org.apache.avro.util.Utf8;
 @org.apache.avro.specific.AvroGenerated
 public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBase
     implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -1645974530053124767L;
+  private static final long serialVersionUID = -1935042375402340408L;
   public static final org.apache.avro.Schema SCHEMA$ =
       new org.apache.avro.Schema.Parser()
           .parse(
-              "{\"type\":\"record\",\"name\":\"OrderCreatedEvent\",\"namespace\":\"edu.hsh.favs.project.escqrs.events.order\",\"fields\":[{\"name\":\"orderId\",\"type\":\"long\"},{\"name\":\"customerId\",\"type\":\"long\"},{\"name\":\"productId\",\"type\":\"long\"},{\"name\":\"state\",\"type\":\"string\"}]}");
+              "{\"type\":\"record\",\"name\":\"OrderCreatedEvent\",\"namespace\":\"edu.hsh.favs.project.escqrs.events.order\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"customerId\",\"type\":\"long\"},{\"name\":\"productId\",\"type\":\"long\"},{\"name\":\"state\",\"type\":\"string\"}]}");
 
   public static org.apache.avro.Schema getClassSchema() {
     return SCHEMA$;
@@ -83,7 +83,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
     return DECODER.decode(b);
   }
 
-  private long orderId;
+  private long id;
   private long customerId;
   private long productId;
   private java.lang.CharSequence state;
@@ -97,17 +97,17 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   /**
    * All-args constructor.
    *
-   * @param orderId The new value for orderId
+   * @param id The new value for id
    * @param customerId The new value for customerId
    * @param productId The new value for productId
    * @param state The new value for state
    */
   public OrderCreatedEvent(
-      java.lang.Long orderId,
+      java.lang.Long id,
       java.lang.Long customerId,
       java.lang.Long productId,
       java.lang.CharSequence state) {
-    this.orderId = orderId;
+    this.id = id;
     this.customerId = customerId;
     this.productId = productId;
     this.state = state;
@@ -124,7 +124,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   public java.lang.Object get(int field$) {
     switch (field$) {
       case 0:
-        return orderId;
+        return id;
       case 1:
         return customerId;
       case 2:
@@ -141,7 +141,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
       case 0:
-        orderId = (java.lang.Long) value$;
+        id = (java.lang.Long) value$;
         break;
       case 1:
         customerId = (java.lang.Long) value$;
@@ -158,21 +158,21 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   }
 
   /**
-   * Gets the value of the 'orderId' field.
+   * Gets the value of the 'id' field.
    *
-   * @return The value of the 'orderId' field.
+   * @return The value of the 'id' field.
    */
-  public long getOrderId() {
-    return orderId;
+  public long getId() {
+    return id;
   }
 
   /**
-   * Sets the value of the 'orderId' field.
+   * Sets the value of the 'id' field.
    *
    * @param value the value to set.
    */
-  public void setOrderId(long value) {
-    this.orderId = value;
+  public void setId(long value) {
+    this.id = value;
   }
 
   /**
@@ -275,7 +275,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
       extends org.apache.avro.specific.SpecificRecordBuilderBase<OrderCreatedEvent>
       implements org.apache.avro.data.RecordBuilder<OrderCreatedEvent> {
 
-    private long orderId;
+    private long id;
     private long customerId;
     private long productId;
     private java.lang.CharSequence state;
@@ -292,8 +292,8 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      */
     private Builder(edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder other) {
       super(other);
-      if (isValidValue(fields()[0], other.orderId)) {
-        this.orderId = data().deepCopy(fields()[0].schema(), other.orderId);
+      if (isValidValue(fields()[0], other.id)) {
+        this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
       if (isValidValue(fields()[1], other.customerId)) {
@@ -317,8 +317,8 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      */
     private Builder(edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent other) {
       super(SCHEMA$);
-      if (isValidValue(fields()[0], other.orderId)) {
-        this.orderId = data().deepCopy(fields()[0].schema(), other.orderId);
+      if (isValidValue(fields()[0], other.id)) {
+        this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
       }
       if (isValidValue(fields()[1], other.customerId)) {
@@ -336,43 +336,42 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
     }
 
     /**
-     * Gets the value of the 'orderId' field.
+     * Gets the value of the 'id' field.
      *
      * @return The value.
      */
-    public long getOrderId() {
-      return orderId;
+    public long getId() {
+      return id;
     }
 
     /**
-     * Sets the value of the 'orderId' field.
+     * Sets the value of the 'id' field.
      *
-     * @param value The value of 'orderId'.
+     * @param value The value of 'id'.
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder setOrderId(
-        long value) {
+    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder setId(long value) {
       validate(fields()[0], value);
-      this.orderId = value;
+      this.id = value;
       fieldSetFlags()[0] = true;
       return this;
     }
 
     /**
-     * Checks whether the 'orderId' field has been set.
+     * Checks whether the 'id' field has been set.
      *
-     * @return True if the 'orderId' field has been set, false otherwise.
+     * @return True if the 'id' field has been set, false otherwise.
      */
-    public boolean hasOrderId() {
+    public boolean hasId() {
       return fieldSetFlags()[0];
     }
 
     /**
-     * Clears the value of the 'orderId' field.
+     * Clears the value of the 'id' field.
      *
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder clearOrderId() {
+    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder clearId() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -509,8 +508,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
     public OrderCreatedEvent build() {
       try {
         OrderCreatedEvent record = new OrderCreatedEvent();
-        record.orderId =
-            fieldSetFlags()[0] ? this.orderId : (java.lang.Long) defaultValue(fields()[0]);
+        record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
         record.customerId =
             fieldSetFlags()[1] ? this.customerId : (java.lang.Long) defaultValue(fields()[1]);
         record.productId =
@@ -551,7 +549,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
 
   @Override
   public void customEncode(org.apache.avro.io.Encoder out) throws java.io.IOException {
-    out.writeLong(this.orderId);
+    out.writeLong(this.id);
 
     out.writeLong(this.customerId);
 
@@ -564,7 +562,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   public void customDecode(org.apache.avro.io.ResolvingDecoder in) throws java.io.IOException {
     org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
     if (fieldOrder == null) {
-      this.orderId = in.readLong();
+      this.id = in.readLong();
 
       this.customerId = in.readLong();
 
@@ -576,7 +574,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
       for (int i = 0; i < 4; i++) {
         switch (fieldOrder[i].pos()) {
           case 0:
-            this.orderId = in.readLong();
+            this.id = in.readLong();
             break;
 
           case 1:
