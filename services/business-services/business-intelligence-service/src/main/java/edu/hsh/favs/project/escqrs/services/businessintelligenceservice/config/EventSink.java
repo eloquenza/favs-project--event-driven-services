@@ -1,4 +1,4 @@
-package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.processing;
+package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.config;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.messaging.SubscribableChannel;
