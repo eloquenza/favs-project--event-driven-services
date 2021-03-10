@@ -52,9 +52,6 @@ public class CustomerController {
       @PathVariable("customerId") Long customerId, @RequestBody Customer updatedCustomer) {
     Assert.state(updatedCustomer != null, "Customer payload must not equal null");
     Assert.state(customerId != null, "CustomerId must not equal null");
-    Assert.state(
-        updatedCustomer.getId().equals(customerId),
-        "CustomerId supplied in the URI path does not match the customerId in the payload");
 
     log.info("Logging updateCustomer request: " + updatedCustomer);
     // Execute an dual-write of entity to local database and event to shared Kafka broker

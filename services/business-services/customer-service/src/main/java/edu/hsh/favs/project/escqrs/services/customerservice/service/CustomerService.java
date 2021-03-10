@@ -10,6 +10,7 @@ import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.customerservice.repository.CustomerRepository;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
@@ -63,32 +64,29 @@ public class CustomerService {
   }
 
   public Mono<Customer> updateCustomer(Long customerId, Customer updatedCustomer) {
+    // TODO: handle error where user will supply an ID in the json body that does not match the
+    // customerId given on the URI path
+    // TODO: handle error where user will try to "create" an user via an update
+    // ^- both errors are conceptually the same, I think
     Javers javers = JaversBuilder.javers().withListCompareAlgorithm(LEVENSHTEIN_DISTANCE).build();
     return this.repo
         .findById(customerId)
         .flatMap(
             customer -> {
               Diff diff = javers.compare(customer, updatedCustomer);
+              this.log.info(String.format("Logging difference between objects: %s", diff));
               diff.getChangesByType(ValueChange.class)
                   .forEach(
                       valueChange -> {
-                        log.info(
-                            String.format(
-                                "Has a property been changed? %s",
-                                valueChange.isPropertyValueChanged()));
-                        log.info(
-                            String.format(
-                                "Which property changed: %s", valueChange.getPropertyName()));
-                        log.info(
-                            String.format(
-                                "Changed from %s to %s",
-                                valueChange.getLeft(), valueChange.getRight()));
                         try {
-                          Method method =
-                              Customer.class.getDeclaredMethod(
-                                  "set" + StringUtils.capitalize(valueChange.getPropertyName()),
-                                  valueChange.getRight().getClass());
-                          method.invoke(customer, valueChange.getRight());
+                          Optional<?> opt = Optional.ofNullable(valueChange.getRight());
+                          if (opt.isPresent()) {
+                            Method method =
+                                Customer.class.getDeclaredMethod(
+                                    "set" + StringUtils.capitalize(valueChange.getPropertyName()),
+                                    valueChange.getRight().getClass());
+                            method.invoke(customer, valueChange.getRight());
+                          }
                         } catch (IllegalAccessException e) {
                           e.printStackTrace();
                         } catch (InvocationTargetException e) {
@@ -99,17 +97,5 @@ public class CustomerService {
                       });
               return dualWriteHelper.updateEntity(customer, updateEventFactory);
             });
-    //    this.repo
-    //        .findById(customerId)
-    //        .doFirst(() -> this.log.info("Figuring out difference between objects"))
-    //        .doOnNext(
-    //            customer ->
-    //                this.log.info(
-    //                    String.format(
-    //                        "Logging difference between objects: %s",
-    //                        javers.compare(customer, updatedCustomer))))
-    //        .doOnTerminate(() -> this.log.info("Done figuring out"))
-    //        .subscribe();
-    //    return dualWriteHelper.updateEntity(updatedCustomer, updateEventFactory);
   }
 }
