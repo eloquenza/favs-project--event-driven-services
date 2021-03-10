@@ -56,6 +56,12 @@ public class OrderService {
   }
 
   public Mono<Order> updateOrder(Long orderId, Order updatedOrder) {
+    // Semantical nonsensical to transfer an order to another customer, therefore we guard ourselves
+    // from clients that try to do so.
+    if (updatedOrder.getCustomerId() != null) {
+      throw new UnsupportedOperationException(
+          "Updating the customerId of an specific order is now allowed");
+    }
     return this.repo
         .findById(orderId)
         .flatMap(

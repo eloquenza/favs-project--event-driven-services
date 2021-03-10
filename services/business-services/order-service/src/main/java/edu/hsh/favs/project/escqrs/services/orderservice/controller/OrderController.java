@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
@@ -56,17 +57,20 @@ public class OrderController {
     Assert.state(updatedOrder != null, "Order payload must not equal null");
     Assert.state(orderId != null, "orderId must not equal null");
 
-    log.info("Logging updateOrder request: " + updatedOrder);
-    return service.updateOrder(orderId, updatedOrder);
+    log.info("Logging updateOrder request for order with id " + orderId + ": " + updatedOrder);
+    try {
+      return service.updateOrder(orderId, updatedOrder);
+    } catch (UnsupportedOperationException e) {
+      log.info(e.toString());
+      throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, e.toString());
+    }
   }
 
   @DeleteMapping(value = "{orderId}")
   @ResponseStatus(code = HttpStatus.OK)
   public Mono<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
     Assert.state(orderId != null, "orderId must not equal null");
-    // TODO: improve message to clarify that the orderId for the to be deleted order is logged
-    log.info("Logging deleteOrder request: " + orderId);
-    // Execute an dual-write of entity to local database and event to shared Kafka broker
+    log.info("Logging deleteOrder request for order id: " + orderId);
     return service.deleteOrder(orderId);
   }
 
