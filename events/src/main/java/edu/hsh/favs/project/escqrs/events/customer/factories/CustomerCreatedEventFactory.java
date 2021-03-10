@@ -5,7 +5,7 @@ import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
 import edu.hsh.favs.project.escqrs.events.factories.AbstractEventFactory;
 
 public class CustomerCreatedEventFactory
-    implements AbstractEventFactory<Customer, CustomerCreatedEvent> {
+    extends AbstractEventFactory<Customer, CustomerCreatedEvent> {
 
   @Override
   public CustomerCreatedEvent createEvent(Customer entity) {
@@ -15,5 +15,10 @@ public class CustomerCreatedEventFactory
         entity.getLastName(),
         entity.getUsername(),
         entity.getAge());
+  }
+
+  @Override
+  public CustomerCreatedEvent createEvent() {
+    return createEvent(suppliedEntity);
   }
 }

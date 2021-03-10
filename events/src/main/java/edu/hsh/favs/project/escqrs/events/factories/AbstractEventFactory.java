@@ -1,5 +1,19 @@
 package edu.hsh.favs.project.escqrs.events.factories;
 
-public interface AbstractEventFactory<EntityT, DomainEventBaseT> {
-  DomainEventBaseT createEvent(EntityT entity);
+public abstract class AbstractEventFactory<EntityT, DomainEventBaseT> {
+
+  protected EntityT suppliedEntity;
+
+  public abstract DomainEventBaseT createEvent(EntityT entity);
+
+  public abstract DomainEventBaseT createEvent();
+
+  public AbstractEventFactory supplyEntity(EntityT entity) {
+    this.suppliedEntity = entity;
+    return this;
+  }
+
+  public boolean isEntitySupplied() {
+    return suppliedEntity != null;
+  }
 }

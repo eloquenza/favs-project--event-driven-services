@@ -4,7 +4,7 @@ import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import edu.hsh.favs.project.escqrs.events.factories.AbstractEventFactory;
 import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
 
-public class OrderCreatedEventFactory implements AbstractEventFactory<Order, OrderCreatedEvent> {
+public class OrderCreatedEventFactory extends AbstractEventFactory<Order, OrderCreatedEvent> {
 
   @Override
   public OrderCreatedEvent createEvent(Order entity) {
@@ -13,5 +13,10 @@ public class OrderCreatedEventFactory implements AbstractEventFactory<Order, Ord
         entity.getCustomerId(),
         entity.getProductId(),
         entity.getState().toString());
+  }
+
+  @Override
+  public OrderCreatedEvent createEvent() {
+    return createEvent(suppliedEntity);
   }
 }
