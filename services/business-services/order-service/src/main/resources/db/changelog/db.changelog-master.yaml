@@ -23,7 +23,6 @@ databaseChangeLog:
                   name: product_id
                   type: BIGINT
                   constraints:
-                    primaryKey: true
                     nullable: false
               - column:
                   name: state

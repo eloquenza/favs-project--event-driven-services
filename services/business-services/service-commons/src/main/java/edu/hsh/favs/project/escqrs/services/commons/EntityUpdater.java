@@ -2,7 +2,6 @@ package edu.hsh.favs.project.escqrs.services.commons;
 
 import static org.javers.core.diff.ListCompareAlgorithm.LEVENSHTEIN_DISTANCE;
 
-import edu.hsh.favs.project.escqrs.domains.customers.Customer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -33,12 +32,16 @@ public class EntityUpdater<EntityT> {
                 Optional<?> opt = Optional.ofNullable(valueChange.getRight());
                 if (opt.isPresent()) {
                   Method method =
-                      oldEntity.getClass().getDeclaredMethod(
-                          "set" + StringUtils.capitalize(valueChange.getPropertyName()),
-                          valueChange.getRight().getClass());
+                      oldEntity
+                          .getClass()
+                          .getDeclaredMethod(
+                              "set" + StringUtils.capitalize(valueChange.getPropertyName()),
+                              valueChange.getRight().getClass());
                   method.invoke(oldEntity, valueChange.getRight());
                 }
-              } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+              } catch (IllegalAccessException
+                  | InvocationTargetException
+                  | NoSuchMethodException e) {
                 throw new RuntimeException(e);
               }
             });

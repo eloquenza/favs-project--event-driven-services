@@ -1,3 +1,4 @@
 [
-    "edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent"
+    "edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent",
+    "edu.hsh.favs.project.escqrs.events.order.OrderUpdatedEvent"
 ]

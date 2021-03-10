@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -45,6 +46,17 @@ public class OrderController {
 
     log.info("Logging createOrder request: " + body);
     return body.flatMap(order -> service.createOrder(order));
+  }
+
+  @PutMapping(path = "{orderId}", consumes = OrderController.MEDIATYPE_ORDER_JSON_V1)
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Order> updateOrder(
+      @PathVariable("orderId") Long orderId, @RequestBody Order updatedOrder) {
+    Assert.state(updatedOrder != null, "Order payload must not equal null");
+    Assert.state(orderId != null, "orderId must not equal null");
+
+    log.info("Logging updateOrder request: " + updatedOrder);
+    return service.updateOrder(orderId, updatedOrder);
   }
 
   @GetMapping(path = "")

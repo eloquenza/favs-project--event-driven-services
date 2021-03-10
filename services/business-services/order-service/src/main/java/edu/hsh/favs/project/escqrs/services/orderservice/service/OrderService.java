@@ -2,7 +2,9 @@ package edu.hsh.favs.project.escqrs.services.orderservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
+import edu.hsh.favs.project.escqrs.events.order.factories.OrderUpdatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.DualWriteTransactionHelper;
+import edu.hsh.favs.project.escqrs.services.commons.EntityUpdater;
 import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
@@ -20,7 +22,9 @@ public class OrderService {
   private final Logger log = Loggers.getLogger(OrderService.class.getName());
   private final OrderRepository repo;
   private final OrderCreatedEventFactory createEventFactory;
+  private final OrderUpdatedEventFactory updateEventFactory;
   private final DualWriteTransactionHelper<Order> dualWriteHelper;
+  private final EntityUpdater<Order> entityUpdater;
 
   @Autowired
   public OrderService(
@@ -30,8 +34,10 @@ public class OrderService {
       Source messageBroker) {
     this.repo = repo;
     this.createEventFactory = new OrderCreatedEventFactory();
+    this.updateEventFactory = new OrderUpdatedEventFactory();
     this.dualWriteHelper =
         new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
+    this.entityUpdater = new EntityUpdater<>(log);
   }
 
   public Mono<Order> findOrderById(Long orderId) {
@@ -44,5 +50,15 @@ public class OrderService {
 
   public Mono<Order> createOrder(Order order) {
     return dualWriteHelper.createEntity(order, createEventFactory);
+  }
+
+  public Mono<Order> updateOrder(Long orderId, Order updatedOrder) {
+    return this.repo
+        .findById(orderId)
+        .flatMap(
+            order ->
+                dualWriteHelper.updateEntity(
+                    entityUpdater.update(order, updatedOrder),
+                    updateEventFactory.supplyEntity(updatedOrder.setId(order.getId()))));
   }
 }
