@@ -110,6 +110,8 @@ public class DualWriteTransactionHelper<EntityT> {
       return (Mono<EntityT>)
           template
               .select(entity.getClass())
+              // Using reflection to access getId here as the entities do not have a shared superclass
+              // but all are having an getId method.
               .matching(query(where("id").is(entity.getClass().getMethod("getId").invoke(entity))))
               .first();
     } catch (NoSuchMethodException e) {
