@@ -95,7 +95,9 @@ public class CustomerService {
                           e.printStackTrace();
                         }
                       });
-              return dualWriteHelper.updateEntity(customer, updateEventFactory);
+              return dualWriteHelper.updateEntity(
+                  customer,
+                  updateEventFactory.supplyEntity(updatedCustomer.setId(customer.getId())));
             });
   }
 }

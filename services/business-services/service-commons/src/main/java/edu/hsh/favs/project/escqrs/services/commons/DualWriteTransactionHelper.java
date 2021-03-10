@@ -132,10 +132,13 @@ public class DualWriteTransactionHelper<EntityT> {
         () -> {
           // If the database transaction fails, our domain event must not be sent to broker
           try {
-            DomainEventBaseT event = factory.createEvent(entity);
+            DomainEventBaseT event =
+                factory.isEntitySupplied() ? factory.createEvent() : factory.createEvent(entity);
             // Attempt to perform CQRS-needed dual-write to message broker by sending domain event
             Message<DomainEventBaseT> message =
                 MessageBuilder.withPayload(event)
+                    // supply an eventType header so consumers can do content-based routing, i.e.
+                    // figure out which event is to be sent to which consuming function
                     .setHeader("eventType", event.getClass().getSimpleName())
                     .build();
             this.log.info(String.format("Emitting event to broker: %s", message));
