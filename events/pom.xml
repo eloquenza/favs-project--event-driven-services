@@ -84,7 +84,7 @@
                 <version>${confluent.version}</version>
                 <configuration>
                     <schemaRegistryUrls>
-                        <param>http://0.0.0.0:8081</param>
+                        <param>http://schema-registry:8081</param>
                     </schemaRegistryUrls>
                     <subjects>
                         <!-- This defines the possible event types on each Kafka topic -->

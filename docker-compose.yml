@@ -161,8 +161,6 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:32181'
     image: confluentinc/cp-schema-registry:latest
-    hostname: schema-registry
-    container_name: schema-registry
     ports:
       - "8081:8081"
     restart: always
@@ -187,3 +185,13 @@ services:
       - "5432/tcp"
     deploy:
       replicas: 1
+
+  register-schemas:
+    build:
+      context: .
+      dockerfile: register-schemas.Dockerfile
+    command: dockerize -wait http://schema-registry:8081/subjects -timeout 300s -wait-retry-interval 10s mvn -s /usr/share/maven/ref/settings-docker.xml -pl events schema-registry:register
+    volumes:
+      - ./:/repository:ro
+    depends_on:
+      - schema-registry
