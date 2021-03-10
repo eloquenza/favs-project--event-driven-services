@@ -50,11 +50,6 @@
             <version>7.3.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.javers</groupId>
-            <artifactId>javers-core</artifactId>
-            <version>5.14.0</version>
-        </dependency>
     </dependencies>
 
     <repositories>

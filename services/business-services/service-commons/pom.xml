@@ -23,5 +23,10 @@
       <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.javers</groupId>
+      <artifactId>javers-core</artifactId>
+      <version>5.14.0</version>
+    </dependency>
   </dependencies>
 </project>
