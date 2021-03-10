@@ -19,7 +19,7 @@ public class Customer implements Serializable {
   private String lastName;
 
   @Column(value = "age")
-  private int age;
+  private Integer age;
 
   @Id private Long id;
 
@@ -60,11 +60,11 @@ public class Customer implements Serializable {
     return this;
   }
 
-  public int getAge() {
+  public Integer getAge() {
     return age;
   }
 
-  public Customer setAge(int age) {
+  public Customer setAge(Integer age) {
     this.age = age;
     return this;
   }

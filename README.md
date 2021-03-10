@@ -40,6 +40,12 @@ List a specific customer:
 
 Replace the `1` with the id of the customer you want to know more about.
 
+Update a specific customer: 
+
+`curl -s -X "PUT" "http://0.0.0.0:9000/customers/1" -H 'Content-Type:
+application/vnd.favs-commerce.customers.v1+json; charset=utf-8' -d "{\"firstName\":
+\"testFirstname\", \"lastName\": \"testLastname\", \"age\": 21, \"username\": \"testUniqueUsername\"}"`
+
 Delete a specific customer:
 `curl -s -X "DELETE" "http://0.0.0.0:9000/customers/1"`
 

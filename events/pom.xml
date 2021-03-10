@@ -105,6 +105,7 @@
                         <customer-value>src/main/resources/avro/CustomerEvents.avsc</customer-value>
                         <order-value>src/main/resources/avro/OrderEvents.avsc</order-value>
                         <CustomerCreated>src/main/resources/avro/CustomerCreatedEvent.avsc</CustomerCreated>
+                        <CustomerUpdated>src/main/resources/avro/CustomerUpdatedEvent.avsc</CustomerUpdated>
                         <CustomerDeleted>src/main/resources/avro/CustomerDeletedEvent.avsc</CustomerDeleted>
                         <OrderCreated>src/main/resources/avro/OrderCreatedEvent.avsc</OrderCreated>
                     </subjects>
@@ -113,6 +114,7 @@
                         <order-value>AVRO</order-value>
                         <CustomerCreated>AVRO</CustomerCreated>
                         <CustomerDeleted>AVRO</CustomerDeleted>
+                        <CustomerUpdated>AVRO</CustomerUpdated>
                         <OrderCreated>AVRO</OrderCreated>
                     </schemaTypes>
                     <references>
@@ -124,6 +126,10 @@
                             <reference>
                                 <name>edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent</name>
                                 <subject>CustomerDeleted</subject>
+                            </reference>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.customer.CustomerUpdatedEvent</name>
+                                <subject>CustomerUpdated</subject>
                             </reference>
                         </customer-value>
                         <order-value>

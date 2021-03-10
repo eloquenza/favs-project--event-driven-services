@@ -30,7 +30,8 @@ public class OrderService {
       Source messageBroker) {
     this.repo = repo;
     this.createEventFactory = new OrderCreatedEventFactory();
-    this.dualWriteHelper = new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
+    this.dualWriteHelper =
+        new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
   }
 
   public Mono<Order> findOrderById(Long orderId) {

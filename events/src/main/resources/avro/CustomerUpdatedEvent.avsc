@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.customer",
+  "name": "CustomerUpdatedEvent",
+
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "firstName", "type": ["null", "string"], "default": null},
+    {"name": "lastName",  "type": ["null", "string"], "default": null},
+    {"name": "username",  "type": ["null", "string"], "default": null},
+    {"name": "age", "type": ["null", "int"], "default": null}
+  ]
+}
