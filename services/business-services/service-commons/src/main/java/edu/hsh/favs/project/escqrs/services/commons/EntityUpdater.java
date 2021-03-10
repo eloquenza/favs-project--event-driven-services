@@ -23,7 +23,7 @@ public class EntityUpdater<EntityT> {
     this.javers = JaversBuilder.javers().withListCompareAlgorithm(LEVENSHTEIN_DISTANCE).build();
   }
 
-  public EntityT update(EntityT oldEntity, EntityT newEntity) {
+  public EntityT update(EntityT oldEntity, EntityT newEntity) throws RuntimeException {
     Diff diff = javers.compare(oldEntity, newEntity);
     this.log.info(String.format("Logging difference between objects: %s", diff));
     diff.getChangesByType(ValueChange.class)
@@ -38,12 +38,8 @@ public class EntityUpdater<EntityT> {
                           valueChange.getRight().getClass());
                   method.invoke(oldEntity, valueChange.getRight());
                 }
-              } catch (IllegalAccessException e) {
-                e.printStackTrace();
-              } catch (InvocationTargetException e) {
-                e.printStackTrace();
-              } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+              } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
               }
             });
     return oldEntity;
