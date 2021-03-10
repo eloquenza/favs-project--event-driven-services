@@ -44,7 +44,13 @@ Update a specific customer:
 
 `curl -s -X "PUT" "http://0.0.0.0:9000/customers/1" -H 'Content-Type:
 application/vnd.favs-commerce.customers.v1+json; charset=utf-8' -d "{\"firstName\":
-\"testFirstname\", \"lastName\": \"testLastname\", \"age\": 21, \"username\": \"testUniqueUsername\"}"`
+\"newFirstName\", \"lastName\": \"newLastName\", \"age\": 21, \"username\": \"newUniqueUsername\"}"`
+
+This operation would update all fields from the specific customer.
+It is also possible to update a single field of a specific customer:
+
+`curl -s -X "PUT" "http://0.0.0.0:9000/customers/1" -H 'Content-Type:
+application/vnd.favs-commerce.customers.v1+json; charset=utf-8' -d "{"age\": 23}"`
 
 Delete a specific customer:
 `curl -s -X "DELETE" "http://0.0.0.0:9000/customers/1"`
@@ -56,10 +62,17 @@ This means that each product has to be in its own order.
 
 Create an order:
 `curl -X "POST" "http://0.0.0.0:9000/orders" -H 'Content-Type: application/vnd.favs-commerce.
-orders.v1+json; charset=utf-8' -d "{\"orderId\": 1, \"customerId\": 1, \"productId\": 1, \"state\": \"CREATED\"}"`
+orders.v1+json; charset=utf-8' -d "{\\"customerId\": 1, \"productId\": 1, \"state\": \"CREATED\"}"`
 
 Get an specific order:
 `curl -H "Accept: application/vnd.favs-commerce.orders.v1+json" -s "http://0.0.0.0:9000/orders/1"`
+
+Update a specific order:
+
+`curl -s -X "PUT" "http://0.0.0.0:9000/order/1" -H 'Content-Type:
+application/vnd.favs-commerce.orders.v1+json; charset=utf-8' {\"productId\": 1, \"state\": \"CREATED\"}"`
+
+For this operation the same rules apply as to the customer update operation, i.e. updating only a specific field is possible.
 
 Get all orders:
 `curl -H "Accept: application/vnd.favs-commerce.orders.v1+json" -s "http://0.0.0.0:9000/orders"`
