@@ -51,7 +51,7 @@ public class CustomerController {
   public Mono<Customer> updateCustomer(
       @PathVariable("customerId") Long customerId, @RequestBody Customer updatedCustomer) {
     Assert.state(updatedCustomer != null, "Customer payload must not equal null");
-    Assert.state(customerId != null, "CustomerId must not equal null");
+    Assert.state(customerId != null, "customerId must not equal null");
 
     log.info("Logging updateCustomer request: " + updatedCustomer);
     // Execute an dual-write of entity to local database and event to shared Kafka broker

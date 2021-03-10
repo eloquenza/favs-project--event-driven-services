@@ -68,7 +68,7 @@ public class CustomerEventProcessor {
       condition = "headers['eventType']=='CustomerUpdatedEvent'")
   public void receive(@Payload CustomerUpdatedEvent updatedEvent) {
     try {
-      log.info("CustomerDeletedEvent received: " + updatedEvent.toString());
+      log.info("CustomerUpdatedEvent received: " + updatedEvent.toString());
       Integer oldAge = customerAgeMap.get(updatedEvent.getId());
       Integer newAge = updatedEvent.getAge();
       customerAgeMap.replace(updatedEvent.getId(), oldAge, newAge);
