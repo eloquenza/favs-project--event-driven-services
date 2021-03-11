@@ -101,8 +101,7 @@ public class OrderController {
 
   private Mono<Order> changeOrderState(Long orderId, OrderState newState) {
     try {
-      return service.updateOrder(
-          orderId, new Order().setId(orderId).setState(newState));
+      return service.updateOrder(orderId, new Order().setId(orderId).setState(newState));
     } catch (UnsupportedOperationException e) {
       log.info(e.toString());
       throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, e.toString());
