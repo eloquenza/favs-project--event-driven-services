@@ -6,10 +6,12 @@ import edu.hsh.favs.project.escqrs.events.order.OrderDeletedEvent;
 import edu.hsh.favs.project.escqrs.events.order.OrderUpdatedEvent;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.analysis.AmountOfProductsBoughtMarketAnalysis;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.config.EventSink;
+import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.handler.annotation.Payload;
+import reactor.util.Logger;
 import reactor.util.Loggers;
 
 @Configuration
@@ -17,9 +19,11 @@ import reactor.util.Loggers;
 public class OrderEventProcessor extends EntityEventProcessor {
 
   private final AmountOfProductsBoughtMarketAnalysis analysis;
+  private final Logger log;
 
   public OrderEventProcessor() {
-    super(Loggers.getLogger(CustomerEventProcessor.class.getName()));
+    super(Loggers.getLogger(OrderEventProcessor.class.getName()));
+    this.log = Loggers.getLogger(OrderEventProcessor.class.getName());
     this.analysis = new AmountOfProductsBoughtMarketAnalysis();
   }
 
