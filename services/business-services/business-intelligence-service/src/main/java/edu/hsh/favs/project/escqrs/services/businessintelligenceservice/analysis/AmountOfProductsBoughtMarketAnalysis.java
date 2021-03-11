@@ -26,13 +26,10 @@ public class AmountOfProductsBoughtMarketAnalysis {
   private final Logger log;
 
   public AmountOfProductsBoughtMarketAnalysis() {
-    this.warehouse = new EntityAnalyticWarehouse<>(
-        1L,
-        0L,
-        (l, r) -> l++,
-        (l, r) -> l--);
-    this.eventProcessor = new EntityEventProcessor(Loggers.getLogger(
-        AmountOfProductsBoughtMarketAnalysis.class.getName()));
+    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l++, (l, r) -> l--);
+    this.eventProcessor =
+        new EntityEventProcessor(
+            Loggers.getLogger(AmountOfProductsBoughtMarketAnalysis.class.getName()));
     this.log = Loggers.getLogger(AmountOfProductsBoughtMarketAnalysis.class.getName());
   }
 
@@ -43,8 +40,7 @@ public class AmountOfProductsBoughtMarketAnalysis {
     this.eventProcessor.handleEvent(
         orderCreatedEvent,
         event -> {
-          this.warehouse.addValueEntry(
-              orderCreatedEvent.getId(), orderCreatedEvent.getProductId());
+          this.warehouse.addValueEntry(orderCreatedEvent.getId(), orderCreatedEvent.getProductId());
           this.logHistogram();
         });
   }
@@ -84,8 +80,14 @@ public class AmountOfProductsBoughtMarketAnalysis {
     this.eventProcessor.handleEvent(
         orderDeletedEvent,
         event -> {
-          this.warehouse.removeValueEntry(orderDeletedEvent.getId());
-          this.logHistogram();
+          if (!orderDeletedEvent
+              .getState()
+              .toString()
+              .contentEquals(OrderState.DELIVERED.toString())) {
+            this.log.info("Order was never delivered, i.e. these products were never bought.");
+            this.warehouse.removeValueEntry(orderDeletedEvent.getId());
+            this.logHistogram();
+          }
         });
   }
 
