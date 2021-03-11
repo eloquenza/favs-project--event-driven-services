@@ -1,29 +1,73 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.analysis;
 
+import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
+import edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent;
+import edu.hsh.favs.project.escqrs.events.customer.CustomerUpdatedEvent;
+import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.config.EventSink;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.datatypes.EntityAnalyticWarehouse;
+import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.handler.annotation.Payload;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
+@Configuration
+@EnableBinding(EventSink.class)
 public class CustomerWithSpecificAgeMarketAnalysis {
 
-  private EntityAnalyticWarehouse<Long, Integer> warehouse;
+  // Save customers by id and age, has a histogram with age buckets to count
+  // how many customers we have in our service with a specific age.
+  private final EntityAnalyticWarehouse<Long, Integer> warehouse;
+  private final EntityEventProcessor eventProcessor;
+  private final Logger log;
 
   public CustomerWithSpecificAgeMarketAnalysis() {
-    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l + 1L, (l, r) -> l - 1L);
+    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l++, (l, r) -> l--);
+    this.eventProcessor =
+        new EntityEventProcessor(
+            Loggers.getLogger(CustomerWithSpecificAgeMarketAnalysis.class.getName()));
+    this.log = Loggers.getLogger(CustomerWithSpecificAgeMarketAnalysis.class.getName());
   }
 
-  public void addAgeEntry(Long customerId, Integer age) {
-    warehouse.addValueEntry(customerId, age);
+  @StreamListener(
+      value = EventSink.CUSTOMER_INPUT,
+      condition = "headers['eventType']=='CustomerCreatedEvent'")
+  public void receive(@Payload CustomerCreatedEvent createEvent) {
+    this.eventProcessor.handleEvent(
+        createEvent,
+        event -> {
+          this.warehouse.addValueEntry(createEvent.getId(), createEvent.getAge());
+          this.logHistogram();
+        });
   }
 
-  public void removeAgeEntry(Long customerId) {
-    warehouse.removeValueEntry(customerId);
+  @StreamListener(
+      value = EventSink.CUSTOMER_INPUT,
+      condition = "headers['eventType']=='CustomerDeletedEvent'")
+  public void receive(@Payload CustomerDeletedEvent deleteEvent) {
+    this.eventProcessor.handleEvent(
+        deleteEvent,
+        event -> {
+          this.warehouse.removeValueEntry(deleteEvent.getId());
+          this.logHistogram();
+        });
   }
 
-  public void updateAgeEntry(Long customerId, Integer newAge) {
-    warehouse.updateValueEntry(customerId, newAge);
+  @StreamListener(
+      value = EventSink.CUSTOMER_INPUT,
+      condition = "headers['eventType']=='CustomerUpdatedEvent'")
+  public void receive(@Payload CustomerUpdatedEvent updatedEvent) {
+    this.eventProcessor.handleEvent(
+        updatedEvent,
+        event -> {
+          this.warehouse.updateValueEntry(updatedEvent.getId(), updatedEvent.getAge());
+          this.logHistogram();
+        });
   }
 
-  @Override
-  public String toString() {
-    return "CustomerWithSpecificAgeMarketAnalysis{" + "warehouse=" + warehouse + '}';
+  private void logHistogram() {
+    this.log.info("Displaying the updated 'customer age' histogram: " + warehouse);
   }
 }
