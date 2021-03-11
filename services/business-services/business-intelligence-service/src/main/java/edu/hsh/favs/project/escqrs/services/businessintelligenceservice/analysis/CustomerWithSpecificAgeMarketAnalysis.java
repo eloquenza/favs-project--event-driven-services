@@ -24,7 +24,7 @@ public class CustomerWithSpecificAgeMarketAnalysis {
   private final Logger log;
 
   public CustomerWithSpecificAgeMarketAnalysis() {
-    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l++, (l, r) -> l--);
+    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l + 1L, (l, r) -> l - 1L);
     this.eventProcessor =
         new EntityEventProcessor(
             Loggers.getLogger(CustomerWithSpecificAgeMarketAnalysis.class.getName()));
@@ -33,7 +33,7 @@ public class CustomerWithSpecificAgeMarketAnalysis {
 
   @StreamListener(
       value = EventSink.CUSTOMER_INPUT,
-      condition = "headers['eventType']=='CustomerCreatedEvent'")
+      condition = EntityEventProcessor.MATCHING_CUSTOMERCREATEDEVENT)
   public void receive(@Payload CustomerCreatedEvent createEvent) {
     this.eventProcessor.handleEvent(
         createEvent,
@@ -45,7 +45,7 @@ public class CustomerWithSpecificAgeMarketAnalysis {
 
   @StreamListener(
       value = EventSink.CUSTOMER_INPUT,
-      condition = "headers['eventType']=='CustomerDeletedEvent'")
+      condition = EntityEventProcessor.MATCHING_CUSTOMERDELETEDEVENT)
   public void receive(@Payload CustomerDeletedEvent deleteEvent) {
     this.eventProcessor.handleEvent(
         deleteEvent,
@@ -57,7 +57,7 @@ public class CustomerWithSpecificAgeMarketAnalysis {
 
   @StreamListener(
       value = EventSink.CUSTOMER_INPUT,
-      condition = "headers['eventType']=='CustomerUpdatedEvent'")
+      condition = EntityEventProcessor.MATCHING_CUSTOMERUPDATEDEVENT)
   public void receive(@Payload CustomerUpdatedEvent updatedEvent) {
     this.eventProcessor.handleEvent(
         updatedEvent,

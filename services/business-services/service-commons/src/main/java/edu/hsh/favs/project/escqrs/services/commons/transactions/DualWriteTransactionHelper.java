@@ -4,6 +4,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
 
 import edu.hsh.favs.project.escqrs.events.factories.AbstractEventFactory;
+import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.UnaryOperator;
 import org.springframework.cloud.stream.messaging.Source;
@@ -139,7 +140,7 @@ public class DualWriteTransactionHelper<EntityT> {
                 MessageBuilder.withPayload(event)
                     // supply an eventType header so consumers can do content-based routing, i.e.
                     // figure out which event is to be sent to which consuming function
-                    .setHeader("eventType", event.getClass().getSimpleName())
+                    .setHeader(EntityEventProcessor.HEADER_KEY_EVENTTYPE, event.getClass().getSimpleName())
                     .build();
             this.log.info(String.format("Emitting event to broker: %s", message));
             this.messageBroker.output().send(message, 30000L);

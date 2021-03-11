@@ -26,7 +26,7 @@ public class AmountOfProductsBoughtMarketAnalysis {
   private final Logger log;
 
   public AmountOfProductsBoughtMarketAnalysis() {
-    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l++, (l, r) -> l--);
+    this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l + 1L, (l, r) -> l - 1L);
     this.eventProcessor =
         new EntityEventProcessor(
             Loggers.getLogger(AmountOfProductsBoughtMarketAnalysis.class.getName()));
@@ -35,7 +35,7 @@ public class AmountOfProductsBoughtMarketAnalysis {
 
   @StreamListener(
       value = EventSink.ORDER_INPUT,
-      condition = "headers['eventType']=='OrderCreatedEvent'")
+      condition = EntityEventProcessor.MATCHING_ORDERCREATEDEVENT)
   public void receive(@Payload OrderCreatedEvent orderCreatedEvent) {
     this.eventProcessor.handleEvent(
         orderCreatedEvent,
@@ -47,7 +47,7 @@ public class AmountOfProductsBoughtMarketAnalysis {
 
   @StreamListener(
       value = EventSink.ORDER_INPUT,
-      condition = "headers['eventType']=='OrderUpdatedEvent'")
+      condition = EntityEventProcessor.MATCHING_ORDERUPDATEDEVENT)
   public void receive(@Payload OrderUpdatedEvent orderUpdatedEvent) {
     this.eventProcessor.handleEvent(
         orderUpdatedEvent,
@@ -75,7 +75,7 @@ public class AmountOfProductsBoughtMarketAnalysis {
 
   @StreamListener(
       value = EventSink.ORDER_INPUT,
-      condition = "headers['eventType']=='OrderDeletedEvent'")
+      condition = EntityEventProcessor.MATCHING_ORDERDELETEDEVENT)
   public void receive(@Payload OrderDeletedEvent orderDeletedEvent) {
     this.eventProcessor.handleEvent(
         orderDeletedEvent,
