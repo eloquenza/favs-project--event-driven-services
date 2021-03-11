@@ -27,10 +27,8 @@ public class AmountOfProductsBoughtMarketAnalysis {
 
   public AmountOfProductsBoughtMarketAnalysis() {
     this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l + 1L, (l, r) -> l - 1L);
-    this.eventProcessor =
-        new EntityEventProcessor(
-            Loggers.getLogger(AmountOfProductsBoughtMarketAnalysis.class.getName()));
     this.log = Loggers.getLogger(AmountOfProductsBoughtMarketAnalysis.class.getName());
+    this.eventProcessor = new EntityEventProcessor(this.log);
   }
 
   @StreamListener(

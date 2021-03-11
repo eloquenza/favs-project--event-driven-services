@@ -25,10 +25,8 @@ public class CustomerWithSpecificAgeMarketAnalysis {
 
   public CustomerWithSpecificAgeMarketAnalysis() {
     this.warehouse = new EntityAnalyticWarehouse<>(1L, 0L, (l, r) -> l + 1L, (l, r) -> l - 1L);
-    this.eventProcessor =
-        new EntityEventProcessor(
-            Loggers.getLogger(CustomerWithSpecificAgeMarketAnalysis.class.getName()));
     this.log = Loggers.getLogger(CustomerWithSpecificAgeMarketAnalysis.class.getName());
+    this.eventProcessor = new EntityEventProcessor(this.log);
   }
 
   @StreamListener(
