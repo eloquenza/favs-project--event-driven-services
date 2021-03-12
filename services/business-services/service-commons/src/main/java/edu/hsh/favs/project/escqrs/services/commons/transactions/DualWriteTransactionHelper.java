@@ -140,7 +140,8 @@ public class DualWriteTransactionHelper<EntityT> {
                 MessageBuilder.withPayload(event)
                     // supply an eventType header so consumers can do content-based routing, i.e.
                     // figure out which event is to be sent to which consuming function
-                    .setHeader(EntityEventProcessor.HEADER_KEY_EVENTTYPE, event.getClass().getSimpleName())
+                    .setHeader(
+                        EntityEventProcessor.HEADER_KEY_EVENTTYPE, event.getClass().getSimpleName())
                     .build();
             this.log.info(String.format("Emitting event to broker: %s", message));
             this.messageBroker.output().send(message, 30000L);
