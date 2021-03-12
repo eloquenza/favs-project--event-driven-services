@@ -48,6 +48,12 @@ spring:
           group: order-group
           producer:
             requiredGroups: order-group
+        input:
+          binder: kafka
+          destination: customer
+          contentType: application/*+avro
+          consumer:
+            concurrency: 1
 server:
   port: ${PORT:${SERVER_PORT:8122}}
 logging:

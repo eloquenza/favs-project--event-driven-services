@@ -9,6 +9,8 @@ import reactor.core.publisher.Flux;
 @Service
 public interface OrderRepository extends ReactiveSortingRepository<Order, Long> {
 
+  Flux<Order> findByCustomerId(Long customerId);
+
   @Query("SELECT * FROM orders;")
   Flux<Order> getAllOrders();
 }
