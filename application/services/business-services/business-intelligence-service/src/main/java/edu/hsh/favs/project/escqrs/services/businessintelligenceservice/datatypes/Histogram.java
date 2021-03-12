@@ -25,6 +25,10 @@ public class Histogram<KeyT, ValueT> {
     histogram = new TreeMap<>();
   }
 
+  public ValueT getEntry(KeyT key) {
+    return histogram.get(key);
+  }
+
   public ValueT addEntry(KeyT key) {
     return mergeEntries(
         key, stepValue, (oldV, newV) -> this.incrementFunctor.apply(oldV, stepValue));

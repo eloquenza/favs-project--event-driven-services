@@ -18,6 +18,14 @@ public class EntityAnalyticWarehouse<KeyT, ValueT> {
     this.entityInterestedValueMap = new HashMap<>();
   }
 
+  public KeyT getHistogramEntryForValue(ValueT value) {
+    return histogram.getEntry(value);
+  }
+
+  public ValueT getMappedValue(KeyT key) {
+    return entityInterestedValueMap.get(key);
+  }
+
   public void addValueEntry(KeyT entityId, ValueT value) {
     entityInterestedValueMap.put(entityId, value);
     histogram.addEntry(value);
