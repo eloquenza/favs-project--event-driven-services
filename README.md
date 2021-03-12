@@ -88,3 +88,18 @@ Get all products:
 
 Get a specific product:
 `curl -H "Accept: application/vnd.favs-commerce.products.v1+json" -s "http://0.0.0.0:9000/products/1"`
+
+## Development tools
+
+If you want to enter the PostgreSQL instance and see what is on the DB, play around, manipulate data, you can do the following:
+
+`docker-compose customer-db /bin/bash`.
+
+This will start a bash shell inside the DB container.
+Afterwards, you can use the psql client to interact with the database:
+
+`psql -U postgres`
+
+Listing all tables can be done by entering:
+
+`\dt+`
