@@ -89,11 +89,25 @@ Get all products:
 Get a specific product:
 `curl -H "Accept: application/vnd.favs-commerce.products.v1+json" -s "http://0.0.0.0:9000/products/1"`
 
-## Development tools
+## Development/Deployment tools
+
+### Kafka
+
+This displays all created topics on the Kafka broker:
+
+`docker run -it --network=demo_default edenhill/kafkacat:1.6.0 -b kafka:29092 -L`
+
+This command displays all events published on a specific topic, here topic `customer` (i.e. this is a consumer):
+
+`docker run -it --network=demo_default edenhill/kafkacat:1.6.0 -b kafka:29092 -t customer -C`
+
+If interested in reading events from a specific offset, use the `-o #` flag with the needed offset.
+
+### PostgreSQL
 
 If you want to enter the PostgreSQL instance and see what is on the DB, play around, manipulate data, you can do the following:
 
-`docker-compose customer-db /bin/bash`.
+`docker-compose exec customer-db /bin/bash`.
 
 This will start a bash shell inside the DB container.
 Afterwards, you can use the psql client to interact with the database:
@@ -103,3 +117,19 @@ Afterwards, you can use the psql client to interact with the database:
 Listing all tables can be done by entering:
 
 `\dt+`
+
+Other than this, all commonly known SQL commands (in PostgreSQL dialect) work inside this client.
+
+### Application containers
+
+#### Scaling up services
+
+`docker-compose up -d --scale $service-name=$amount-of-required-instances`
+
+Change `$service-name` to the service that needs to be scaled up.
+Change `$amount-of-required-instances` to the required amount of instances.
+If the correct service name is needed, check the `docker-compose.yml` file for the declared service-names.
+
+For example, if the `business-intelligence-service` should be scaled up to 5 instances, the appropriate command would be:
+
+`docker-compose up -d --scale business-intelligence-service=5`
