@@ -40,7 +40,6 @@ spring:
         customer:
           binder: kafka
           destination: customer
-          group: customer-group
           contentType: application/*+avro
           consumer:
             concurrency: 1
@@ -51,7 +50,6 @@ spring:
         order:
           binder: kafka
           destination: order
-          group: order-group
           contentType: application/*+avro
           consumer:
             concurrency: 1
