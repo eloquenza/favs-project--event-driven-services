@@ -9,6 +9,11 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 ADD . /repository
 WORKDIR /repository
+# Download all maven packages in beforehand, so we can simply use this container as a one-off command
 RUN mvn -B -f ./events/pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins
+# Resolve-plugins only does not seem to help, there are more dependencies needed
+# Executing the command will download these dependencies, but it will fail as the schema-registry server is not online
+# Ending the command `|| true` will let the docker build process complete instead of fail.
+RUN mvn -B -s /usr/share/maven/ref/settings-docker.xml -pl events schema-registry:register || true
 
 ENTRYPOINT [""]
