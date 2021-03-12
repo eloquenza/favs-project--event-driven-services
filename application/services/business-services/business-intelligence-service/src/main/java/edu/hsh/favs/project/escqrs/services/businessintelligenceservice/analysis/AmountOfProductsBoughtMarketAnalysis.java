@@ -1,8 +1,8 @@
 package edu.hsh.favs.project.escqrs.services.businessintelligenceservice.analysis;
 
 import edu.hsh.favs.project.escqrs.domains.orders.OrderState;
-import edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent;
 import edu.hsh.favs.project.escqrs.events.order.OrderDeletedEvent;
+import edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent;
 import edu.hsh.favs.project.escqrs.events.order.OrderUpdatedEvent;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.config.EventSink;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.datatypes.EntityAnalyticWarehouse;
@@ -33,12 +33,12 @@ public class AmountOfProductsBoughtMarketAnalysis {
 
   @StreamListener(
       value = EventSink.ORDER_INPUT,
-      condition = EntityEventProcessor.MATCHING_ORDERCREATEDEVENT)
-  public void receive(@Payload OrderCreatedEvent orderCreatedEvent) {
+      condition = EntityEventProcessor.MATCHING_ORDERPLACEDEVENT)
+  public void receive(@Payload OrderPlacedEvent orderPlacedEvent) {
     this.eventProcessor.handleEvent(
-        orderCreatedEvent,
+        orderPlacedEvent,
         event -> {
-          this.warehouse.addValueEntry(orderCreatedEvent.getId(), orderCreatedEvent.getProductId());
+          this.warehouse.addValueEntry(orderPlacedEvent.getId(), orderPlacedEvent.getProductId());
           this.logHistogram();
         });
   }

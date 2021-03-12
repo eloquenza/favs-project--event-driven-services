@@ -12,13 +12,13 @@ import org.apache.avro.specific.SpecificData;
 import org.apache.avro.util.Utf8;
 
 @org.apache.avro.specific.AvroGenerated
-public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBase
+public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBase
     implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -1935042375402340408L;
+  private static final long serialVersionUID = 4599566602310441716L;
   public static final org.apache.avro.Schema SCHEMA$ =
       new org.apache.avro.Schema.Parser()
           .parse(
-              "{\"type\":\"record\",\"name\":\"OrderCreatedEvent\",\"namespace\":\"edu.hsh.favs.project.escqrs.events.order\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"customerId\",\"type\":\"long\"},{\"name\":\"productId\",\"type\":\"long\"},{\"name\":\"state\",\"type\":\"string\"}]}");
+              "{\"type\":\"record\",\"name\":\"OrderPlacedEvent\",\"namespace\":\"edu.hsh.favs.project.escqrs.events.order\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"customerId\",\"type\":\"long\"},{\"name\":\"productId\",\"type\":\"long\"},{\"name\":\"state\",\"type\":\"string\"}]}");
 
   public static org.apache.avro.Schema getClassSchema() {
     return SCHEMA$;
@@ -26,18 +26,18 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
 
   private static SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<OrderCreatedEvent> ENCODER =
-      new BinaryMessageEncoder<OrderCreatedEvent>(MODEL$, SCHEMA$);
+  private static final BinaryMessageEncoder<OrderPlacedEvent> ENCODER =
+      new BinaryMessageEncoder<OrderPlacedEvent>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<OrderCreatedEvent> DECODER =
-      new BinaryMessageDecoder<OrderCreatedEvent>(MODEL$, SCHEMA$);
+  private static final BinaryMessageDecoder<OrderPlacedEvent> DECODER =
+      new BinaryMessageDecoder<OrderPlacedEvent>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageEncoder instance used by this class.
    *
    * @return the message encoder used by this class
    */
-  public static BinaryMessageEncoder<OrderCreatedEvent> getEncoder() {
+  public static BinaryMessageEncoder<OrderPlacedEvent> getEncoder() {
     return ENCODER;
   }
 
@@ -46,7 +46,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
    *
    * @return the message decoder used by this class
    */
-  public static BinaryMessageDecoder<OrderCreatedEvent> getDecoder() {
+  public static BinaryMessageDecoder<OrderPlacedEvent> getDecoder() {
     return DECODER;
   }
 
@@ -57,12 +57,12 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
-  public static BinaryMessageDecoder<OrderCreatedEvent> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<OrderCreatedEvent>(MODEL$, SCHEMA$, resolver);
+  public static BinaryMessageDecoder<OrderPlacedEvent> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<OrderPlacedEvent>(MODEL$, SCHEMA$, resolver);
   }
 
   /**
-   * Serializes this OrderCreatedEvent to a ByteBuffer.
+   * Serializes this OrderPlacedEvent to a ByteBuffer.
    *
    * @return a buffer holding the serialized data for this instance
    * @throws java.io.IOException if this instance could not be serialized
@@ -72,14 +72,14 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   }
 
   /**
-   * Deserializes a OrderCreatedEvent from a ByteBuffer.
+   * Deserializes a OrderPlacedEvent from a ByteBuffer.
    *
    * @param b a byte buffer holding serialized data for an instance of this class
-   * @return a OrderCreatedEvent instance decoded from the given buffer
+   * @return a OrderPlacedEvent instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into an instance of
    *     this class
    */
-  public static OrderCreatedEvent fromByteBuffer(java.nio.ByteBuffer b) throws java.io.IOException {
+  public static OrderPlacedEvent fromByteBuffer(java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
@@ -92,7 +92,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
    * Default constructor. Note that this does not initialize fields to their default values from the
    * schema. If that is desired then one should use <code>newBuilder()</code>.
    */
-  public OrderCreatedEvent() {}
+  public OrderPlacedEvent() {}
 
   /**
    * All-args constructor.
@@ -102,7 +102,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
    * @param productId The new value for productId
    * @param state The new value for state
    */
-  public OrderCreatedEvent(
+  public OrderPlacedEvent(
       java.lang.Long id,
       java.lang.Long customerId,
       java.lang.Long productId,
@@ -230,50 +230,49 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   }
 
   /**
-   * Creates a new OrderCreatedEvent RecordBuilder.
+   * Creates a new OrderPlacedEvent RecordBuilder.
    *
-   * @return A new OrderCreatedEvent RecordBuilder
+   * @return A new OrderPlacedEvent RecordBuilder
    */
-  public static edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder newBuilder() {
-    return new edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder();
+  public static edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder newBuilder() {
+    return new edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder();
   }
 
   /**
-   * Creates a new OrderCreatedEvent RecordBuilder by copying an existing Builder.
+   * Creates a new OrderPlacedEvent RecordBuilder by copying an existing Builder.
    *
    * @param other The existing builder to copy.
-   * @return A new OrderCreatedEvent RecordBuilder
+   * @return A new OrderPlacedEvent RecordBuilder
    */
-  public static edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder newBuilder(
-      edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder other) {
+  public static edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder newBuilder(
+      edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder other) {
     if (other == null) {
-      return new edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder();
+      return new edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder();
     } else {
-      return new edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder(other);
+      return new edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder(other);
     }
   }
 
   /**
-   * Creates a new OrderCreatedEvent RecordBuilder by copying an existing OrderCreatedEvent
-   * instance.
+   * Creates a new OrderPlacedEvent RecordBuilder by copying an existing OrderPlacedEvent instance.
    *
    * @param other The existing instance to copy.
-   * @return A new OrderCreatedEvent RecordBuilder
+   * @return A new OrderPlacedEvent RecordBuilder
    */
-  public static edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder newBuilder(
-      edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent other) {
+  public static edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder newBuilder(
+      edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent other) {
     if (other == null) {
-      return new edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder();
+      return new edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder();
     } else {
-      return new edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder(other);
+      return new edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder(other);
     }
   }
 
-  /** RecordBuilder for OrderCreatedEvent instances. */
+  /** RecordBuilder for OrderPlacedEvent instances. */
   @org.apache.avro.specific.AvroGenerated
   public static class Builder
-      extends org.apache.avro.specific.SpecificRecordBuilderBase<OrderCreatedEvent>
-      implements org.apache.avro.data.RecordBuilder<OrderCreatedEvent> {
+      extends org.apache.avro.specific.SpecificRecordBuilderBase<OrderPlacedEvent>
+      implements org.apache.avro.data.RecordBuilder<OrderPlacedEvent> {
 
     private long id;
     private long customerId;
@@ -290,7 +289,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      *
      * @param other The existing Builder to copy.
      */
-    private Builder(edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder other) {
+    private Builder(edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -311,11 +310,11 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
     }
 
     /**
-     * Creates a Builder by copying an existing OrderCreatedEvent instance
+     * Creates a Builder by copying an existing OrderPlacedEvent instance
      *
      * @param other The existing instance to copy.
      */
-    private Builder(edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent other) {
+    private Builder(edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent other) {
       super(SCHEMA$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -350,7 +349,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      * @param value The value of 'id'.
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder setId(long value) {
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder setId(long value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -371,7 +370,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      *
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder clearId() {
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder clearId() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -391,7 +390,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      * @param value The value of 'customerId'.
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder setCustomerId(
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder setCustomerId(
         long value) {
       validate(fields()[1], value);
       this.customerId = value;
@@ -413,7 +412,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      *
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder clearCustomerId() {
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder clearCustomerId() {
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -433,7 +432,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      * @param value The value of 'productId'.
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder setProductId(
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder setProductId(
         long value) {
       validate(fields()[2], value);
       this.productId = value;
@@ -455,7 +454,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      *
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder clearProductId() {
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder clearProductId() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -475,7 +474,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      * @param value The value of 'state'.
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder setState(
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder setState(
         java.lang.CharSequence value) {
       validate(fields()[3], value);
       this.state = value;
@@ -497,7 +496,7 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
      *
      * @return This builder.
      */
-    public edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent.Builder clearState() {
+    public edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent.Builder clearState() {
       state = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -505,9 +504,9 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
 
     @Override
     @SuppressWarnings("unchecked")
-    public OrderCreatedEvent build() {
+    public OrderPlacedEvent build() {
       try {
-        OrderCreatedEvent record = new OrderCreatedEvent();
+        OrderPlacedEvent record = new OrderPlacedEvent();
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
         record.customerId =
             fieldSetFlags()[1] ? this.customerId : (java.lang.Long) defaultValue(fields()[1]);
@@ -525,8 +524,8 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<OrderCreatedEvent> WRITER$ =
-      (org.apache.avro.io.DatumWriter<OrderCreatedEvent>) MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<OrderPlacedEvent> WRITER$ =
+      (org.apache.avro.io.DatumWriter<OrderPlacedEvent>) MODEL$.createDatumWriter(SCHEMA$);
 
   @Override
   public void writeExternal(java.io.ObjectOutput out) throws java.io.IOException {
@@ -534,8 +533,8 @@ public class OrderCreatedEvent extends org.apache.avro.specific.SpecificRecordBa
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<OrderCreatedEvent> READER$ =
-      (org.apache.avro.io.DatumReader<OrderCreatedEvent>) MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<OrderPlacedEvent> READER$ =
+      (org.apache.avro.io.DatumReader<OrderPlacedEvent>) MODEL$.createDatumReader(SCHEMA$);
 
   @Override
   public void readExternal(java.io.ObjectInput in) throws java.io.IOException {

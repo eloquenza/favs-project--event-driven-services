@@ -14,8 +14,8 @@ public class EntityEventProcessor {
       CONDITION_HEADERS_MATCHING + "'CustomerDeletedEvent'";
   public static final String MATCHING_CUSTOMERUPDATEDEVENT =
       CONDITION_HEADERS_MATCHING + "'CustomerUpdatedEvent'";
-  public static final String MATCHING_ORDERCREATEDEVENT =
-      CONDITION_HEADERS_MATCHING + "'OrderCreatedEvent'";
+  public static final String MATCHING_ORDERPLACEDEVENT =
+      CONDITION_HEADERS_MATCHING + "'OrderPlacedEvent'";
   public static final String MATCHING_ORDERDELETEDEVENT =
       CONDITION_HEADERS_MATCHING + "'OrderDeletedEvent'";
   public static final String MATCHING_ORDERUPDATEDEVENT =

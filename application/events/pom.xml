@@ -107,7 +107,7 @@
                         <CustomerCreated>src/main/resources/avro/CustomerCreatedEvent.avsc</CustomerCreated>
                         <CustomerUpdated>src/main/resources/avro/CustomerUpdatedEvent.avsc</CustomerUpdated>
                         <CustomerDeleted>src/main/resources/avro/CustomerDeletedEvent.avsc</CustomerDeleted>
-                        <OrderCreated>src/main/resources/avro/OrderCreatedEvent.avsc</OrderCreated>
+                        <OrderPlaced>src/main/resources/avro/OrderPlacedEvent.avsc</OrderPlaced>
                         <OrderDeleted>src/main/resources/avro/OrderDeletedEvent.avsc</OrderDeleted>
                         <OrderUpdated>src/main/resources/avro/OrderUpdatedEvent.avsc</OrderUpdated>
                     </subjects>
@@ -117,7 +117,7 @@
                         <CustomerCreated>AVRO</CustomerCreated>
                         <CustomerDeleted>AVRO</CustomerDeleted>
                         <CustomerUpdated>AVRO</CustomerUpdated>
-                        <OrderCreated>AVRO</OrderCreated>
+                        <OrderPlaced>AVRO</OrderPlaced>
                         <OrderDeleted>AVRO</OrderDeleted>
                         <OrderUpdated>AVRO</OrderUpdated>
                     </schemaTypes>
@@ -138,8 +138,8 @@
                         </customer-value>
                         <order-value>
                             <reference>
-                                <name>edu.hsh.favs.project.escqrs.events.order.OrderCreatedEvent</name>
-                                <subject>OrderCreated</subject>
+                                <name>edu.hsh.favs.project.escqrs.events.order.OrderPlacedEvent</name>
+                                <subject>OrderPlaced</subject>
                             </reference>
                             <reference>
                                 <name>edu.hsh.favs.project.escqrs.events.order.OrderDeletedEvent</name>

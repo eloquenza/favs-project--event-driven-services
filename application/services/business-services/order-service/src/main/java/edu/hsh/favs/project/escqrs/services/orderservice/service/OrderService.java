@@ -1,8 +1,8 @@
 package edu.hsh.favs.project.escqrs.services.orderservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
-import edu.hsh.favs.project.escqrs.events.order.factories.OrderCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderDeletedEventFactory;
+import edu.hsh.favs.project.escqrs.events.order.factories.OrderPlacedEventFactory;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderUpdatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.EntityUpdater;
@@ -22,7 +22,7 @@ public class OrderService {
 
   private final Logger log = Loggers.getLogger(OrderService.class.getName());
   private final OrderRepository repo;
-  private final OrderCreatedEventFactory createEventFactory;
+  private final OrderPlacedEventFactory createEventFactory;
   private final OrderUpdatedEventFactory updateEventFactory;
   private final OrderDeletedEventFactory deleteEventFactory;
   private final DualWriteTransactionHelper<Order> dualWriteHelper;
@@ -35,7 +35,7 @@ public class OrderService {
       TransactionalOperator txOperator,
       Source messageBroker) {
     this.repo = repo;
-    this.createEventFactory = new OrderCreatedEventFactory();
+    this.createEventFactory = new OrderPlacedEventFactory();
     this.updateEventFactory = new OrderUpdatedEventFactory();
     this.deleteEventFactory = new OrderDeletedEventFactory();
     this.dualWriteHelper =
@@ -51,7 +51,7 @@ public class OrderService {
     return repo.getAllOrders();
   }
 
-  public Mono<Order> createOrder(Order order) {
+  public Mono<Order> placeOrder(Order order) {
     return dualWriteHelper.createEntity(order, createEventFactory);
   }
 

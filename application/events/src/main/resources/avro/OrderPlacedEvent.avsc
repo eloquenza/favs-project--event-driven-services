@@ -1,7 +1,7 @@
 {
   "type": "record",
   "namespace": "edu.hsh.favs.project.escqrs.events.order",
-  "name": "OrderCreatedEvent",
+  "name": "OrderPlacedEvent",
 
   "fields": [
     {"name": "id", "type": "long"},

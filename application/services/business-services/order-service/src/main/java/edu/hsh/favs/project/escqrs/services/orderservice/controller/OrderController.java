@@ -44,11 +44,11 @@ public class OrderController {
 
   @PostMapping(path = "", consumes = OrderController.MEDIATYPE_ORDER_JSON_V1)
   @ResponseStatus(code = HttpStatus.OK)
-  public Mono<Order> createOrder(@RequestBody Mono<Order> body) {
-    Assert.state(body != null, "During CreateOrder: Order payload must not be null");
+  public Mono<Order> placeOrder(@RequestBody Mono<Order> body) {
+    Assert.state(body != null, "Order payload must not be null");
 
-    log.info("Logging createOrder request: " + body);
-    return body.flatMap(order -> service.createOrder(order));
+    log.info("Logging placeOrder request: " + body);
+    return body.flatMap(order -> service.placeOrder(order.setState(OrderState.PLACED)));
   }
 
   @PutMapping(path = "{orderId}", consumes = OrderController.MEDIATYPE_ORDER_JSON_V1)
@@ -67,13 +67,22 @@ public class OrderController {
     }
   }
 
-  @PutMapping(path = "{orderId}/cancel")
+  @PutMapping(path = "{orderId}/pay")
   @ResponseStatus(code = HttpStatus.OK)
-  public Mono<Order> cancelOrder(@PathVariable("orderId") Long orderId) {
+  public Mono<Order> payOrder(@PathVariable("orderId") Long orderId) {
     Assert.state(orderId != null, "orderId must not equal null");
 
-    log.info("Logging cancelOrder request for order with id " + orderId);
-    return changeOrderState(orderId, OrderState.CANCELLED);
+    log.info("Logging payOrder request for order with id " + orderId);
+    return changeOrderState(orderId, OrderState.PAID);
+  }
+
+  @PutMapping(path = "{orderId}/ship")
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Order> shipOrder(@PathVariable("orderId") Long orderId) {
+    Assert.state(orderId != null, "orderId must not equal null");
+
+    log.info("Logging shipOrder request for order with id " + orderId);
+    return changeOrderState(orderId, OrderState.SHIPPED);
   }
 
   @PutMapping(path = "{orderId}/deliver")
@@ -83,6 +92,15 @@ public class OrderController {
 
     log.info("Logging deliverOrder request for order with id " + orderId);
     return changeOrderState(orderId, OrderState.DELIVERED);
+  }
+
+  @PutMapping(path = "{orderId}/cancel")
+  @ResponseStatus(code = HttpStatus.OK)
+  public Mono<Order> cancelOrder(@PathVariable("orderId") Long orderId) {
+    Assert.state(orderId != null, "orderId must not equal null");
+
+    log.info("Logging cancelOrder request for order with id " + orderId);
+    return changeOrderState(orderId, OrderState.CANCELLED);
   }
 
   @DeleteMapping(value = "{orderId}")

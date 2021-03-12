@@ -62,7 +62,13 @@ This means that each product has to be in its own order.
 
 Create an order:
 `curl -X "POST" "http://0.0.0.0:9000/orders" -H 'Content-Type: application/vnd.favs-commerce.
-orders.v1+json; charset=utf-8' -d "{\\"customerId\": 1, \"productId\": 1, \"state\": \"CREATED\"}"`
+orders.v1+json; charset=utf-8' -d "{\"customerId\": 1, \"productId\": 1, \"state\": \"PLACED\"}"`
+
+Putting the state into the payload does not matter. During the creation of an order, the state will be set to `PLACED`.
+Therefore, the above request would be the same as:
+
+`curl -X "POST" "http://0.0.0.0:9000/orders" -H 'Content-Type: application/vnd.favs-commerce.
+orders.v1+json; charset=utf-8' -d "{\"customerId\": 1, \"productId\": 1}"`
 
 Get an specific order:
 `curl -H "Accept: application/vnd.favs-commerce.orders.v1+json" -s "http://0.0.0.0:9000/orders/1"`
@@ -70,13 +76,14 @@ Get an specific order:
 Update a specific order:
 
 `curl -s -X "PUT" "http://0.0.0.0:9000/orders/1" -H 'Content-Type:
-application/vnd.favs-commerce.orders.v1+json; charset=utf-8' {\"productId\": 1, \"state\": \"CREATED\"}"`
+application/vnd.favs-commerce.orders.v1+json; charset=utf-8' {\"productId\": 1, \"state\": \"PLACED\"}"`
 
 For this operation the same rules apply as to the customer update operation, i.e. updating only a specific field is possible.
+Valid states for the state are `{PLACED, PAID, SHIPPED, DELIVERED, CANCELLED}`.
 
-Cancel/"deliver" a specific order:
+"Pay"/"ship"/"deliver"/"cancel" a specific order:
 
-`curl -s -X "PUT" "http://0.0.0.0:9000/orders/1/{cancel, deliver}"`
+`curl -s -X "PUT" "http://0.0.0.0:9000/orders/1/{pay,ship,deliver,cancel}"`
 
 Get all orders:
 `curl -H "Accept: application/vnd.favs-commerce.orders.v1+json" -s "http://0.0.0.0:9000/orders"`
