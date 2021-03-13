@@ -1,4 +1,4 @@
-package edu.hsh.favs.project.escqrs.services.orderservice.dtos;
+package edu.hsh.favs.project.escqrs.services.orderservice.domain.entities;
 
 import java.util.Objects;
 import org.javers.core.metamodel.annotation.ValueObject;
@@ -6,12 +6,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @ValueObject
-@Table(value = "orderservice_customers")
-public class CustomerId {
+@Table(value = "product_ids")
+public class ProductId {
 
   @Id private Long id;
 
-  public CustomerId(Long id) {
+  public ProductId(Long id) {
     this.id = id;
   }
 
@@ -24,10 +24,10 @@ public class CustomerId {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof CustomerId)) {
+    if (!(o instanceof ProductId)) {
       return false;
     }
-    CustomerId that = (CustomerId) o;
+    ProductId that = (ProductId) o;
     return getId().equals(that.getId());
   }
 
@@ -38,6 +38,6 @@ public class CustomerId {
 
   @Override
   public String toString() {
-    return "CustomerId{" + "id=" + id + '}';
+    return "ProductId{" + "id=" + id + '}';
   }
 }
