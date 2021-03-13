@@ -1,4 +1,4 @@
-## How to interact with the FAVS-Commerce system
+# How to interact with the FAVS-Commerce system
 
 TODO: DIVIDE API ENDPOINT USAGE FROM ACTUAL WORKFLOW DESCRIPTION?
 
@@ -15,7 +15,14 @@ Omitting the header for `POST` requests will result in a response with the HTTP 
 
 As all API endpoints produce or consume JSON, a tool like `jq` will help with making the JSON more readable in the CLI.
 
-### Customers
+Furthermore, a few constraints have been introduced for the first version of this system to simplify the development process:
+
+* Orders and products are in a 1:1 relationship,
+* Customers have unlimited budget,
+* Products are not really shipped & delivered to the customers (which is fine, because they currently do not lose their money anyways),
+* Products are infinitely available
+
+## Customers
 
 Create a customer:
 `curl -s -X "POST" "http://0.0.0.0:9000/customers" -H 'Content-Type: 
@@ -45,7 +52,7 @@ application/vnd.favs-commerce.customers.v1+json; charset=utf-8' -d "{"age\": 23}
 Delete a specific customer:
 `curl -s -X "DELETE" "http://0.0.0.0:9000/customers/1"`
 
-### Orders
+## Orders
 
 Due to the smaller scope of this system each order, customer and product form a 1:1:1 relationship.
 This means that each product has to be in its own order.
@@ -78,7 +85,7 @@ Valid states for the state are `{PLACED, PAID, SHIPPED, DELIVERED, CANCELLED}`.
 Get all orders:
 `curl -H "Accept: application/vnd.favs-commerce.orders.v1+json" -s "http://0.0.0.0:9000/orders"`
 
-### Products
+## Products
 
 Add a product:
 
