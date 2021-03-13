@@ -56,8 +56,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         new ErrorResponse(
             HttpStatus.UNPROCESSABLE_ENTITY.value(),
             HttpStatus.UNPROCESSABLE_ENTITY.toString(),
-            "Validation error. Check 'errors' field for details. Concrete exception message: " +
-            ex.getMessage());
+            "Validation error. Check 'errors' field for details. Concrete exception message: "
+                + ex.getMessage());
     for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
       errorResponse.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
     }
@@ -75,8 +75,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private ResponseEntity<Object> buildErrorResponse(Exception exception, HttpStatus httpStatus) {
     ErrorResponse errorResponse =
-        new ErrorResponse(
-            httpStatus.value(), httpStatus.toString(), exception.getMessage());
+        new ErrorResponse(httpStatus.value(), httpStatus.toString(), exception.getMessage());
     return constructResponseEntity(exception, httpStatus, errorResponse);
   }
 
@@ -94,8 +93,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return constructResponseEntity(exception, httpStatus, errorResponse);
   }
 
-  private ResponseEntity<Object> constructResponseEntity(Exception ex,
-      HttpStatus httpStatus, ErrorResponse errorResponse) {
+  private ResponseEntity<Object> constructResponseEntity(
+      Exception ex, HttpStatus httpStatus, ErrorResponse errorResponse) {
     log.info("Exception happened:");
     log.info("\t\t" + ex);
     log.info("Logging response sent to client: " + errorResponse);

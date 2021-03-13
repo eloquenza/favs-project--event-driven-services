@@ -22,8 +22,7 @@ public class ErrorResponse {
     this.timestamp = new Date();
   }
 
-  public ErrorResponse(
-      int status, String httpStatusName, String message,WebRequest request) {
+  public ErrorResponse(int status, String httpStatusName, String message, WebRequest request) {
     this(status, httpStatusName, message);
     this.request = request;
   }
