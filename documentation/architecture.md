@@ -41,31 +41,51 @@ We can recreate a projection of the needed domain data by consuming all appropri
 
 ### FAVS-commerce self-implemented services
 
-|          Service Name         	| Spring Boot 	| Spring Cloud 	|  ORM  	|   Messaging  	|     Service Type     	|
-|:-----------------------------:	|:-----------:	|:------------:	|:-----:	|:------------:	|:--------------------:	|
-| customer-service              	| 2.4.3       	| 2020.0.1     	| R2DBC 	| Apache Kafka 	| Domain               	|
-| order-service                 	| 2.4.3       	| 2020.0.1     	| R2DBC 	| Apache Kafka 	| Domain               	|
-| product-service               	| 2.4.3       	| 2020.0.1     	| R2DBC 	| Apache Kafka 	| Domain               	|
-| business-intelligence-service 	| 2.4.3       	| 2020.0.1     	| N/A   	| Apache Kafka 	| Aggregate            	|
-| discovery-service             	| 2.4.3       	| 2020.0.1     	| N/A   	| N/A          	| Netflix Eureka       	|
-| gateway-service               	| 2.4.3       	| 2020.0.1     	| N/A   	| N/A          	| Spring Cloud Gateway 	|
+|                          Service Name                          | Spring Boot | Spring Cloud |  ORM  |   Messaging  |     Service Type     |
+|:--------------------------------------------------------------:|:-----------:|:------------:|:-----:|:------------:|:--------------------:|
+|              [customer-service][customer-service]              |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
+|                 [order-service][order-service]                 |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
+|               [product-service][product-service]               |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
+| [business-intelligence-service][business-intelligence-service] |    2.4.3    |   2020.0.1   |  N/A  | Apache Kafka |       Aggregate      |
+|             [discovery-service][discovery-service]             |    2.4.3    |   2020.0.1   |  N/A  |      N/A     |    Netflix Eureka    |
+|               [gateway-service][gateway-service]               |    2.4.3    |   2020.0.1   |  N/A  |      N/A     | Spring Cloud Gateway |
 
 The `discovery-service` and `gateway-service` are special kind of "self-implemented" services.
 While they would fit more into the following table, they are implemented by providing a self-built microservice that use Netflix Eureka or Spring Cloud Gateway as dependencies and are enabled by annotations.
 
 ### Needed services for infrastructure purposes
 
-|   Service Name  	|                 Version                	|                  Service Type                 	|
-|:---------------:	|:--------------------------------------:	|:---------------------------------------------:	|
-| kafka           	| confluentinc/cp-kafka:latest           	| Message broker/event bus and event store      	|
-| zookeeper       	| confluentinc/cp-zookeeper:latest       	| Hierarchical key-value store needed for Kafka 	|
-| schema-registry 	| confluentinc/cp-schema-registry:latest 	| Central repository for data schemas           	|
-| customer-db     	| postgres:latest                        	| Database                                      	|
-| order-db        	| postgres:latest                        	| Database                                      	|
-| product-db      	| postgres:latest                        	| Database                                      	|
+|           Service Name          |                               Version                               |                  Service Type                 |
+|:-------------------------------:|:-------------------------------------------------------------------:|:---------------------------------------------:|
+|      [kafka][compose-file]      |                [confluentinc/cp-kafka:latest][kafka]                |    Message broker/event bus and event store   |
+|    [zookeeper][compose-file]    |            [confluentinc/cp-zookeeper:latest][zookeeper]            | Hierarchical key-value store needed for Kafka |
+| [schema-registry][compose-file] | [confluentinc/cp-schema-registry:latest][confluent-schema-registry] |      Central repository for data schemas      |
+|   [customer-db][compose-file]   |                    [postgres:latest][postgresql]                    |                    Database                   |
+|     [order-db][compose-file]    |                    [postgres:latest][postgresql]                    |                    Database                   |
+|    [product-db][compose-file]   |                    [postgres:latest][postgresql]                    |                    Database                   |
 
 ## Advantages of this architecture and other used architectural concepts
 
 TODO: add CQRS description, write how they replicated data for the read model by sourcing the event streams (topics) in kafka
+TODO: explain concepts used
+TODO: describe how to showcase ES experiment, i.e. how newly scaled up instances of a service are reading the event stream to recreate the current state
+TODO: Describe why we use database per service pattern
 
-Services can use the database paradigm that fits their use case the best.
+* Services can use the database paradigm that fits their use case the best.
+
+[postgresql]: https://www.postgresql.org/
+[spring]: https://spring.io/
+[spring-boot]: https://spring.io/projects/spring-boot
+[spring-r2dbc]: https://spring.io/projects/spring-data-r2dbc
+[spring-cloud]: https://spring.io/projects/spring-cloud
+[spring-cloud-stream]: https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/
+[zookeeper]: https://zookeeper.apache.org/
+[confluent-schema-registry]: https://docs.confluent.io/platform/current/schema-registry/index.html
+[kafka]: https://www.confluent.io/what-is-apache-kafka/
+[compose-file]: ../application/docker-compose.yml
+[customer-service]: ../application/services/business-services/customer-service
+[product-service]: ../application/services/business-services/product-service
+[order-service]: ../application/services/business-services/order-service
+[business-intelligence-service]: ../application/services/business-services/business-intelligence-service
+[discovery-service]: ../application/services/infrastructure-services/discovery-service
+[gateway-service]: ../application/services/infrastructure-services/gateway-service
