@@ -61,7 +61,7 @@ For specific use cases and their corresponding `cURL` command, see [./documentat
 
 ## Further information
 
-Most of the high-level information is described in an appropriate document inside the [./documentation](./documentation) directory.
+All further information is described in an appropriate document inside the [./documentation](./documentation) directory.
 
 The following topics can be viewed there:
 
@@ -72,6 +72,8 @@ The following topics can be viewed there:
 * Requirements guide: [./documentation/requirements.md](./documentation/requirements.md)
 * Technologies used: [./documentation/technologies.md](./documentation/technologies.md)
 * Usage guide: [./documentation/how-to-use.md](./documentation/how-to-use.md)
+
+If you however are interested in the code documentation, look inside the source code.
 
 [adr]: https://adr.github.io/
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
