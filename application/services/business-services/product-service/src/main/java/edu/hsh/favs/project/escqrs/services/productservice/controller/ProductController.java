@@ -68,12 +68,4 @@ public class ProductController {
         "Logging updateProduct request for product with id " + productId + ": " + updatedProduct);
     return service.updateProduct(productId, updatedProduct);
   }
-
-  @DeleteMapping(value = "{productId}")
-  @ResponseStatus(code = HttpStatus.OK)
-  public Mono<Product> removeProduct(@PathVariable("productId") Long productId) {
-    Assert.state(productId != null, "productId must not equal null");
-    log.info("Logging removeProduct request for product id: " + productId);
-    return service.removeProduct(productId);
-  }
 }

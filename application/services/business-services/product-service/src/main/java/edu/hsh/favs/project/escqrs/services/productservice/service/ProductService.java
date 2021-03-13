@@ -2,7 +2,6 @@ package edu.hsh.favs.project.escqrs.services.productservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.products.Product;
 import edu.hsh.favs.project.escqrs.events.product.factories.ProductAddedEventFactory;
-import edu.hsh.favs.project.escqrs.events.product.factories.ProductRemovedEventFactory;
 import edu.hsh.favs.project.escqrs.events.product.factories.ProductUpdatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.EntityUpdater;
@@ -24,7 +23,6 @@ public class ProductService {
   private final ProductRepository repo;
   private final ProductAddedEventFactory addEventFactory;
   private final ProductUpdatedEventFactory updateEventFactory;
-  private final ProductRemovedEventFactory removeEventFactory;
   private final DualWriteTransactionHelper<Product> dualWriteHelper;
   private final EntityUpdater<Product> entityUpdater;
 
@@ -37,7 +35,6 @@ public class ProductService {
     this.repo = repo;
     this.addEventFactory = new ProductAddedEventFactory();
     this.updateEventFactory = new ProductUpdatedEventFactory();
-    this.removeEventFactory = new ProductRemovedEventFactory();
     this.dualWriteHelper =
         new DualWriteTransactionHelper<>(template, txOperator, messageBroker, log);
     this.entityUpdater = new EntityUpdater<>(log);
@@ -63,11 +60,5 @@ public class ProductService {
                 dualWriteHelper.updateEntity(
                     entityUpdater.update(product, updatedProduct),
                     updateEventFactory.supplyEntity(updatedProduct.setId(product.getId()))));
-  }
-
-  public Mono<Product> removeProduct(Long productId) {
-    return this.repo
-        .findById(productId)
-        .flatMap(product -> dualWriteHelper.deleteEntity(product, removeEventFactory));
   }
 }
