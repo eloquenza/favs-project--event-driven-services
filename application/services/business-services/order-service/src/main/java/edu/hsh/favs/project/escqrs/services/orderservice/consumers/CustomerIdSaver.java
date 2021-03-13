@@ -3,22 +3,21 @@ package edu.hsh.favs.project.escqrs.services.orderservice.consumers;
 import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
 import edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent;
 import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
+import edu.hsh.favs.project.escqrs.services.orderservice.config.EventSink;
 import edu.hsh.favs.project.escqrs.services.orderservice.dtos.CustomerId;
 import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import reactor.util.Logger;
 import reactor.util.Loggers;
 
 // Needed to save/delete the ids of created/deleted customers, so only valid customerIds can be
-// passed
-// for the creation of orders.
-@EnableBinding(Sink.class)
+// passed for the creation of orders.
+@EnableBinding(EventSink.class)
 public class CustomerIdSaver {
 
   private final EntityEventProcessor eventProcessor;
@@ -38,7 +37,7 @@ public class CustomerIdSaver {
   }
 
   @StreamListener(
-      value = Sink.INPUT,
+      value = EventSink.CUSTOMER_INPUT,
       condition = EntityEventProcessor.MATCHING_CUSTOMERCREATEDEVENT)
   public void receive(@Payload CustomerCreatedEvent createEvent) {
     this.eventProcessor.handleEvent(
@@ -47,7 +46,7 @@ public class CustomerIdSaver {
   }
 
   @StreamListener(
-      value = Sink.INPUT,
+      value = EventSink.CUSTOMER_INPUT,
       condition = EntityEventProcessor.MATCHING_CUSTOMERDELETEDEVENT)
   public void receive(@Payload CustomerDeletedEvent deletedEvent) {
     this.eventProcessor.handleEvent(

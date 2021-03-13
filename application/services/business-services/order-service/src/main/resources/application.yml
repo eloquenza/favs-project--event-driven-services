@@ -48,9 +48,15 @@ spring:
           group: order-group
           producer:
             requiredGroups: order-group
-        input:
+        customer:
           binder: kafka
           destination: customer
+          contentType: application/*+avro
+          consumer:
+            concurrency: 1
+        product:
+          binder: kafka
+          destination: product
           contentType: application/*+avro
           consumer:
             concurrency: 1

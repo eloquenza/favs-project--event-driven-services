@@ -20,6 +20,12 @@ public class EntityEventProcessor {
       CONDITION_HEADERS_MATCHING + "'OrderDeletedEvent'";
   public static final String MATCHING_ORDERUPDATEDEVENT =
       CONDITION_HEADERS_MATCHING + "'OrderUpdatedEvent'";
+  public static final String MATCHING_PRODUCTADDEDEVENT =
+      CONDITION_HEADERS_MATCHING + "'ProductAddedEvent'";
+  public static final String MATCHING_PRODUCTREMOVEDEVENT =
+      CONDITION_HEADERS_MATCHING + "'ProductRemovedEvent'";
+  public static final String MATCHING_PRODUCTUPDATEDEVENT =
+      CONDITION_HEADERS_MATCHING + "'ProductUpdatedEvent'";
 
   private final Logger log;
 

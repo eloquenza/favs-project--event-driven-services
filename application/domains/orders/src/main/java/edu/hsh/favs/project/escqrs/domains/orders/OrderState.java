@@ -1,7 +1,9 @@
 package edu.hsh.favs.project.escqrs.domains.orders;
 
 import java.io.Serializable;
+import org.javers.core.metamodel.annotation.ValueObject;
 
+@ValueObject
 public enum OrderState implements Serializable {
   PLACED {
     @Override

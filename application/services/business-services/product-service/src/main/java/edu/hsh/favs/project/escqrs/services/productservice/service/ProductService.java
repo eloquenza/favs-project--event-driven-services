@@ -56,7 +56,6 @@ public class ProductService {
   }
 
   public Mono<Product> updateProduct(Long productId, Product updatedProduct) {
-    // TODO why does this bug out without an exception
     return this.repo
         .findById(productId)
         .flatMap(
