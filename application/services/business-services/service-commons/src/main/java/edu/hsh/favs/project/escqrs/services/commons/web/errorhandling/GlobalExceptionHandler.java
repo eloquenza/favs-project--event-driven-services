@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 // Each microservice wants to use this global exception handler in order to make sure that our
 // exceptions will be handled exactly the same by each service.
@@ -22,23 +24,25 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 // response.
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+  private final Logger log = Loggers.getLogger(GlobalExceptionHandler.class.getName());
+
   @ExceptionHandler(IllegalEntityOperationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Object> handleIllegalEntityOperationException(
       IllegalEntityOperationException ex) {
-    return buildErrorResponse(ex, ex.getMessage(), HttpStatus.BAD_REQUEST);
+    return buildErrorResponse(ex, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-    return buildErrorResponse(ex, ex.getMessage(), HttpStatus.BAD_REQUEST);
+    return buildErrorResponse(ex, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(BusinessException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
-    return buildErrorResponse(ex, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    return buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @Override
@@ -52,7 +56,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         new ErrorResponse(
             HttpStatus.UNPROCESSABLE_ENTITY.value(),
             HttpStatus.UNPROCESSABLE_ENTITY.toString(),
-            "Validation error. Check 'errors' field for details.");
+            "Validation error. Check 'errors' field for details. Concrete exception message: " +
+            ex.getMessage());
     for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
       errorResponse.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
     }
@@ -61,28 +66,39 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ResponseEntity<Object> handleAllUncaughtException(
-      Exception exception, WebRequest request) {
+  public ResponseEntity<Object> handleAllUncaughtException(Exception exception) {
     return buildErrorResponse(
-        exception, "Unknown error occurred", HttpStatus.INTERNAL_SERVER_ERROR, request);
+        exception,
+        "Unknown error occurred: " + exception.getMessage(),
+        HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  private ResponseEntity<Object> buildErrorResponse(Exception exception, HttpStatus httpStatus) {
+    ErrorResponse errorResponse =
+        new ErrorResponse(
+            httpStatus.value(), httpStatus.toString(), exception.getMessage());
+    return constructResponseEntity(exception, httpStatus, errorResponse);
   }
 
   private ResponseEntity<Object> buildErrorResponse(
       Exception exception, String message, HttpStatus httpStatus) {
     ErrorResponse errorResponse =
         new ErrorResponse(httpStatus.value(), httpStatus.toString(), message);
-    return constructResponseEntity(httpStatus, errorResponse);
+    return constructResponseEntity(exception, httpStatus, errorResponse);
   }
 
   private ResponseEntity<Object> buildErrorResponse(
       Exception exception, String message, HttpStatus httpStatus, WebRequest request) {
     ErrorResponse errorResponse =
         new ErrorResponse(httpStatus.value(), httpStatus.toString(), message, request);
-    return constructResponseEntity(httpStatus, errorResponse);
+    return constructResponseEntity(exception, httpStatus, errorResponse);
   }
 
-  private ResponseEntity<Object> constructResponseEntity(
+  private ResponseEntity<Object> constructResponseEntity(Exception ex,
       HttpStatus httpStatus, ErrorResponse errorResponse) {
+    log.info("Exception happened:");
+    log.info("\t\t" + ex);
+    log.info("Logging response sent to client: " + errorResponse);
     return ResponseEntity.status(httpStatus).body(errorResponse);
   }
 

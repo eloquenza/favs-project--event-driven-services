@@ -3,7 +3,6 @@ package edu.hsh.favs.project.escqrs.services.commons.web.errorhandling;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.web.context.request.WebRequest;
 
 public class ErrorResponse {
@@ -19,10 +18,12 @@ public class ErrorResponse {
     this.status = status;
     this.httpStatusName = httpStatusName;
     this.message = message;
+    this.errors = new ArrayList<>();
     this.timestamp = new Date();
   }
 
-  public ErrorResponse(int status, String httpStatusName, String message, WebRequest request) {
+  public ErrorResponse(
+      int status, String httpStatusName, String message,WebRequest request) {
     this(status, httpStatusName, message);
     this.request = request;
   }
@@ -53,9 +54,26 @@ public class ErrorResponse {
   }
 
   public void addValidationError(String field, String message) {
-    if (Objects.isNull(errors)) {
-      errors = new ArrayList<>();
-    }
     errors.add(new ValidationError(field, message));
+  }
+
+  @Override
+  public String toString() {
+    return "ErrorResponse{"
+        + "status="
+        + status
+        + ", httpStatusName='"
+        + httpStatusName
+        + '\''
+        + ", message='"
+        + message
+        + '\''
+        + ", timestamp="
+        + timestamp
+        + ", request="
+        + request
+        + ", errors="
+        + errors
+        + '}';
   }
 }
