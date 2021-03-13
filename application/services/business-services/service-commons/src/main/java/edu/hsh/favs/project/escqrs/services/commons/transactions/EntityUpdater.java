@@ -2,14 +2,12 @@ package edu.hsh.favs.project.escqrs.services.commons.transactions;
 
 import static org.javers.core.diff.ListCompareAlgorithm.LEVENSHTEIN_DISTANCE;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Optional;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
 import org.javers.core.diff.changetype.ValueChange;
-import org.springframework.util.StringUtils;
 import reactor.util.Logger;
 
 public class EntityUpdater<EntityT> {
@@ -31,17 +29,22 @@ public class EntityUpdater<EntityT> {
               try {
                 Optional<?> opt = Optional.ofNullable(valueChange.getRight());
                 if (opt.isPresent()) {
-                  Method method =
-                      oldEntity
-                          .getClass()
-                          .getDeclaredMethod(
-                              "set" + StringUtils.capitalize(valueChange.getPropertyName()),
-                              valueChange.getRight().getClass());
-                  method.invoke(oldEntity, valueChange.getRight());
+                  Field field =
+                      oldEntity.getClass().getDeclaredField(valueChange.getPropertyName());
+                  field.setAccessible(true);
+                  if (field.getType().isEnum()) {
+                    field.set(
+                        oldEntity,
+                        Enum.valueOf(
+                            (Class<Enum>) field.getType(), valueChange.getRight().toString()));
+                  } else {
+                    field.set(oldEntity, valueChange.getRight());
+                  }
                 }
               } catch (IllegalAccessException
-                  | InvocationTargetException
-                  | NoSuchMethodException e) {
+                  | IllegalArgumentException
+                  | NoSuchFieldException
+                  | NullPointerException e) {
                 throw new RuntimeException(e);
               }
             });
