@@ -3,7 +3,7 @@ package edu.hsh.favs.project.escqrs.services.orderservice.consumers;
 import edu.hsh.favs.project.escqrs.events.product.ProductAddedEvent;
 import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
 import edu.hsh.favs.project.escqrs.services.orderservice.config.EventSink;
-import edu.hsh.favs.project.escqrs.services.orderservice.dtos.ProductId;
+import edu.hsh.favs.project.escqrs.services.orderservice.domain.entities.ProductId;
 import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

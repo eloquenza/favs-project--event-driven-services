@@ -172,6 +172,24 @@ services:
 #    deploy:
 #      replicas: 1
 
+  order-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432/tcp"
+    deploy:
+      replicas: 1
+
+  product-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432/tcp"
+    deploy:
+      replicas: 1
+
   customer-db:
     image: postgres:latest
     environment:

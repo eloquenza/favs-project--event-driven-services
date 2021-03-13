@@ -4,7 +4,7 @@ import edu.hsh.favs.project.escqrs.events.customer.CustomerCreatedEvent;
 import edu.hsh.favs.project.escqrs.events.customer.CustomerDeletedEvent;
 import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
 import edu.hsh.favs.project.escqrs.services.orderservice.config.EventSink;
-import edu.hsh.favs.project.escqrs.services.orderservice.dtos.CustomerId;
+import edu.hsh.favs.project.escqrs.services.orderservice.domain.entities.CustomerId;
 import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
 import edu.hsh.favs.project.escqrs.services.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

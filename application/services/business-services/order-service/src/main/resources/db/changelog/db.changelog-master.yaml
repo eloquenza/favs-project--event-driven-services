@@ -4,7 +4,7 @@ databaseChangeLog:
       author: order-service
       changes:
         - createTable:
-            tableName: orderservice_customers
+            tableName: customer_ids
             columns:
               - column:
                   name: id
@@ -13,7 +13,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
         - createTable:
-            tableName: orderservice_products
+            tableName: product_ids
             columns:
               - column:
                   name: id
@@ -36,14 +36,14 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     foreignKeyName: fk_customer_id
-                    references: orderservice_customers(id)
+                    references: customer_ids(id)
                     nullable: false
               - column:
                   name: product_id
                   type: BIGINT
                   constraints:
                     foreignKeyName: fk_product_id
-                    references: orderservice_products(id)
+                    references: product_ids(id)
                     nullable: false
               - column:
                   name: state
