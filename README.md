@@ -60,12 +60,12 @@ Most of the high-level information is described in an appropriate document insid
 
 The following topics can be viewed there:
 
-* Domain-driven design process: [./documentation/how-to-use.md](./documentation/domain-driven-design-process.md)
-* Event documentation: [./documentation/how-to-use.md](./documentation/events.md)
+* Domain-driven design process: [./documentation/domain-driven-design-process.md](./documentation/domain-driven-design-process.md)
+* Event documentation: [./documentation/events.md](./documentation/events.md)
 * Usage guide: [./documentation/how-to-use.md](./documentation/how-to-use.md)
-* Requirements guide: [./documentation/how-to-use.md](./documentation/requirements.md)
-* Architectural high-level description: [./documentation/how-to-use.md](./documentation/architecture.md)
-* Deployment and development related infomation: [./documentation/how-to-use.md](./documentation/development-deployment.md)
-* Technologies used: [./documentation/how-to-use.md](./documentation/technologies.md)
+* Requirements guide: [./documentation/requirements.md](./documentation/requirements.md)
+* Architectural high-level description: [./documentation/architecture.md](./documentation/architecture.md)
+* Deployment and development related infomation: [./documentation/development-deployment.md](./documentation/development-deployment.md)
+* Technologies used: [./documentation/technologies.md](./documentation/technologies.md)
 
 [adr]: https://adr.github.io/
