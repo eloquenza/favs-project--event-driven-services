@@ -8,7 +8,7 @@ public abstract class AbstractEventFactory<EntityT, DomainEventBaseT> {
 
   public abstract DomainEventBaseT createEvent();
 
-  public AbstractEventFactory supplyEntity(EntityT entity) {
+  public AbstractEventFactory<EntityT, DomainEventBaseT> supplyEntity(EntityT entity) {
     this.suppliedEntity = entity;
     return this;
   }
