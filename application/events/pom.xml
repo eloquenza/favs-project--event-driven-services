@@ -68,10 +68,14 @@
                             <goal>idl-protocol</goal>
                         </goals>
                         <configuration>
+                            <!-- These need to be excluded as they are union types that are only registered -->
+                            <!-- in order to permit only valid entity events on the Kakfa topics. -->
+                            <!-- The compiler would else try to create classes for these union types. -->
                             <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
                                 <excludes>
                                     <exclude>CustomerEvents.avsc</exclude>
                                     <exclude>OrderEvents.avsc</exclude>
+                                    <exclude>ProductEvents.avsc</exclude>
                                 </excludes>
                             <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
                         </configuration>
@@ -104,12 +108,16 @@
                         <!-- our Kafka topics to ensure that only these events can be produced/consumed. -->
                         <customer-value>src/main/resources/avro/CustomerEvents.avsc</customer-value>
                         <order-value>src/main/resources/avro/OrderEvents.avsc</order-value>
+                        <product-value>src/main/resources/avro/ProductEvents.avsc</product-value>
                         <CustomerCreated>src/main/resources/avro/CustomerCreatedEvent.avsc</CustomerCreated>
                         <CustomerUpdated>src/main/resources/avro/CustomerUpdatedEvent.avsc</CustomerUpdated>
                         <CustomerDeleted>src/main/resources/avro/CustomerDeletedEvent.avsc</CustomerDeleted>
                         <OrderPlaced>src/main/resources/avro/OrderPlacedEvent.avsc</OrderPlaced>
                         <OrderDeleted>src/main/resources/avro/OrderDeletedEvent.avsc</OrderDeleted>
                         <OrderUpdated>src/main/resources/avro/OrderUpdatedEvent.avsc</OrderUpdated>
+                        <ProductAdded>src/main/resources/avro/ProductAddedEvent.avsc</ProductAdded>
+                        <ProductRemoved>src/main/resources/avro/ProductRemovedEvent.avsc</ProductRemoved>
+                        <ProductUpdated>src/main/resources/avro/ProductUpdatedEvent.avsc</ProductUpdated>
                     </subjects>
                     <schemaTypes>
                         <customer-value>AVRO</customer-value>
@@ -120,6 +128,9 @@
                         <OrderPlaced>AVRO</OrderPlaced>
                         <OrderDeleted>AVRO</OrderDeleted>
                         <OrderUpdated>AVRO</OrderUpdated>
+                        <ProductAdded>AVRO</ProductAdded>
+                        <ProductRemoved>AVRO</ProductRemoved>
+                        <ProductUpdated>AVRO</ProductUpdated>
                     </schemaTypes>
                     <references>
                         <customer-value>
@@ -150,6 +161,20 @@
                                 <subject>OrderUpdated</subject>
                             </reference>
                         </order-value>
+                        <product-value>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.product.ProductAddedEvent</name>
+                                <subject>ProductAdded</subject>
+                            </reference>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.product.ProductRemovedEvent</name>
+                                <subject>ProductRemoved</subject>
+                            </reference>
+                            <reference>
+                                <name>edu.hsh.favs.project.escqrs.events.product.ProductUpdatedEvent</name>
+                                <subject>ProductUpdated</subject>
+                            </reference>
+                        </product-value>
                     </references>
                 </configuration>
                 <goals>

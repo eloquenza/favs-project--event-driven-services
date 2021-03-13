@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.product",
+  "name": "ProductAddedEvent",
+
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "name", "type": "string"},
+    {"name": "cost", "type": "long"}
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  "edu.hsh.favs.project.escqrs.events.product.ProductAddedEvent",
+  "edu.hsh.favs.project.escqrs.events.product.ProductUpdatedEvent",
+  "edu.hsh.favs.project.escqrs.events.product.ProductRemovedEvent"
+]

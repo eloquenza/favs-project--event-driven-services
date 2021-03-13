@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "namespace": "edu.hsh.favs.project.escqrs.events.product",
+  "name": "ProductUpdatedEvent",
+
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "name", "type": ["null", "string"], "default": null},
+    {"name": "cost", "type": ["null", "long"], "default": null}
+  ]
+}
