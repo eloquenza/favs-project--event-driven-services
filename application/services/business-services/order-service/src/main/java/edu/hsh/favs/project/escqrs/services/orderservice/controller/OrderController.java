@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
@@ -59,12 +58,7 @@ public class OrderController {
     Assert.state(orderId != null, "orderId must not equal null");
 
     log.info("Logging updateOrder request for order with id " + orderId + ": " + updatedOrder);
-    try {
-      return service.updateOrder(orderId, updatedOrder);
-    } catch (UnsupportedOperationException e) {
-      log.info(e.toString());
-      throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, e.toString());
-    }
+    return service.updateOrder(orderId, updatedOrder);
   }
 
   @PutMapping(path = "{orderId}/pay")
@@ -118,11 +112,6 @@ public class OrderController {
   }
 
   private Mono<Order> changeOrderState(Long orderId, OrderState newState) {
-    try {
-      return service.updateOrder(orderId, new Order().setId(orderId).setState(newState));
-    } catch (UnsupportedOperationException e) {
-      log.info(e.toString());
-      throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, e.toString());
-    }
+    return service.updateOrder(orderId, new Order().setId(orderId).setState(newState));
   }
 }

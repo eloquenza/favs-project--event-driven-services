@@ -1,12 +1,16 @@
 package edu.hsh.favs.project.escqrs.services.orderservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.orders.Order;
+import edu.hsh.favs.project.escqrs.domains.orders.OrderState;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderPlacedEventFactory;
 import edu.hsh.favs.project.escqrs.events.order.factories.OrderUpdatedEventFactory;
+import edu.hsh.favs.project.escqrs.services.commons.exceptions.EntityNotFoundException;
+import edu.hsh.favs.project.escqrs.services.commons.exceptions.IllegalEntityOperationException;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.EntityUpdater;
 import edu.hsh.favs.project.escqrs.services.orderservice.repository.OrderRepository;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -59,11 +63,29 @@ public class OrderService {
     // Semantical nonsensical to transfer an order to another customer, therefore we guard ourselves
     // from clients that try to do so.
     if (updatedOrder.getCustomerId() != null) {
-      throw new UnsupportedOperationException(
-          "Updating the customerId of an specific order is now allowed");
+      return Mono.error(
+          () -> {
+            throw new IllegalEntityOperationException(
+                "Updating the customerId of an specific order is now allowed");
+          });
     }
     return this.repo
         .findById(orderId)
+        .switchIfEmpty(
+            Mono.error(
+                () -> {
+                  throw new EntityNotFoundException("No order with this id can be found.");
+                }))
+        .filter(order -> isValidStateTransition(order.getState(), updatedOrder.getState()))
+        .switchIfEmpty(
+            Mono.error(
+                () -> {
+                  throw new IllegalEntityOperationException(
+                      "Invalid state transition, to transition into "
+                          + updatedOrder.getState()
+                          + " the order needs to be in one of the following states: "
+                          + Arrays.toString(updatedOrder.getState().previousState()));
+                }))
         .flatMap(
             order ->
                 dualWriteHelper.updateEntity(
@@ -75,5 +97,9 @@ public class OrderService {
     return this.repo
         .findById(orderId)
         .flatMap(order -> dualWriteHelper.deleteEntity(order, deleteEventFactory));
+  }
+
+  private boolean isValidStateTransition(OrderState oldState, OrderState newState) {
+    return oldState.hasNextState() && Arrays.asList(oldState.nextState()).contains(newState);
   }
 }
