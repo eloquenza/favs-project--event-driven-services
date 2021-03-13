@@ -38,6 +38,11 @@ Additionally there was a paper and a presentation to be created were everybody c
 
 ## Repository organization
 
+This repository is set up as a [Monorepo][monorepo].
+This means, that every single line of source code for each software artifact, i.e. our microservices and their commons, are stored in this very repository.
+
+### Folder organization
+
 * [./adrs](./adrs): Contains ["Architectural Decision Records"][adr] that describe decisions made that address (non)-functional requirements that are architecturally signifcant.
 * [./application](./application): Contains the e-commerce system itself
 * [./documentation](./documentation): Contains all documentation documents and created diagrams, e.g. requirements needed, a usage guide, used technologies, how to develop/deploy.
@@ -69,3 +74,4 @@ The following topics can be viewed there:
 * Usage guide: [./documentation/how-to-use.md](./documentation/how-to-use.md)
 
 [adr]: https://adr.github.io/
+[monorepo]: https://en.wikipedia.org/wiki/Monorepo
