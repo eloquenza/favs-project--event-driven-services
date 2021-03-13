@@ -108,3 +108,11 @@ Get all products:
 
 Get a specific product:
 `curl -H "Accept: application/vnd.favs-commerce.products.v1+json" -s "http://0.0.0.0:9000/products/1"`
+
+## Accessing the discovery service
+
+Open up the browser of your choice and navigate to the following URL:
+
+* `http://localhost:8761`
+
+Here, you can see which services have been discovered, i.e. registered themselves so they can be found by the gateway-service and load-balanced.
