@@ -174,6 +174,7 @@ Produced by:
 
 * `OrderService` as a reaction to a HTTP PUT request on `/orders/{id}` with a JSON body containing the fields that need to be changed.
 * `OrderService` as a reaction to a HTTP PUT request on `/orders/{id}/{pay,ship,deliver,cancel}` to change the status of this order into `{PAID, SHIPPED, DELIVERED, CANCELLED}`
+* **NOT YET IMPLEMENTED**: The OrderService would receive notifications from external systems if the products of a specific order are shipped or delivered, i.e. a shipping company like DHL would supply us with such a notifcation.
 
 #### Subscriber
 
