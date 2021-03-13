@@ -1,5 +1,7 @@
 ## How to interact with the FAVS-Commerce system
 
+TODO: DIVIDE API ENDPOINT USAGE FROM ACTUAL WORKFLOW DESCRIPTION?
+
 Currently, this system does not have a GUI in any form.
 To interact with the system, you should consume its API via cURL or similar tools.  
 Version negotiation is done through MIME type 
@@ -88,9 +90,11 @@ Update a specific product:
 
 For this operation the same rules apply as to the customer/order update operation, i.e. updating only a specific field is possible.
 
-Delete a specific product:
+Deleting a product:
 
-`curl -s -X "DELETE" "http://0.0.0.0:9000/products/1" | jq`
+This is not possible due to the fact that the system would like to be able to provide an audit log for all possible orders.
+To do so, it would be counterproductive to delete products and therefore the operation is not supported.
+Ideally but not yet implemented, this should be able to soft-delete products so they are not viewable in an GUI but still present in the database to see which orders have been placed for which products.
 
 Get all products:
 `curl -H "Accept: application/vnd.favs-commerce.products.v1+json" -s "http://0.0.0.0:9000/products"`
