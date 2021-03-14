@@ -3,7 +3,7 @@
 This example aims to implement an e-commerce shop.
 The e-commerce shop's domain is rather simple model as it just comprises of customers, orders and products, but there is a high degree of complexity involved due to the fact that each domain is tightly coupled with each other.
 Each customer is able to place orders for specific products, i.e. a customer has a list of orders they placed in the past, which each order having a list of products.
-If each of these domains is implemented as a single microservice, that means that in order to place an order for a specific customer, the `OrderService` would have to ask the `CustomerService` if the specified customerId exists and repeat the same with the ProductService and the specified productId.
+If each of these domains is implemented as a single microservice, that means that in order to place an order for a specific customer, the `OrderService` would have to ask the `CustomerService` if the specified customerId exists and repeat the same with the `ProductService` and the specified productId.
 Without the right architectural practice, this could degrade into a tightly coupled system where each microservice would have to directly interact with the other ones in order to send HTTP requests on REST APIs.
 
 This could quickly degrade into a unmaintable system if we imagine a bigger scope for our system, something like Amazon.
@@ -45,7 +45,8 @@ We can recreate a projection of the needed domain data by consuming all appropri
 |:--------------------------------------------------------------:|:-----------:|:------------:|:-----:|:------------:|:--------------------:|
 |              [customer-service][customer-service]              |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
 |                 [order-service][order-service]                 |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
-|               [product-service][product-service]               |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
+|       [product-command-service][product-command-service]       |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
+|         [product-query-service][product-query-service]         |    2.4.3    |   2020.0.1   | R2DBC | Apache Kafka |        Domain        |
 | [business-intelligence-service][business-intelligence-service] |    2.4.3    |   2020.0.1   |  N/A  | Apache Kafka |       Aggregate      |
 |             [discovery-service][discovery-service]             |    2.4.3    |   2020.0.1   |  N/A  |      N/A     |    Netflix Eureka    |
 |               [gateway-service][gateway-service]               |    2.4.3    |   2020.0.1   |  N/A  |      N/A     | Spring Cloud Gateway |
@@ -88,7 +89,8 @@ TODO: Describe why we use database per service pattern
 [kafka]: https://www.confluent.io/what-is-apache-kafka/
 [compose-file]: ../application/docker-compose.yml
 [customer-service]: ../application/services/business-services/customer-service
-[product-service]: ../application/services/business-services/product-service
+[product-command-service]: ../application/services/business-services/product-command-service
+[product-query-service]: ../application/services/business-services/product-query-service
 [order-service]: ../application/services/business-services/order-service
 [business-intelligence-service]: ../application/services/business-services/business-intelligence-service
 [discovery-service]: ../application/services/infrastructure-services/discovery-service
