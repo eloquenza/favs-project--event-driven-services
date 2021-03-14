@@ -11,7 +11,7 @@ $cli_name
 FAVS-commerce bash REST API client
 Usage: $cli_name [command]
 Commands:
-  populateProductsDB    populate the 'product-service' DB with some products
+  populateProductsDB    populate the 'product-query-service' DB with some products
   addProduct [json]     add one product
   getAllProducts        get all products
   <empty>   Help
