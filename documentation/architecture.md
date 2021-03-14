@@ -52,6 +52,10 @@ We can recreate a projection of the needed domain data by consuming all appropri
 
 The `discovery-service` and `gateway-service` are special kind of "self-implemented" services.
 While they would fit more into the following table, they are implemented by providing a self-built microservice that use Netflix Eureka or Spring Cloud Gateway as dependencies and are enabled by annotations.
+This is needed because:
+
+* for `gateway-service`, each system somehow needs to define their own routes, either via `application.yml` or a programmable way.
+* for `discovery-service` and `gateway-service` you might want to define special profiles based on the environment in which you are launching them or want to add them into some kind of metrics-service like micrometer.io.
 
 ### Needed services for infrastructure purposes
 
