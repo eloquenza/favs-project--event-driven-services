@@ -1,4 +1,4 @@
-package edu.hsh.favs.project.escqrs.services.productservice.config;
+package edu.hsh.favs.project.escqrs.services.productcommandservice.config;
 
 import edu.hsh.favs.project.escqrs.services.commons.web.errorhandling.GlobalExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

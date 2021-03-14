@@ -1,4 +1,4 @@
-package edu.hsh.favs.project.escqrs.services.productservice.config;
+package edu.hsh.favs.project.escqrs.services.productcommandservice.config;
 
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;

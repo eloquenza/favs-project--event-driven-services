@@ -1,11 +1,11 @@
-package edu.hsh.favs.project.escqrs.services.productservice.service;
+package edu.hsh.favs.project.escqrs.services.productcommandservice.service;
 
 import edu.hsh.favs.project.escqrs.domains.products.Product;
 import edu.hsh.favs.project.escqrs.events.product.factories.ProductAddedEventFactory;
 import edu.hsh.favs.project.escqrs.events.product.factories.ProductUpdatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.EntityUpdater;
-import edu.hsh.favs.project.escqrs.services.productservice.repository.ProductRepository;
+import edu.hsh.favs.project.escqrs.services.productcommandservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;

@@ -1,11 +1,10 @@
-package edu.hsh.favs.project.escqrs.services.productservice.controller;
+package edu.hsh.favs.project.escqrs.services.productcommandservice.controller;
 
 import edu.hsh.favs.project.escqrs.domains.products.Product;
-import edu.hsh.favs.project.escqrs.services.productservice.service.ProductService;
+import edu.hsh.favs.project.escqrs.services.productcommandservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

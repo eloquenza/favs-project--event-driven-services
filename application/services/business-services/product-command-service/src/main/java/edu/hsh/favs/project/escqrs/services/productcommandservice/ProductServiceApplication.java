@@ -1,4 +1,4 @@
-package edu.hsh.favs.project.escqrs.services.productservice;
+package edu.hsh.favs.project.escqrs.services.productcommandservice;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
