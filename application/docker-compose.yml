@@ -65,7 +65,7 @@ services:
           memory: '250mb'
     depends_on:
       - kafka
-      - customer-db
+      - order-db
       - gateway-service
       - discovery-service
       - schema-registry
@@ -75,6 +75,26 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-product-command-service:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          memory: '250mb'
+    depends_on:
+      - kafka
+      - product-db
+      - gateway-service
+      - discovery-service
+      - schema-registry
+
+  product-query-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PROMETHEUS_URL: "prometheus-pushgateway:9091"
+    image: eloquenza/favs-product-query-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
       resources:

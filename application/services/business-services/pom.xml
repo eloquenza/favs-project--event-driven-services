@@ -19,6 +19,7 @@
         <module>order-service</module>
         <module>product-command-service</module>
         <module>web-service</module>
+        <module>product-query-service</module>
     </modules>
 
     <dependencies>

@@ -18,10 +18,16 @@ spring:
           uri: lb://customer-service
           predicates:
             - Path=/customers/**
+        - id: product-query-service
+          uri: lb://product-query-service
+          predicates:
+            - Path=/products/**
+            - Method=GET
         - id: product-command-service
           uri: lb://product-command-service
           predicates:
             - Path=/products/**
+            - Method=POST,PUT
         - id: order-service
           uri: lb://order-service
           predicates:
