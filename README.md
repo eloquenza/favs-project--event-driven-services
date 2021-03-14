@@ -56,8 +56,10 @@ You can follow the start up process via `docker-compose logs -f` which simply di
 
 ## How to interact with the system
 
-As there is currently no GUI, the only ways to interact with this system is by directly sending HTTP requests to the appropriate REST API endpoints.
+As there is currently no GUI, the only way to interact with this system is by directly sending HTTP requests to the appropriate REST API endpoints.
 For specific use cases and their corresponding `cURL` command, see [./documentation/how-to-use.md](./documentation/how-to-use.md).
+
+As products are needed to allow customers to place orders, a script has been provided to insert a few test products: [insertDefaultProducts.sh](./application/deployment/scripts/insertDefaultProducts.sh)
 
 ## Further information
 

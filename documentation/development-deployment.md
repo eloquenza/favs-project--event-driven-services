@@ -2,6 +2,8 @@
 
 ## Development
 
+TODO: DESCRIBE THE MOST INTERESTING FILES THAT SHOULD BE VIEWED AND LIST THEM AGAIN IN README.MD
+
 ### Compiling
 
 ### Creating the docker container images
@@ -89,6 +91,10 @@ Open a `bash` shell inside e.g. customer-service:
 
 For, e.g. customer-service:
 `docker-compose logs -f customer-service`
+
+### Check the status of all services
+
+`docker-compose ps`
 
 ## Kafka
 
