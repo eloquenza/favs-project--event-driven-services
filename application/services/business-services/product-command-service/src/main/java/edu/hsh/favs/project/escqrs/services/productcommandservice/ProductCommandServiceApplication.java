@@ -8,10 +8,10 @@ import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
-public class ProductServiceApplication {
+public class ProductCommandServiceApplication {
 
   public static void main(String[] args) {
-    new SpringApplicationBuilder(ProductServiceApplication.class)
+    new SpringApplicationBuilder(ProductCommandServiceApplication.class)
         .web(WebApplicationType.REACTIVE)
         .run(args);
   }

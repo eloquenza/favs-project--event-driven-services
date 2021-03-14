@@ -21,7 +21,8 @@ import org.springframework.transaction.reactive.TransactionalOperator;
 
 /** This class configures the PostgreSQL database access through R2DBC */
 @Configuration
-@EnableR2dbcRepositories(basePackages = "edu.hsh.favs.project.escqrs.services.productservice")
+@EnableR2dbcRepositories(
+    basePackages = "edu.hsh.favs.project.escqrs.services.productcommandservice")
 @Profile({"docker", "development"})
 public class DataSourceConfiguration extends AbstractR2dbcConfiguration {
 

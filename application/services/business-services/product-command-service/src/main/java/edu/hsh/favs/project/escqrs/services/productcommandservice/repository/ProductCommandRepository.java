@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public interface ProductRepository extends ReactiveSortingRepository<Product, Long> {
+public interface ProductCommandRepository extends ReactiveSortingRepository<Product, Long> {
 
   Mono<Product> findById(Long productId);
 

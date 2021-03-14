@@ -5,7 +5,7 @@ import edu.hsh.favs.project.escqrs.events.product.factories.ProductAddedEventFac
 import edu.hsh.favs.project.escqrs.events.product.factories.ProductUpdatedEventFactory;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.EntityUpdater;
-import edu.hsh.favs.project.escqrs.services.productcommandservice.repository.ProductRepository;
+import edu.hsh.favs.project.escqrs.services.productcommandservice.repository.ProductCommandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -17,18 +17,18 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 
 @Service
-public class ProductService {
+public class ProductCommandService {
 
-  private final Logger log = Loggers.getLogger(ProductService.class.getName());
-  private final ProductRepository repo;
+  private final Logger log = Loggers.getLogger(ProductCommandService.class.getName());
+  private final ProductCommandRepository repo;
   private final ProductAddedEventFactory addEventFactory;
   private final ProductUpdatedEventFactory updateEventFactory;
   private final DualWriteTransactionHelper<Product> dualWriteHelper;
   private final EntityUpdater<Product> entityUpdater;
 
   @Autowired
-  public ProductService(
-      ProductRepository repo,
+  public ProductCommandService(
+      ProductCommandRepository repo,
       R2dbcEntityTemplate template,
       TransactionalOperator txOperator,
       Source messageBroker) {
