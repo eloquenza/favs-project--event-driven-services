@@ -86,7 +86,7 @@ Consumed by:
 
 A `ProductRemovedEvent` does not exist.
 This is due to the fact that the shop wants to provide an "order" audit log from which can be seen which products have been bought by whom.
-To do so in an fashion that is future-proof, we are not deleting products from the `ProductService` and its database.
+To do so in an fashion that is future-proof, we are not deleting products from the `ProductCommandService`/`ProductQueryService` and its database.
 
 In a system with more allocated development time, products should be soft-deleted.
 
@@ -100,13 +100,14 @@ Signal to subscribers that a new product has been added to the warehouse.
 
 Produced by:
 
-* `ProductService` as a reaction to HTTP POST request on `/products` with a JSON body containing the details for said product.
+* `ProductCommandService` as a reaction to HTTP POST request on `/products` with a JSON body containing the details for said product.
 
 #### Subscriber
 
 Consumed by:
 
-* `OrderService`: To persist the IDs of each added product to permit only valid `productIds` during the creation of an order entity without having to interact again with the `ProductService`.
+* `OrderService`: To persist the IDs of each added product to permit only valid `productIds` during the creation of an order entity without having to interact again with the `ProductCommandService`/`ProductQueryService`.
+* `ProductQueryService`: To persist the newly added product in memory so it is available through the query interface
 
 ### `ProductUpdatedEvent`
 
@@ -118,11 +119,11 @@ Signal to subscribers that a product's information has been updated.
 
 Produced by:
 
-* `ProductService` as a reaction to a HTTP PUT request on `/products/{id}` with a JSON body containing the changes to said product.
+* `ProductCommandService` as a reaction to a HTTP PUT request on `/products/{id}` with a JSON body containing the changes to said product.
 
 #### Subscriber
 
-Currently not consumed by any subscriber.
+* `ProductQueryService`: To persist the newly added product in memory so it is available through the query interface
 
 ## Order related events
 
