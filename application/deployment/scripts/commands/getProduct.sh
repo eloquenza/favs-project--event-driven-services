@@ -7,7 +7,7 @@ headers='Accept: application/vnd.favs-commerce.products.v1+json'
 
 getProduct() {
   log "Getting product with id: $1"
-  sendGETRequest "getProductURL/$1" "$headers"
+  sendGETRequest "$getProductURL/$1" "$headers"
   echo ""
 }
 getProduct "$1"
