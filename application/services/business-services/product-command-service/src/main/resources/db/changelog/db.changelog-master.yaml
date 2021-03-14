@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: product-service
+      author: product-command-service
       changes:
         - createTable:
             tableName: products

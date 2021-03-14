@@ -17,7 +17,7 @@
         <module>business-intelligence-service</module>
         <module>customer-service</module>
         <module>order-service</module>
-        <module>product-service</module>
+        <module>product-command-service</module>
         <module>web-service</module>
     </modules>
 

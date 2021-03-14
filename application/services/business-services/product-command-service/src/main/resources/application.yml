@@ -8,7 +8,7 @@ spring:
   profiles:
     active: docker
   application:
-    name: product-service
+    name: product-command-service
   datasource:
     url: ${postgres.url}
     data-username: ${postgres.username}

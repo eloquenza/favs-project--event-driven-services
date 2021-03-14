@@ -70,11 +70,11 @@ services:
       - discovery-service
       - schema-registry
 
-  product-service:
+  product-command-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
       PROMETHEUS_URL: "prometheus-pushgateway:9091"
-    image: eloquenza/favs-product-service:0.0.1-SNAPSHOT
+    image: eloquenza/favs-product-command-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
       resources:
