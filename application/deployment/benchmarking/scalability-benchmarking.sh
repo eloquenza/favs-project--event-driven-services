@@ -29,3 +29,5 @@ latencyTest() {
     # Producing the real latency test over 10 mins
     wrk2 -t4 -c4 -d600s -R1000 --latency http://0.0.0.0:9000/products/1
 }
+
+latencyTest()

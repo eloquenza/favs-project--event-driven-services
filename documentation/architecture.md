@@ -150,12 +150,28 @@ Thus it is feasible to develop, optimize and scale the write model, the write AP
 The "ProductQueryService" implements the retrieve operations and provides them via REST API endpoints and writes all necessary data into a local HashMap to mimic an in-memory database.
 The "ProductCommandService", on the other hand, provides all create, update and delete operations and writes all received data to its own PostgreSQL instance.
 In the following, we build upon the scenario presented in the previous chapter to show how CQRS furthermore favors increased scalability.
+A benchmarking experiment can now be used to measure whether there are noticeable differences in latency.
 
-<insert parallel script code> 
+```bash
+latencyTest() {
+    # Warming up JVM, CPU and RAM caches
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    wrk2 -t4 -c4 -d30s -R1000 --latency http://0.0.0.0:9000/products/1
+    # Producing the real latency test over 10 mins
+    wrk2 -t4 -c4 -d600s -R1000 --latency http://0.0.0.0:9000/products/1
+}
+```
 
-This script sends an HTTP GET request to the "/products" REST API endpoint of the product query service. A benchmarking experiment can now be used to measure whether there are noticeable differences in latency.
+This script sends a HTTP GET request to the "/products/1" REST API endpoint of the product query service via 4 threads and 4 connections. A few runs are done to warm up the caches before conducting a 10 mins experiment.
 
-<insert experiment results, i.e. single service setup has higher latency quantiles than quad-service setup>
+![Plot showing the latency](../application/deployment/benchmarking/myplot.png)
 
 ### Database per Service pattern
 
