@@ -26,7 +26,6 @@ public class OrderService {
 
   // TODO: explicit exception if that customerId/productId does not exist
   // TODO: disallow update to invalid productId
-  // TODO: Make sure bad requests will somehow be logged
 
   private final Logger log = Loggers.getLogger(OrderService.class.getName());
   private final OrderRepository repo;
