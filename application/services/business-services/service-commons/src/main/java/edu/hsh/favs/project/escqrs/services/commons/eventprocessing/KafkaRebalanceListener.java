@@ -5,9 +5,19 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.cloud.stream.binder.kafka.KafkaBindingRebalanceListener;
 
-/** TODO */
 /*
- * https://docs.spring.io/spring-cloud-stream-binder-kafka/docs/3.0.10.RELEASE/reference/html/spring-cloud-stream-binder-kafka.html#rebalance-listener
+ * Because of a bug that seems to be present in Spring Cloud Stream's Kafka
+ * Binder, it is not possible to simply use the `startOffset` property to
+ * ensure that newly created services are able to read the whole event stream
+ * from the start instead from the last known offset, i.e. the last published
+ * event.
+ *
+ * This system therefore has to rely on a programmatic solution that the Spring
+ * Cloud Stream framework calls directly after the start.
+ * Here, we simply 'seek' to the beginning of the stream and resume processing
+ * the stream afterwards.
+ * 
+ * Source: https://docs.spring.io/spring-cloud-stream-binder-kafka/docs/3.0.10.RELEASE/reference/html/spring-cloud-stream-binder-kafka.html#rebalance-listener
  * */
 public class KafkaRebalanceListener implements KafkaBindingRebalanceListener {
 
