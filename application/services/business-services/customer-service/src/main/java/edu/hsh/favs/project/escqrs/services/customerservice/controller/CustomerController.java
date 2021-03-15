@@ -53,7 +53,7 @@ public class CustomerController {
     Assert.state(updatedCustomer != null, "Customer payload must not equal null");
     Assert.state(customerId != null, "customerId must not equal null");
 
-    log.info("Logging updateCustomer request: " + updatedCustomer);
+    log.info("Logging updateCustomer request for customer with id: " + updatedCustomer);
     // Execute an dual-write of entity to local database and event to shared Kafka broker
     return service.updateCustomer(customerId, updatedCustomer);
   }
@@ -62,8 +62,7 @@ public class CustomerController {
   @ResponseStatus(code = HttpStatus.OK)
   public Mono<Customer> deleteCustomer(@PathVariable("customerId") Long customerId) {
     Assert.state(customerId != null, "CustomerId must not equal null");
-    // TODO: improve message to clarify that the customerId for the to be deleted customer is logged
-    log.info("Logging deleteCustomer request: " + customerId);
+    log.info("Logging deleteCustomer request for customer with id: " + customerId);
     // Execute an dual-write of entity to local database and event to shared Kafka broker
     return service.deleteCustomer(customerId);
   }
