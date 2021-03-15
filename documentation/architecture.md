@@ -71,10 +71,36 @@ This is needed because:
 
 ## Advantages of this architecture and other used architectural concepts
 
+TODO: Write down, that our services adhere to the reactive manifesto
+TODO: Write down that we are even using Functional Reactive Programming, a new asynchronous programming paradigm
+
+Describes a new asynchronous programming paradigm in which the availability of new information drives the logic forward rather than having control flow driven by a thread-of-execution.
+For this, each problem will be decomposed into multiple discrete, disjoint steps that can be executed in an asynchronous and nonblocking way.
+These steps then are composed to form a workflow, i.e. solve the afore-decomposed problem.
+
 TODO: add CQRS description, write how they replicated data for the read model by sourcing the event streams (topics) in kafka
 TODO: explain concepts used
 TODO: describe how to showcase ES experiment, i.e. how newly scaled up instances of a service are reading the event stream to recreate the current state
 TODO: Describe why we use database per service pattern
+TODO: Write down how to access eureka, how load-balancing is implemented.
+TODO: Write down somewhere, why it is important that all different event types for the same entity are written to the same kafka topic - reason: ordering is important.
+
+How does the schema-registry work?
+
+5.7. What Happened During Processing?
+
+Let's try to understand what exactly happened with our example application:
+
+    The producer built the Kafka message using the Employee object
+    The producer registered the employee schema with the schema registry to get a schema version ID, this either creates a new ID or reuses the existing one for that exact schema
+    Avro serialized the Employee object using the schema
+    Spring Cloud put the schema-id in the message headers
+    The message was published on the topic
+    When the message came to the consumer, it read the schema-id from the header
+    The consumer used schema-id to get the Employee schema from the registry
+    The consumer found a local class that could represent that object and deserialized the message into it
+
+https://www.baeldung.com/spring-cloud-stream-kafka-avro-confluent
 
 * Services can use the database paradigm that fits their use case the best.
 

@@ -100,7 +100,7 @@ From these bounded contexts, the following form the most important business subd
 * Order component
 * Product component
 
-The order component needs to define their own `Customer` and `Product` domain model as they need access to specific information from both domain models.
+The order component needs to define their own `Customer` and `Product` domain model as they need access to specific information from both domain models; atleast the identifier of these entities to ensure that only valid customer and products, i.e. those that actually exist in our system, can be used for the order creation.
 
 ## Generic subdomains
 
