@@ -1,5 +1,8 @@
 # Technologies used
 
+In order to keep the findings of this project as technology-agnostic as possible, the use of strongly opinionated frameworks (e.g. Axon Framework) was avoided, which completely conceal typical event-driven architectural concepts and potentially other important technical details. Therefore, the project relies on libraries, frameworks and other technologies that provide sufficient support for only one feature.
+This is essentially the UNIX philosophy - do one thing well.
+
 ## Language
 
 * [Java][java]

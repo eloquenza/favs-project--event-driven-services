@@ -2,11 +2,9 @@
 
 ## Development
 
-TODO: DESCRIBE THE MOST INTERESTING FILES THAT SHOULD BE VIEWED AND LIST THEM AGAIN IN README.MD
-
 ### Compiling
 
-### Creating the docker container images
+#### Creating the docker container images
 
 Executing the Maven lifecycle phase `install` will compile the associated application and re-create its docker container image.
 Doing this for all services is possible by executing the following command while having the top-level `application` folder as the working directory:
@@ -22,9 +20,9 @@ For example, to rebuild the customer-service, the following would work:
 
 `mvn -pl customer-service install`
 
-### Special cases
+#### Special cases
 
-#### Subtle bugs occuring while only rebuilding/restarting a specific container
+##### Subtle bugs occuring while only rebuilding/restarting a specific container
 
 Sometimes, for reasons currently unknown, the newly rebuilt docker image will not be started if you kept all other services running.
 If this is the case, simply stop all current containers, remove all docker containers and start all services up again:
@@ -36,7 +34,7 @@ mvn install
 docker-compose up -d
 ```
 
-#### Rebuilding the register-schemas container
+##### Rebuilding the register-schemas container
 
 If the dependencies for `register-schemas`, i.e. the `events` Maven sub-project change, you manually need to re-create that container.
 The easiest way to do so would be:

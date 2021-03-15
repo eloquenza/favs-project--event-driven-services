@@ -77,5 +77,7 @@ The following topics can be viewed there:
 
 If you however are interested in the code documentation, look inside the source code.
 
+TODO: DESCRIBE THE MOST INTERESTING FILES THAT SHOULD BE VIEWED AND LIST THEM AGAIN IN README.MD
+
 [adr]: https://adr.github.io/
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
