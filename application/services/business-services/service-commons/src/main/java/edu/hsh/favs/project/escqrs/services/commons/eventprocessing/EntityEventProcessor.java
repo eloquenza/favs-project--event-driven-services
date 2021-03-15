@@ -3,7 +3,16 @@ package edu.hsh.favs.project.escqrs.services.commons.eventprocessing;
 import java.util.function.Consumer;
 import reactor.util.Logger;
 
-/** TODO */
+/**
+ * This class helps our services to streamline how our event processing is
+ * performed. Concrete, this means, that services that need to consume events
+ * can use this processor to process specific events.
+ * This works as followed:
+ * A consumer can call EntityEventProcessor.handleEvent(event, eventHandler), to make sure, that
+ * 1. The event and it's type is logged.
+ * 2. Event is handled.
+ * 3. Any exception is catched.
+ */
 public class EntityEventProcessor {
 
   public static final String HEADER_KEY_EVENTTYPE = "eventType";

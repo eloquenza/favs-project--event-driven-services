@@ -10,7 +10,10 @@ import org.javers.core.diff.Diff;
 import org.javers.core.diff.changetype.ValueChange;
 import reactor.util.Logger;
 
-/** TODO */
+/**
+ * This class provides our transaction and event elper class to figure out how 2 domain entities differ to produce update events that only contain the changes
+ *
+ */
 public class EntityUpdater<EntityT> {
 
   private final Logger log;

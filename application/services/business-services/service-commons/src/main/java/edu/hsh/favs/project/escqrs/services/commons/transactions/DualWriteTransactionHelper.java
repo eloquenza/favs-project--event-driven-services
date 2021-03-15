@@ -17,7 +17,36 @@ import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
 
-/** TODO */
+/**
+ * This class provides our services with a unified mechanism to perform
+ * our CRUD transactions.
+ * This is a delicate process because we need to publish an event after each
+ * successfully committed transaction, but we need to rollback the transaction
+ * if for some reason the event could not be transmitted.
+ * This makes sense if we view published events as true facts that represent new
+ * information.
+ * If this event would not represent a correct fact, i.e. a new customer is
+ * perceived as created despite not being available in the CustomerService
+ * a compensation event would have to be transmitted, that instantly tells other
+ * services that this customer does not exist in the system.
+ * While that is also a possible solution, it was decided that for this system
+ * it is just simpler to only publish events after their operation is completed.
+ * 
+ * Therefore, to ensure each service handles these local DB transaction and the
+ * publishing of said events in the same way, this class was created.
+ * Through this class, each service is provided with:
+ * * a entity create operation that publishes the appropriate CreateEvent,
+ * * a entity delete operation that publishes the appropriate DeleteEvent,
+ * * a entity update operation that publishes the appropriate UpdateEvent.
+ *
+ * This class however does not try to figure out which the correct event type
+ * is for the currently performed operation.
+ * Instead, it relies on the service to provide it with the appropriate event
+ * factory which is then used to create the event, if and only if the DB
+ * transaction has successfully committed.
+ * Furthermore, it ensures each of these transactions and published events
+ * are correctly logged.
+ */
 public class DualWriteTransactionHelper<EntityT> {
 
   private final R2dbcEntityTemplate template;
