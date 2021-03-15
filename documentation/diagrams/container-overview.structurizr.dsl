@@ -20,22 +20,17 @@ workspace "FAVS project - Event-driven services" "This is the container diagram 
 
         # relationships to/from containers
         gatewayService -> discoveryService "Service discovery" "HTTP" "DiscoveryCommunication"
-        customerService -> discoveryService "Service registration" "HTTP" "DiscoveryCommunication"
-        productCommandService -> discoveryService "Service registration" "HTTP" "DiscoveryCommunication"
-        productQueryService -> discoveryService "Service registration" "HTTP" "DiscoveryCommunication"
-        orderService -> discoveryService "Service registration" "HTTP" "DiscoveryCommunication"
-        businessIntelligenceService -> discoveryService "Service registration" "HTTP" "DiscoveryCommunication"
         gatewayService -> customerService "Commands / Queries" "HTTP" "BusinessCommunication"
         gatewayService -> productCommandService "Commands" "HTTP" "BusinessCommunication"
         gatewayService -> productQueryService "Queries" "HTTP" "BusinessCommunication"
         gatewayService -> orderService "Commands / Queries" "HTTP" "BusinessCommunication"
-        productCommandService -> messageBroker  "Events (Apache Avro)" "ProductAdded, ProductUpdated" "BusinessCommunication"
-        customerService -> messageBroker  "Events (Apache Avro)" "CustomerCreated, CustomerUpdated, CustomerDeleted" "BusinessCommunication"
-        orderService -> messageBroker "Events (Apache Avro)" "OrderCreated, OrderUpdated, OrderRemoved" "BusinessCommunication"
-        messageBroker -> businessIntelligenceService "Events (Apache Avro)" "CustomerCreated, CustomerUpdated, CustomerDeleted, OrderCreated, OrderUpdated, OrderDeleted" "BusinessCommunication"
-        messageBroker -> orderService "Events (Apache Avro)" "CustomerCreated, CustomerDeleted, ProductAdded" "BusinessCommunication"
+        productCommandService -> messageBroker  "Publishes events" "" "BusinessCommunication"
+        customerService -> messageBroker  "Publishes events" "" "BusinessCommunication"
+        orderService -> messageBroker "Publishes events" "" "BusinessCommunication"
+        messageBroker -> businessIntelligenceService "Subscribes to events" "" "BusinessCommunication"
+        messageBroker -> orderService "Subscribes to events" "" "BusinessCommunication"
         customerService -> customerDB "SQL queries" "R2DBC"
-        messageBroker -> productQueryService "Events (Apache Avro)" "ProductAdded, ProductUpdated" "BusinessCommunication"
+        messageBroker -> productQueryService "Subscribes to events" "" "BusinessCommunication"
         customerService -> customerDB "SQL queries" "R2DBC" "BusinessCommunication"
         productCommandService -> productDB "SQL queries" "R2DBC" "BusinessCommunication"
         orderService -> orderDB "SQL queries" "R2DBC" "BusinessCommunication"
@@ -62,31 +57,31 @@ workspace "FAVS project - Event-driven services" "This is the container diagram 
                 color #ffffff
             }
             element "DiscoveryServiceContainer" {
-                background #b58900
+                background #FCA790
                 color #000000
                 width 300
                 height 300
             }
             element "GatewayServiceContainer" {
-                background #b58900
+                background #FCA790
                 color #000000
                 width 300
                 height 300
             }
             element "BusinessContainer" {
-                background #859900
+                background #78CC5A
                 color #000000
                 height 250
             }
             element "Database" {
-                background #073642
-                color #ffffff
+                background #D1D1D1
+                color #000000
                 shape Cylinder
                 height 300
                 width 300
             }
             element "Broker" {
-                background #268bd2
+                background #F5DC62
                 color #000000
                 shape Pipe
             }

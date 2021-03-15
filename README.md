@@ -76,8 +76,17 @@ The following topics can be viewed there:
 * Usage guide: [./documentation/how-to-use.md](./documentation/how-to-use.md)
 
 If you however are interested in the code documentation, look inside the source code.
+The following list describes the most interesting files to look at based on the perceived importance of the developer:
 
-TODO: DESCRIBE THE MOST INTERESTING FILES THAT SHOULD BE VIEWED AND LIST THEM AGAIN IN README.MD
+* [The Apache Avro schema for the 'OrderPlacedEvent', which describes what data this event holds. This will be compiled by the Apache Avro compiler into a OrderPlacedEvent.java that handles (de)serialization](application/events/src/main/resources/avro/OrderPlacedEvent.avsc)
+* [The Apache Avro schema for a union type to describe all valid event types for the Order domain entity](application/events/src/main/resources/avro/OrderEvents.avsc)
+* [The maven script which handles the schema registration for our defined event types, such that topics can only contain their domain entity specific event types](application/events/pom.xml)
+* [OrderService - performs CRUD operations for the order domain entity](./application/services/business-services/order-service/src/main/java/edu/hsh/favs/project/escqrs/services/orderservice/service/OrderService.java)
+* [DualWriteTransactionHelper - helper class to ensure that events are transmitted if and only if the local DB transaction has committed successfully](./application/services/business-services/service-commons/src/main/java/edu/hsh/favs/project/escqrs/services/commons/transactions/DualWriteTransactionHelper.java)
+* [EntityUpdater - helper class to figure out how 2 domain entities differ to produce update events that only contain the changes](./application/services/business-services/service-commons/src/main/java/edu/hsh/favs/project/escqrs/services/commons/transactions/EntityUpdater.java)
+* [CustomerIdSaver - example event subscriber, here for the OrderService to save customerIds from newly created customers to ensure that only valid customerIds can be chosen for the creation of new orders](application/services/business-services/order-service/src/main/java/edu/hsh/favs/project/escqrs/services/orderservice/consumers/CustomerIdSaver.java)
+* [EntityEventProcessor - helper class that streamlines how our event processing is performed](./application/services/business-services/service-commons/src/main/java/edu/hsh/favs/project/escqrs/services/commons/eventprocessing/EntityEventProcessor.java)
+* [KafkaRebalanceListener - a bean that defines that newly created services should consume a topic from the start](./application/services/business-services/service-commons/src/main/java/edu/hsh/favs/project/escqrs/services/commons/transactions/KafkaRebalanceListener.java)
 
 [adr]: https://adr.github.io/
 [monorepo]: https://en.wikipedia.org/wiki/Monorepo
