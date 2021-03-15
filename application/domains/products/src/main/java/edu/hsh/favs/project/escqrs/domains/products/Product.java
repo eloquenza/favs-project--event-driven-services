@@ -16,7 +16,6 @@ public class Product implements Serializable {
   @Column(value = "name")
   private String name;
 
-  // TODO: type migrate back to Money after figuring how to persist JavaMoney types in the DB
   @Column(value = "cost")
   private Long cost;
 
