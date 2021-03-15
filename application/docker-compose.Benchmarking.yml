@@ -1,0 +1,124 @@
+version: "3.5"
+
+services:
+
+  discovery-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    image: eloquenza/favs-discovery-service:0.0.1-SNAPSHOT
+    ports:
+      - "8761:8761/tcp"
+    restart: always
+    deploy:
+      replicas: 1
+
+  gateway-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    image: eloquenza/favs-gateway-service:0.0.1-SNAPSHOT
+    ports:
+      - "9000:9000/tcp"
+    restart: always
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          memory: '250mb'
+
+  product-command-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    image: eloquenza/favs-product-command-service:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          memory: '250mb'
+    depends_on:
+      - kafka
+      - product-db
+      - gateway-service
+      - discovery-service
+      - schema-registry
+
+  product-query-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    image: eloquenza/favs-product-query-service:0.0.1-SNAPSHOT
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1000mb'
+        reservations:
+          memory: '250mb'
+    depends_on:
+      - kafka
+      - gateway-service
+      - discovery-service
+      - schema-registry
+
+  kafka:
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "29092:29092/tcp"
+    restart: always
+    deploy:
+      replicas: 1
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "32181:32181/tcp"
+    restart: always
+    deploy:
+      replicas: 1
+
+  schema-registry:
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:32181'
+    image: confluentinc/cp-schema-registry:latest
+    ports:
+      - "8081:8081"
+    restart: always
+    depends_on:
+      - zookeeper
+      - kafka
+
+  product-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432/tcp"
+    deploy:
+      replicas: 1
+
+  register-schemas:
+    build:
+      context: .
+      dockerfile: register-schemas.Dockerfile
+    command: dockerize -wait http://schema-registry:8081/subjects -timeout 300s -wait-retry-interval 10s mvn -s /usr/share/maven/ref/settings-docker.xml -pl events schema-registry:register
+    volumes:
+      - ./:/repository:ro
+    depends_on:
+      - schema-registry
