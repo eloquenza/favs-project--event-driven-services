@@ -40,6 +40,17 @@ This could be due to constrained resources available on the local machine/the cl
 
 To remedy this issue, simply wait before performing another request.
 
+## Normal business use case workflow
+
+In order to place orders, one first needs to create himself an customer account.
+Afterwards, orders can be placed for products already in the warehouse.
+In the default state of this system, there is no product inserted.
+
+To insert a few default products, you can use the [Bash REST client](../application/deployment/scripts/restClientCLI.sh)
+
+If you are inside the application folder, you can execute the following command to do so:
+`./deployment/scripts/restClientCLI.sh populateProductsDB`
+
 ## Customers
 
 Create a customer:

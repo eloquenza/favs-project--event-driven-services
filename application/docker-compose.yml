@@ -191,6 +191,7 @@ services:
     build:
       context: .
       dockerfile: register-schemas.Dockerfile
+    image: eloquenza/favs-register-schemas:0.0.1-SNAPSHOT
     command: dockerize -wait http://schema-registry:8081/subjects -timeout 300s -wait-retry-interval 10s mvn -s /usr/share/maven/ref/settings-docker.xml -pl events schema-registry:register
     volumes:
       - ./:/repository:ro

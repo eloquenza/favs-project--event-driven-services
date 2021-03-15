@@ -5,6 +5,11 @@ import org.javers.core.metamodel.annotation.ValueObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+/**
+ * Simple POJO to allow the entity mapper to generate a valid mapping between the 'customer_ids'
+ * table, which only contains customerIds, and a class that essentially is only a Long field. In a
+ * better language, this should have been only a typedef declaration.
+ */
 @ValueObject
 @Table(value = "customer_ids")
 public class CustomerId {

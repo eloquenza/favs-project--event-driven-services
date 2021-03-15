@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.cloud.stream.binder.kafka.KafkaBindingRebalanceListener;
 
+/** TODO */
 /*
  * https://docs.spring.io/spring-cloud-stream-binder-kafka/docs/3.0.10.RELEASE/reference/html/spring-cloud-stream-binder-kafka.html#rebalance-listener
  * */

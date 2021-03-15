@@ -31,15 +31,14 @@ public class ProductQueryController {
   @GetMapping(path = "{productId}")
   @ResponseStatus(code = HttpStatus.OK)
   public Mono<Product> getProduct(@PathVariable("productId") Long productId) {
-    Mono<Product> result = service.findProductById(productId);
-    log.info("Logging getProduct request" + result);
+    log.info("Logging getProduct request for product with id: " + productId);
     return service.findProductById(productId);
   }
 
   @GetMapping(path = "")
   @ResponseStatus(code = HttpStatus.OK)
   public Flux<Product> getAllProducts() {
-    log.info("Logging findAllProducts request" + service.findAllProducts());
+    log.info("Logging findAllProducts request");
     return service.findAllProducts();
   }
 }

@@ -16,12 +16,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import reactor.util.Logger;
 import reactor.util.Loggers;
 
-// Each microservice wants to use this global exception handler in order to make sure that our
-// exceptions will be handled exactly the same by each service.
-// To do so, each microservice needs to derive a sub class from this class, and add the annotation
-// @RestControllerAdvice.
-// This makes Spring Boot pick up this class and register it as a ExceptionHandler for each
-// response.
+/**
+ * This class provides our microservices with a centralized, shared exception handling mechanism.
+ * Each microservice wants to use this global exception handler in order to make sure that our
+ * exceptions will be handled exactly the same by each service. To do so, each microservice needs to
+ * derive a sub class from this class, and add the annotation @RestControllerAdvice. This allows the
+ * Spring Boot framework to pick up this class and register it as a ExceptionHandler for each
+ * response.
+ */
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private final Logger log = Loggers.getLogger(GlobalExceptionHandler.class.getName());

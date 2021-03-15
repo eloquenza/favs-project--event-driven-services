@@ -4,6 +4,7 @@ import edu.hsh.favs.project.escqrs.domains.customers.Customer;
 import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerCreatedEventFactory;
 import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerDeletedEventFactory;
 import edu.hsh.favs.project.escqrs.events.customer.factories.CustomerUpdatedEventFactory;
+import edu.hsh.favs.project.escqrs.services.commons.exceptions.EntityNotFoundException;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.DualWriteTransactionHelper;
 import edu.hsh.favs.project.escqrs.services.commons.transactions.EntityUpdater;
 import edu.hsh.favs.project.escqrs.services.customerservice.repository.CustomerRepository;
@@ -43,7 +44,12 @@ public class CustomerService {
   }
 
   public Mono<Customer> find(Long id) {
-    return repo.findById(id);
+    return repo.findById(id)
+        .switchIfEmpty(
+            Mono.error(
+                () -> {
+                  throw new EntityNotFoundException("No customer with this id can be found.");
+                }));
   }
 
   public Mono<Customer> createCustomer(Customer customer) {
@@ -57,12 +63,13 @@ public class CustomerService {
   }
 
   public Mono<Customer> updateCustomer(Long customerId, Customer updatedCustomer) {
-    // TODO: handle error where user will supply an ID in the json body that does not match the
-    // customerId given on the URI path
-    // TODO: handle error where user will try to "create" an user via an update
-    // ^- both errors are conceptually the same, I think
     return this.repo
         .findById(customerId)
+        .switchIfEmpty(
+            Mono.error(
+                () -> {
+                  throw new EntityNotFoundException("No customer with this id can be found.");
+                }))
         .flatMap(
             customer ->
                 dualWriteHelper.updateEntity(

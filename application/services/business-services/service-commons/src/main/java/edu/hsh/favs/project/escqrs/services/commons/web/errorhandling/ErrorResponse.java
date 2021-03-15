@@ -5,6 +5,11 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * This class is a POJO containing relevant information about an error that has occured due to an
+ * HTTP request. It is simply used to provide the Spring Framework with a schema that will be used
+ * to create the JSON for the HTTP response.
+ */
 public class ErrorResponse {
 
   private final int status;

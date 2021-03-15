@@ -11,3 +11,7 @@ You can follow the start up process via `docker-compose logs -f` which simply di
 
 Via Docker Compose it is possible to deploy locally or to a Kubernetes/Docker Swarm.
 To start locally, just follow the introduction chapter of this document.
+
+## Usage
+
+Look into the [Usage guide](./how-to-start.md).

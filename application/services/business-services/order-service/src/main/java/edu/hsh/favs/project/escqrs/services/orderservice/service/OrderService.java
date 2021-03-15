@@ -24,9 +24,6 @@ import reactor.util.Loggers;
 @Service
 public class OrderService {
 
-  // TODO: explicit exception if that customerId/productId does not exist
-  // TODO: disallow update to invalid productId
-
   private final Logger log = Loggers.getLogger(OrderService.class.getName());
   private final OrderRepository repo;
   private final OrderPlacedEventFactory createEventFactory;

@@ -7,6 +7,7 @@ import edu.hsh.favs.project.escqrs.events.order.OrderUpdatedEvent;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.config.EventSink;
 import edu.hsh.favs.project.escqrs.services.businessintelligenceservice.datatypes.EntityAnalyticWarehouse;
 import edu.hsh.favs.project.escqrs.services.commons.eventprocessing.EntityEventProcessor;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -25,11 +26,12 @@ public class ProductMarketAnalysis {
   private final EntityAnalyticWarehouse<Long, Long> productsCustomerWereInterestedInWarehouse;
   private final EntityAnalyticWarehouse<Long, Long> boughtProductsWarehouse;
   private final EntityEventProcessor eventProcessor;
-  private final Stream<String> finalOrderStates =
-      Stream.of(
-          OrderState.PAID.toString(),
-          OrderState.SHIPPED.toString(),
-          OrderState.DELIVERED.toString());
+  private final Supplier<Stream<String>> finalOrderStates =
+      () ->
+          Stream.of(
+              OrderState.PAID.toString(),
+              OrderState.SHIPPED.toString(),
+              OrderState.DELIVERED.toString());
   private final Logger log;
 
   public ProductMarketAnalysis() {
@@ -97,7 +99,9 @@ public class ProductMarketAnalysis {
     this.eventProcessor.handleEvent(
         orderDeletedEvent,
         event -> {
-          if (finalOrderStates.noneMatch(orderDeletedEvent.getState().toString()::contentEquals)) {
+          if (finalOrderStates
+              .get()
+              .noneMatch(orderDeletedEvent.getState().toString()::contentEquals)) {
             this.log.info("Order was never finalized, i.e. these products were never bought.");
             this.productsCustomerWereInterestedInWarehouse.removeValueEntry(
                 orderDeletedEvent.getId());

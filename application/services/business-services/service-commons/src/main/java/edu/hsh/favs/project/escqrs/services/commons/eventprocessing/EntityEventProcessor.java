@@ -3,6 +3,7 @@ package edu.hsh.favs.project.escqrs.services.commons.eventprocessing;
 import java.util.function.Consumer;
 import reactor.util.Logger;
 
+/** TODO */
 public class EntityEventProcessor {
 
   public static final String HEADER_KEY_EVENTTYPE = "eventType";
@@ -45,9 +46,5 @@ public class EntityEventProcessor {
               "Error during processing %1$s: %2$s - %3$s", eventClassName, event.toString(), e));
       throw e;
     }
-  }
-
-  public static String createConditionMatchingEventTypeString(String eventName) {
-    return "headers['" + HEADER_KEY_EVENTTYPE + "']=='" + eventName + "'";
   }
 }
