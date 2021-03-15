@@ -5,7 +5,6 @@ services:
   discovery-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-discovery-service:0.0.1-SNAPSHOT
     ports:
       - "8761:8761/tcp"
@@ -16,7 +15,6 @@ services:
   gateway-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-gateway-service:0.0.1-SNAPSHOT
     ports:
       - "9000:9000/tcp"
@@ -33,7 +31,6 @@ services:
   customer-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-customer-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
@@ -53,7 +50,6 @@ services:
   order-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-order-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
@@ -73,7 +69,6 @@ services:
   product-command-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-product-command-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
@@ -93,7 +88,6 @@ services:
   product-query-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-product-query-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
@@ -105,7 +99,6 @@ services:
           memory: '250mb'
     depends_on:
       - kafka
-      - customer-db
       - gateway-service
       - discovery-service
       - schema-registry
@@ -113,7 +106,6 @@ services:
   business-intelligence-service:
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      PROMETHEUS_URL: "prometheus-pushgateway:9091"
     image: eloquenza/favs-business-intelligence-service:0.0.1-SNAPSHOT
     deploy:
       replicas: 1
@@ -128,21 +120,6 @@ services:
       - gateway-service
       - discovery-service
       - schema-registry
-#
-#  web-service:
-#    environment:
-#      SPRING_PROFILES_ACTIVE: docker
-#      PROMETHEUS_URL: "prometheus-pushgateway:9091"
-#    image: eloquenza/favs-web-service:0.0.1-SNAPSHOT
-#    deploy:
-#      replicas: 1
-#      resources:
-#        limits:
-#          cpus: '0.5'
-#          memory: '1000mb'
-#        reservations:
-#          cpus: '0.1'
-#          memory: '250mb'
 
   kafka:
     environment:
@@ -182,15 +159,6 @@ services:
     depends_on:
       - zookeeper
       - kafka
-
-#  product-db:
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_PASSWORD: example
-#    ports:
-#      - "5432/tcp"
-#    deploy:
-#      replicas: 1
 
   order-db:
     image: postgres:latest
